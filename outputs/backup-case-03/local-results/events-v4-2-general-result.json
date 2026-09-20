@@ -1,0 +1,342 @@
+{
+  "version": "event-extraction-general-v4.2",
+  "case_id": "case_03",
+  "title": "주간 정산표",
+  "model": "qwen3:4b-instruct",
+  "participants": [
+    "원이정",
+    "홍길동"
+  ],
+  "source_file": "C:\\Users\\nicol\\Documents\\Codex\\2026-09-17\\agent-mcp-multi-agent-graph-ml\\outputs\\backup-case-03\\source.json",
+  "message_count": 5,
+  "results": [
+    {
+      "source_id": "case_03_M001",
+      "body": "길동님, 지난주 정산표 업로드할 때 오류 없었어요? 이번 주 건 오늘 오후 3시까지 회계팀에 제출해야 해서요.",
+      "candidates": [
+        {
+          "candidate_id": "C01",
+          "text": "길동님, 지난주 정산표 업로드할 때 오류 없었어요?",
+          "context_time_scope": "past"
+        },
+        {
+          "candidate_id": "C02",
+          "text": "이번 주 건 오늘 오후 3시까지 회계팀에 제출해야 해서요.",
+          "context_time_scope": "current"
+        }
+      ],
+      "events": [
+        {
+          "source_id": "case_03_M001",
+          "candidate_id": "C01",
+          "display_time": "오후 3:30",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": "past",
+          "evidence": "길동님, 지난주 정산표 업로드할 때 오류 없었어요?",
+          "subject": "정산표 업로드",
+          "actor": null,
+          "related_people": [],
+          "action": "업로드를 수행했는지 확인",
+          "recipient": null,
+          "event_type": "question",
+          "status": null,
+          "time_scope": "past",
+          "deadline_text": null,
+          "rule_corrections": [
+            "question_normalized"
+          ],
+          "validation_errors": [],
+          "event_id": "case_03_M001-E01"
+        },
+        {
+          "source_id": "case_03_M001",
+          "candidate_id": "C02",
+          "display_time": "오후 3:30",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": "current",
+          "evidence": "이번 주 건 오늘 오후 3시까지 회계팀에 제출해야 해서요.",
+          "subject": "제출",
+          "actor": null,
+          "related_people": [],
+          "action": "제출해야 한다",
+          "recipient": "회계팀",
+          "event_type": "requirement",
+          "status": null,
+          "time_scope": "current",
+          "deadline_text": "오늘 오후 3시까지",
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M001-E02"
+        }
+      ]
+    },
+    {
+      "source_id": "case_03_M002",
+      "body": "네 지난주에눈 문제 없었어요. 제가 업로드하고 회계팀에 완료 메일 보냈습니다",
+      "candidates": [
+        {
+          "candidate_id": "C01",
+          "text": "네 지난주에눈 문제 없었어요.",
+          "context_time_scope": "past"
+        },
+        {
+          "candidate_id": "C02",
+          "text": "제가 업로드하고 회계팀에 완료 메일 보냈습니다",
+          "context_time_scope": "past"
+        }
+      ],
+      "events": [
+        {
+          "source_id": "case_03_M002",
+          "candidate_id": "C02",
+          "display_time": "오후 3:30",
+          "speaker": "홍길동",
+          "conversation_partner": "원이정",
+          "context_time_scope": "past",
+          "evidence": "제가 업로드하고 회계팀에 완료 메일 보냈습니다",
+          "subject": "업로드",
+          "actor": "홍길동",
+          "related_people": [],
+          "action": "업로드",
+          "recipient": null,
+          "event_type": "completion",
+          "status": null,
+          "time_scope": "past",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M002-E01"
+        },
+        {
+          "source_id": "case_03_M002",
+          "candidate_id": "C02",
+          "display_time": "오후 3:30",
+          "speaker": "홍길동",
+          "conversation_partner": "원이정",
+          "context_time_scope": "past",
+          "evidence": "제가 업로드하고 회계팀에 완료 메일 보냈습니다",
+          "subject": "완료 메일",
+          "actor": "홍길동",
+          "related_people": [],
+          "action": "완료 메일 보냄",
+          "recipient": "회계팀",
+          "event_type": "completion",
+          "status": null,
+          "time_scope": "past",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M002-E02"
+        }
+      ]
+    },
+    {
+      "source_id": "case_03_M003",
+      "body": "감사합니다. 이번 주 건은 금액 대사 끝났고, 공유폴더에 `주간정산_최종.xlsx`로 저장했어요. 아직 업로드랑 완료 메일은 안 했어요.",
+      "candidates": [
+        {
+          "candidate_id": "C01",
+          "text": "감사합니다.",
+          "context_time_scope": null
+        },
+        {
+          "candidate_id": "C02",
+          "text": "이번 주 건은 금액 대사 끝났고",
+          "context_time_scope": "current"
+        },
+        {
+          "candidate_id": "C03",
+          "text": "공유폴더에 `주간정산_최종.xlsx`로 저장했어요.",
+          "context_time_scope": "current"
+        },
+        {
+          "candidate_id": "C04",
+          "text": "아직 업로드랑 완료 메일은 안 했어요.",
+          "context_time_scope": "current"
+        }
+      ],
+      "events": [
+        {
+          "source_id": "case_03_M003",
+          "candidate_id": "C02",
+          "display_time": "오후 3:30",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": "current",
+          "evidence": "이번 주 건은 금액 대사 끝났고",
+          "subject": "금액 대사",
+          "actor": "원이정",
+          "related_people": [],
+          "action": "금액 대사 완료",
+          "recipient": null,
+          "event_type": "completion",
+          "status": null,
+          "time_scope": "current",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M003-E01"
+        },
+        {
+          "source_id": "case_03_M003",
+          "candidate_id": "C03",
+          "display_time": "오후 3:30",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": "current",
+          "evidence": "공유폴더에 `주간정산_최종.xlsx`로 저장했어요.",
+          "subject": "주간정산_최종.xlsx",
+          "actor": "원이정",
+          "related_people": [],
+          "action": "저장",
+          "recipient": null,
+          "event_type": "completion",
+          "status": null,
+          "time_scope": "current",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M003-E02"
+        },
+        {
+          "source_id": "case_03_M003",
+          "candidate_id": "C04",
+          "display_time": "오후 3:30",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": "current",
+          "evidence": "아직 업로드랑 완료 메일은 안 했어요.",
+          "subject": "업로드",
+          "actor": "원이정",
+          "related_people": [],
+          "action": "업로드를 하지 않음",
+          "recipient": null,
+          "event_type": "status",
+          "status": "미완료",
+          "time_scope": "current",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M003-E03"
+        },
+        {
+          "source_id": "case_03_M003",
+          "candidate_id": "C04",
+          "display_time": "오후 3:30",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": "current",
+          "evidence": "아직 업로드랑 완료 메일은 안 했어요.",
+          "subject": "완료 메일",
+          "actor": "원이정",
+          "related_people": [],
+          "action": "완료 메일을 보냄",
+          "recipient": null,
+          "event_type": "status",
+          "status": "미완료",
+          "time_scope": "current",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M003-E04"
+        }
+      ]
+    },
+    {
+      "source_id": "case_03_M004",
+      "body": "방금 열어봤는데 합계는 맞네요. 제출 방법은 지난주 쓴 문서 참고해주세요",
+      "candidates": [
+        {
+          "candidate_id": "C01",
+          "text": "방금 열어봤는데 합계는 맞네요.",
+          "context_time_scope": null
+        },
+        {
+          "candidate_id": "C02",
+          "text": "제출 방법은 지난주 쓴 문서 참고해주세요",
+          "context_time_scope": "past"
+        }
+      ],
+      "events": [
+        {
+          "source_id": "case_03_M004",
+          "candidate_id": "C01",
+          "display_time": "오후 3:31",
+          "speaker": "홍길동",
+          "conversation_partner": "원이정",
+          "context_time_scope": null,
+          "evidence": "방금 열어봤는데 합계는 맞네요.",
+          "subject": "합계",
+          "actor": "홍길동",
+          "related_people": [],
+          "action": "확인",
+          "recipient": null,
+          "event_type": "status",
+          "status": "정상 확인",
+          "time_scope": "current",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M004-E01"
+        },
+        {
+          "source_id": "case_03_M004",
+          "candidate_id": "C02",
+          "display_time": "오후 3:31",
+          "speaker": "홍길동",
+          "conversation_partner": "원이정",
+          "context_time_scope": "past",
+          "evidence": "제출 방법은 지난주 쓴 문서 참고해주세요",
+          "subject": "제출 방법",
+          "actor": "원이정",
+          "related_people": [],
+          "action": "참고해주세요",
+          "recipient": null,
+          "event_type": "request",
+          "status": null,
+          "time_scope": "future",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M004-E02"
+        }
+      ]
+    },
+    {
+      "source_id": "case_03_M005",
+      "body": "네, 점심 먹고 처리할게요.",
+      "candidates": [
+        {
+          "candidate_id": "C01",
+          "text": "네, 점심 먹고 처리할게요.",
+          "context_time_scope": null
+        }
+      ],
+      "events": [
+        {
+          "source_id": "case_03_M005",
+          "candidate_id": "C01",
+          "display_time": "오후 3:31",
+          "speaker": "원이정",
+          "conversation_partner": "홍길동",
+          "context_time_scope": null,
+          "evidence": "네, 점심 먹고 처리할게요.",
+          "subject": "점심 먹고 처리할 일",
+          "actor": "원이정",
+          "related_people": [],
+          "action": "처리할게요",
+          "recipient": null,
+          "event_type": "plan",
+          "status": null,
+          "time_scope": "future",
+          "deadline_text": null,
+          "rule_corrections": [],
+          "validation_errors": [],
+          "event_id": "case_03_M005-E01"
+        }
+      ]
+    }
+  ]
+}

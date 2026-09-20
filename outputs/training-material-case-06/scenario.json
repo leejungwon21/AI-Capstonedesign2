@@ -1,0 +1,11 @@
+{
+  "case_id": "case_06",
+  "absent_person": "원이정",
+  "dialogue_business_period": "월요일 오전, 정확한 시각 미상",
+  "absence_cutoff": "월요일 13:00",
+  "return_time": null,
+  "basis": "previously proposed fictional scenario; not extracted from displayed posting times",
+  "timestamp_policy": "15:48–15:49 are posting times, not simulated business times",
+  "priority_label": null,
+  "split_group": "case_06"
+}

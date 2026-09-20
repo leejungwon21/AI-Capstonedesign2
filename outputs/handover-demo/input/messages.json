@@ -1,0 +1,242 @@
+[
+  {
+    "source_id": "M001",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:07:00+09:00",
+    "author": "박서연",
+    "text": "캠페인 A 수정 소재는 금요일 18일 10시에 전달 예정입니다. 아직 최종 파일은 아닙니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M002",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:14:00+09:00",
+    "author": "김지수",
+    "text": "제가 18일 정오까지 소재 검수할게요. 검수 기준은 문서 D01입니다. 이번 검수 대체자는 아직 없습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M003",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:21:00+09:00",
+    "author": "박서연",
+    "text": "현재 수정 진행 중입니다. 최종본 전달 전에는 이전 시안을 발송에 쓰지 말아주세요.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M004",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:28:00+09:00",
+    "author": "최도윤",
+    "text": "테스트 발송은 제가 맡습니다. 지수님 소재 검수가 끝나야 실행할 수 있어요.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M005",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:35:00+09:00",
+    "author": "최도윤",
+    "text": "테스트 완료 목표는 18일 15시입니다. 절차는 문서 D02에 적었습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M006",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:42:00+09:00",
+    "author": "정하린",
+    "text": "검수 전 테스트 실행은 보류하세요. 검수가 늦어지면 발송 일정 조정 여부를 바로 판단해야 합니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M007",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:49:00+09:00",
+    "author": "최도윤",
+    "text": "본 발송은 18일 17시입니다. 테스트 통과 후 제가 실행합니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M008",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T10:56:00+09:00",
+    "author": "김지수",
+    "text": "타깃 고객 선정과 발송 일정 합의는 완료했습니다. 이번 캠페인은 기존 고객 재구매 안내입니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M009",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:03:00+09:00",
+    "author": "최도윤",
+    "text": "발송 도구 접근 권한은 제 계정에 있습니다. 테스트를 통과하지 않으면 본 발송하지 않겠습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M010",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:10:00+09:00",
+    "author": "김지수",
+    "text": "성과 보고는 25일 17시까지입니다. 보고 양식은 D03으로 정리했습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M011",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:17:00+09:00",
+    "author": "최도윤",
+    "text": "지수님 부재 시 성과 보고는 제가 대신 맡겠습니다. 집계 화면 권한도 확인했습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M012",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:24:00+09:00",
+    "author": "정하린",
+    "text": "성과 보고는 실제 발송 후 집계하세요. 당일 긴급 대응 목록에는 넣지 않고 다음 주 진행 상황을 확인하겠습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M013",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:31:00+09:00",
+    "author": "김지수",
+    "text": "캠페인 이후 추가 고객 설문을 하면 어떨까요? 질문안을 생각해보겠습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M014",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:38:00+09:00",
+    "author": "정하린",
+    "text": "설문은 제안으로 접수할게요. 실제 진행 여부와 일정은 아직 정하지 않았습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M015",
+    "channel": "proj-campaign-a",
+    "timestamp": "2026-09-17T11:45:00+09:00",
+    "author": "최도윤",
+    "text": "설문 후속 논의나 문서는 이 채널에서 아직 확인하지 못했습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M016",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T11:52:00+09:00",
+    "author": "이민호",
+    "text": "운영 인증키 요청을 등록했습니다. 18일 11시까지 내부 승인이 필요합니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M017",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T11:59:00+09:00",
+    "author": "김지수",
+    "text": "운영 인증키 내부 승인 권한은 현재 저에게만 있습니다. 아직 승인하지 않았고, 대체 승인자도 등록되지 않았습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M018",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:06:00+09:00",
+    "author": "정하린",
+    "text": "승인 권한 변경은 제가 운영 지원 창구에 요청할 수 있습니다. 요청만으로 즉시 승인 권한이 생기는 것은 아닙니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M019",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:13:00+09:00",
+    "author": "이민호",
+    "text": "SDK 연동 코드는 작성했습니다. 운영 인증키가 승인되어야 운영 환경 검증이 가능합니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M020",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:20:00+09:00",
+    "author": "이민호",
+    "text": "연동 검증 마감은 18일 16시입니다. 테스트 항목은 D04에 있습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M021",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:27:00+09:00",
+    "author": "김지수",
+    "text": "코드 작성 완료와 운영 검증 완료는 별개입니다. 현재 운영 검증은 시작하지 못했습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M022",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:34:00+09:00",
+    "author": "이민호",
+    "text": "타임아웃과 중복 결제 예외 처리는 제가 22일까지 구현합니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M023",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:41:00+09:00",
+    "author": "이민호",
+    "text": "이 작업은 모의 서버로 개발할 수 있어서 운영 인증키 승인과 독립적으로 진행 가능합니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M024",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:48:00+09:00",
+    "author": "정하린",
+    "text": "기존 합의된 요구사항대로 진행하세요. 이번 구현에 지수님 추가 승인은 필요하지 않습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M025",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T12:55:00+09:00",
+    "author": "김지수",
+    "text": "고객사 진행 상황 회신은 18일 14시까지입니다. 하린님을 대체 담당자로 부탁드립니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M026",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T13:02:00+09:00",
+    "author": "정하린",
+    "text": "수락합니다. 고객사 연락처와 이전 회신은 D05에서 확인했고 자료 접근도 됩니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M027",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T13:09:00+09:00",
+    "author": "정하린",
+    "text": "인증키 승인이 늦어져도 현재 상태를 그대로 회신할 수 있습니다. 검증 완료라고 쓰지 않겠습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M028",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T13:16:00+09:00",
+    "author": "김지수",
+    "text": "결제 FAQ 초안을 작성 중입니다. 정리되면 공유하겠습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M029",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T13:23:00+09:00",
+    "author": "이민호",
+    "text": "최신 FAQ 링크를 부탁드립니다. 지금 채널에서 확인 가능한 공유본은 못 찾았습니다.",
+    "synthetic": true
+  },
+  {
+    "source_id": "M030",
+    "channel": "proj-payment-b",
+    "timestamp": "2026-09-17T13:30:00+09:00",
+    "author": "정하린",
+    "text": "FAQ의 마감과 검토 담당자는 아직 확정하지 않았습니다. 초안이 없다고 단정하지 말고 위치부터 확인해야 합니다.",
+    "synthetic": true
+  }
+]

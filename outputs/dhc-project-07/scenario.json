@@ -1,0 +1,14 @@
+{
+  "case_id": "case_07",
+  "absent_person": "원이정",
+  "dialogue_business_period": "가상 월요일 오전 10시",
+  "absence_cutoff": "가상 월요일 오전 11시",
+  "time_basis": "previously proposed scenario; display times 16:13–16:15 are posting times",
+  "absence_type": "갑작스러운 외근",
+  "return_time": null,
+  "contact_unavailable": null,
+  "priority_label": null,
+  "split_group": "case_07",
+  "evaluation_status": "Q1 typo corrected by user; priority label pending",
+  "future_outcome_policy": "User recollection that Lee later performed D is excluded from pre-absence input."
+}

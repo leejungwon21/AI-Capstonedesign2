@@ -1,0 +1,266 @@
+{
+  "version": "event-extraction-v2",
+  "model": "qwen3:4b-instruct",
+  "source_file": "C:\\Users\\nicol\\Documents\\Codex\\2026-09-17\\agent-mcp-multi-agent-graph-ml\\outputs\\slack-mcp\\collected\\sap.json",
+  "message_count": 6,
+  "results": [
+    {
+      "source_id": "S001",
+      "body": "안녕하세요 매니저님~ WP1, WP2 PR/PO 모두 완료되었나요?",
+      "events": [
+        {
+          "event_id": "S001-E01",
+          "source_id": "S001",
+          "record_header": "[S001 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740271.219689",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "WP1 PR/PO 완료 상태 확인",
+          "actor": null,
+          "work_object": "WP1 PR/PO",
+          "action": "완료 상태 확인",
+          "recipient": null,
+          "event_type": "question",
+          "status": null,
+          "evidence": "WP1, WP2 PR/PO 모두 완료되었나요?",
+          "rule_corrections": [
+            "question_actor_removed"
+          ],
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S002",
+      "body": "WP1는 이휘태 매니저님, WP2는 정상환 이사님 승인 대기 중이라 PR까지만 생성되어 있습니다. 마감일이 이번 주 수요일인 것으로 알고 있는데, 빨리 되어야 할 텐데요ㅜ",
+      "events": [
+        {
+          "event_id": "S002-E01",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "focus": "WP1 승인 대기 중",
+          "actor": "원이정",
+          "work_object": "WP1 승인 대기 중",
+          "action": "승인 대기 중 상태를 보고",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 대기 중",
+          "evidence": "WP1는 이휘태 매니저님, WP2는 정상환 이사님 승인 대기 중이라 PR까지만 생성되어 있습니다.",
+          "rule_corrections": [],
+          "validation_errors": []
+        },
+        {
+          "event_id": "S002-E03",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "focus": "PR 생성 상태",
+          "actor": "원이정",
+          "work_object": "PR 생성 상태",
+          "action": "보고",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 대기 중",
+          "evidence": "PR까지만 생성되어 있습니다.",
+          "rule_corrections": [],
+          "validation_errors": []
+        },
+        {
+          "event_id": "S002-E04",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "focus": "마감일 정보",
+          "actor": "원이정",
+          "work_object": "마감일 정보",
+          "action": "알고 있다",
+          "recipient": null,
+          "event_type": "status",
+          "status": "이번 주 수요일",
+          "evidence": "마감일이 이번 주 수요일인 것으로 알고 있는데",
+          "rule_corrections": [],
+          "validation_errors": []
+        },
+        {
+          "event_id": "S002-E05",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "focus": "업무 진행 속도 요구",
+          "actor": null,
+          "work_object": "WP1, WP2 승인 대기 중인 사항",
+          "action": "승인 대기 상태를 보고하고, 마감일이 이번 주 수요일임을 확인하여 진행 속도를 요청",
+          "recipient": null,
+          "event_type": "question",
+          "status": null,
+          "evidence": "빨리 되어야 할 텐데요ㅜ",
+          "rule_corrections": [
+            "question_actor_removed"
+          ],
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S003",
+      "body": "제가 정상환 이사님께는 따로 메일 드릴게요. 이휘태 매니저님은 조금 기다려보시죠.",
+      "events": [
+        {
+          "event_id": "S003-E01",
+          "source_id": "S003",
+          "record_header": "[S003 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740273.707059",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "정상환 이사님께 메일 전달",
+          "actor": "이혜정",
+          "work_object": "메일",
+          "action": "전달",
+          "recipient": "정상환 이사님",
+          "event_type": "plan",
+          "status": null,
+          "evidence": "제가 정상환 이사님께는 따로 메일 드릴게요.",
+          "rule_corrections": [],
+          "validation_errors": []
+        },
+        {
+          "event_id": "S003-E02",
+          "source_id": "S003",
+          "record_header": "[S003 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740273.707059",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "이휘태 매니저님께 기다려달라고 요청",
+          "actor": "이혜정",
+          "work_object": "이휘태 매니저님께 기다려달라고 요청",
+          "action": "기다려달라고 요청",
+          "recipient": null,
+          "event_type": "request",
+          "status": null,
+          "evidence": "이휘태 매니저님은 조금 기다려보시죠.",
+          "rule_corrections": [],
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S004",
+      "body": "이휘태 매니저님이랑 정상환 이사님 모두 승인 났네요. PO번호는 메일로 보냈어요.",
+      "events": [
+        {
+          "event_id": "S004-E01",
+          "source_id": "S004",
+          "record_header": "[S004 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740274.515089",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "이휘태 매니저 승인 완료",
+          "actor": "이휘태 매니저",
+          "work_object": "승인",
+          "action": "승인 났다",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 완료",
+          "evidence": "이휘태 매니저님이랑 정상환 이사님 모두 승인 났네요.",
+          "rule_corrections": [],
+          "validation_errors": []
+        },
+        {
+          "event_id": "S004-E02",
+          "source_id": "S004",
+          "record_header": "[S004 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740274.515089",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "정상환 이사 승인 완료",
+          "actor": "이혜정",
+          "work_object": "정상환 이사 승인",
+          "action": "승인 났네요",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 완료",
+          "evidence": "이휘태 매니저님이랑 정상환 이사님 모두 승인 났네요.",
+          "rule_corrections": [],
+          "validation_errors": []
+        },
+        {
+          "event_id": "S004-E03",
+          "source_id": "S004",
+          "record_header": "[S004 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740274.515089",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "PO번호 메일 발송",
+          "actor": "이혜정",
+          "work_object": "PO번호",
+          "action": "메일로 보냄",
+          "recipient": null,
+          "event_type": "completion",
+          "status": null,
+          "evidence": "PO번호는 메일로 보냈어요.",
+          "rule_corrections": [],
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S005",
+      "body": "네 매니저님~ 감사합니다. MIGO 올리고, 오늘 퇴근하기 전에 마충렬 매니저님께 제출하겠습니다.",
+      "events": [
+        {
+          "event_id": "S005-E01",
+          "source_id": "S005",
+          "record_header": "[S005 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740275.873709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "focus": "MIGO 처리",
+          "actor": "원이정",
+          "work_object": "MIGO",
+          "action": "제출하겠습니다",
+          "recipient": "마충렬 매니저",
+          "event_type": "plan",
+          "status": null,
+          "evidence": "MIGO 올리고",
+          "rule_corrections": [],
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S006",
+      "body": "네~ 순서 지켜서 클립으로 전달 부탁드려요~",
+      "events": [
+        {
+          "event_id": "S006-E01",
+          "source_id": "S006",
+          "record_header": "[S006 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740276.941659",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "focus": "클립 전달 요청",
+          "actor": "원이정",
+          "work_object": "클립",
+          "action": "전달",
+          "recipient": null,
+          "event_type": "request",
+          "status": null,
+          "evidence": "순서 지켜서 클립으로 전달 부탁드려요~",
+          "rule_corrections": [
+            "request_actor_changed_to_partner"
+          ],
+          "validation_errors": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "case_id": "case_05",
+  "absent_person": "원이정",
+  "absence_cutoff": "same day 16:00",
+  "cutoff_basis": "assistant-proposed assumption after receiving revised dialogue; not a message fact",
+  "business_date": null,
+  "dialogue_time_basis": "for this experiment only, treat displayed 15:43–15:45 as same-day business times",
+  "supersedes": "earlier draft morning dialogue and 10:00 absence; revised dialogue controls deadlines",
+  "priority_label": null,
+  "split_group": "case_05"
+}

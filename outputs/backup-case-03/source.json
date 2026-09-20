@@ -1,0 +1,61 @@
+{
+  "collection_method": "user_pasted_dm",
+  "data_kind": "scripted_synthetic_dialogue_posted_by_two_accounts",
+  "conversation_url": "https://app.slack.com/client/T0C264NEDRA/D0C35GEKD8C",
+  "source_url_basis": "user browser context; not independently verified",
+  "identity_basis": "display names in user paste; Slack user IDs unavailable",
+  "timestamp_policy": "Displayed times are posting times, not simulated business times. Posting date unknown.",
+  "completeness": "pasted excerpt only; not verified against Slack",
+  "excluded_event": {
+    "speaker": "홍길동",
+    "display_time": "오후 3:29",
+    "text": "Slack에 가입했습니다. 시간을 내어 인사해 보세요.",
+    "reason": "workspace join notice, not work conversation"
+  },
+  "case_id": "case_03",
+  "title": "주간 정산표",
+  "records": [
+    {
+      "source_id": "case_03_M001",
+      "speaker_label": "원이정",
+      "display_time": "오후 3:30",
+      "body": "길동님, 지난주 정산표 업로드할 때 오류 없었어요? 이번 주 건 오늘 오후 3시까지 회계팀에 제출해야 해서요.",
+      "slack_user_id": null,
+      "message_url": null
+    },
+    {
+      "source_id": "case_03_M002",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:30",
+      "body": "네 지난주에눈 문제 없었어요. 제가 업로드하고 회계팀에 완료 메일 보냈습니다",
+      "slack_user_id": null,
+      "message_url": null
+    },
+    {
+      "source_id": "case_03_M003",
+      "speaker_label": "원이정",
+      "display_time": "오후 3:30",
+      "body": "감사합니다. 이번 주 건은 금액 대사 끝났고, 공유폴더에 `주간정산_최종.xlsx`로 저장했어요. 아직 업로드랑 완료 메일은 안 했어요.",
+      "slack_user_id": null,
+      "message_url": null
+    },
+    {
+      "source_id": "case_03_M004",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:31",
+      "body": "방금 열어봤는데 합계는 맞네요. 제출 방법은 지난주 쓴 문서 참고해주세요",
+      "slack_user_id": null,
+      "message_url": null
+    },
+    {
+      "source_id": "case_03_M005",
+      "speaker_label": "원이정",
+      "display_time": "오후 3:31",
+      "body": "네, 점심 먹고 처리할게요.",
+      "slack_user_id": null,
+      "message_url": null
+    }
+  ],
+  "segmentation_basis": "topic boundary reviewed manually; no case markers in pasted messages",
+  "text_policy": "typos preserved; paste escape characters and trailing whitespace normalized"
+}

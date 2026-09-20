@@ -1,0 +1,219 @@
+{
+  "model": "qwen3:4b-instruct",
+  "source_file": "C:\\Users\\nicol\\Documents\\Codex\\2026-09-17\\agent-mcp-multi-agent-graph-ml\\outputs\\slack-mcp\\collected\\sap.json",
+  "message_count": 6,
+  "results": [
+    {
+      "source_id": "S001",
+      "body": "안녕하세요 매니저님~ WP1, WP2 PR/PO 모두 완료되었나요?",
+      "events": [
+        {
+          "event_id": "S001-E01",
+          "source_id": "S001",
+          "record_header": "[S001 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740271.219689",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "WP1, WP2 PR/PO",
+          "action": "승인 완료 여부를 확인",
+          "recipient": null,
+          "event_type": "question",
+          "status": null,
+          "evidence": "안녕하세요 매니저님~ WP1, WP2 PR/PO 모두 완료되었나요?",
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S002",
+      "body": "WP1는 이휘태 매니저님, WP2는 정상환 이사님 승인 대기 중이라 PR까지만 생성되어 있습니다. 마감일이 이번 주 수요일인 것으로 알고 있는데, 빨리 되어야 할 텐데요ㅜ",
+      "events": [
+        {
+          "event_id": "S002-E01",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "actor": "이휘태",
+          "work_object": "WP1",
+          "action": "승인 대기",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 대기",
+          "evidence": "WP1는 이휘태 매니저님, WP2는 정상환 이사님 승인 대기 중이라 PR까지만 생성되어 있습니다.",
+          "validation_errors": []
+        },
+        {
+          "event_id": "S002-E02",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "actor": "정상환",
+          "work_object": "WP2",
+          "action": "승인 대기",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 대기",
+          "evidence": "WP1는 이휘태 매니저님, WP2는 정상환 이사님 승인 대기 중이라 PR까지만 생성되어 있습니다.",
+          "validation_errors": []
+        },
+        {
+          "event_id": "S002-E03",
+          "source_id": "S002",
+          "record_header": "[S002 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740272.372709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "actor": null,
+          "work_object": "PR",
+          "action": "생성",
+          "recipient": null,
+          "event_type": "plan",
+          "status": null,
+          "evidence": "PR까지만 생성되어 있습니다.",
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S003",
+      "body": "제가 정상환 이사님께는 따로 메일 드릴게요. 이휘태 매니저님은 조금 기다려보시죠.",
+      "events": [
+        {
+          "event_id": "S003-E01",
+          "source_id": "S003",
+          "record_header": "[S003 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740273.707059",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "메일",
+          "action": "메일을 드릴게요",
+          "recipient": "정상환 이사님",
+          "event_type": "plan",
+          "status": null,
+          "evidence": "제가 정상환 이사님께는 따로 메일 드릴게요.",
+          "validation_errors": []
+        },
+        {
+          "event_id": "S003-E02",
+          "source_id": "S003",
+          "record_header": "[S003 | 화요일 오전 11시 대화]",
+          "slack_ts": "1789740273.707059",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "이휘태 매니저님의 요청",
+          "action": "기다려보시죠",
+          "recipient": "이휘태 매니저님",
+          "event_type": "plan",
+          "status": null,
+          "evidence": "이휘태 매니저님은 조금 기다려보시죠.",
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S004",
+      "body": "이휘태 매니저님이랑 정상환 이사님 모두 승인 났네요. PO번호는 메일로 보냈어요.",
+      "events": [
+        {
+          "event_id": "S004-E01",
+          "source_id": "S004",
+          "record_header": "[S004 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740274.515089",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "PO번호",
+          "action": "보냈다",
+          "recipient": null,
+          "event_type": "completion",
+          "status": null,
+          "evidence": "PO번호는 메일로 보냈어요.",
+          "validation_errors": []
+        },
+        {
+          "event_id": "S004-E02",
+          "source_id": "S004",
+          "record_header": "[S004 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740274.515089",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "이휘태 매니저님의 승인",
+          "action": "승인 났다",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 완료",
+          "evidence": "이휘태 매니저님이랑 정상환 이사님 모두 승인 났네요.",
+          "validation_errors": []
+        },
+        {
+          "event_id": "S004-E03",
+          "source_id": "S004",
+          "record_header": "[S004 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740274.515089",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "정상환 이사님의 승인",
+          "action": "승인 났다",
+          "recipient": null,
+          "event_type": "status",
+          "status": "승인 완료",
+          "evidence": "이휘태 매니저님이랑 정상환 이사님 모두 승인 났네요.",
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S005",
+      "body": "네 매니저님~ 감사합니다. MIGO 올리고, 오늘 퇴근하기 전에 마충렬 매니저님께 제출하겠습니다.",
+      "events": [
+        {
+          "event_id": "S005-E01",
+          "source_id": "S005",
+          "record_header": "[S005 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740275.873709",
+          "speaker": "원이정",
+          "conversation_partner": "이혜정",
+          "actor": "원이정",
+          "work_object": "MIGO",
+          "action": "MIGO를 올리고 제출",
+          "recipient": "마충렬",
+          "event_type": "plan",
+          "status": null,
+          "evidence": "네 매니저님~ 감사합니다. MIGO 올리고, 오늘 퇴근하기 전에 마충렬 매니저님께 제출하겠습니다.",
+          "validation_errors": []
+        }
+      ]
+    },
+    {
+      "source_id": "S006",
+      "body": "네~ 순서 지켜서 클립으로 전달 부탁드려요~",
+      "events": [
+        {
+          "event_id": "S006-E01",
+          "source_id": "S006",
+          "record_header": "[S006 | 화요일 오후 1시 30분 대화]",
+          "slack_ts": "1789740276.941659",
+          "speaker": "이혜정",
+          "conversation_partner": "원이정",
+          "actor": "이혜정",
+          "work_object": "클립",
+          "action": "클립을 전달",
+          "recipient": null,
+          "event_type": "request",
+          "status": null,
+          "evidence": "네~ 순서 지켜서 클립으로 전달 부탁드려요~",
+          "validation_errors": []
+        }
+      ]
+    }
+  ]
+}

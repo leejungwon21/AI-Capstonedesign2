@@ -1,0 +1,130 @@
+{
+  "provenance": "Manually reviewed fixture; no automatic LLM extraction or ML inference.",
+  "cutoff": "화요일 오후 2시",
+  "absent_person": "원이정",
+  "nodes": [
+    {
+      "id": "원이정",
+      "type": "person"
+    },
+    {
+      "id": "이혜정",
+      "type": "person"
+    },
+    {
+      "id": "이휘태",
+      "type": "person"
+    },
+    {
+      "id": "정상환",
+      "type": "person"
+    },
+    {
+      "id": "마충렬",
+      "type": "person"
+    },
+    {
+      "id": "WP1 승인",
+      "type": "task",
+      "status": "completed_reported",
+      "source_ids": [
+        "S002",
+        "S004"
+      ]
+    },
+    {
+      "id": "WP2 승인",
+      "type": "task",
+      "status": "completed_reported",
+      "source_ids": [
+        "S002",
+        "S004"
+      ]
+    },
+    {
+      "id": "MIGO 처리",
+      "type": "task",
+      "status": "planned_completion_unverified",
+      "source_ids": [
+        "S005"
+      ]
+    },
+    {
+      "id": "서류 제출",
+      "type": "task",
+      "status": "planned_completion_unverified",
+      "source_ids": [
+        "S005",
+        "S006"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "이휘태",
+      "to": "WP1 승인",
+      "type": "approver",
+      "source_ids": [
+        "S002"
+      ]
+    },
+    {
+      "from": "정상환",
+      "to": "WP2 승인",
+      "type": "approver",
+      "source_ids": [
+        "S002"
+      ]
+    },
+    {
+      "from": "원이정",
+      "to": "MIGO 처리",
+      "type": "works_on",
+      "source_ids": [
+        "S005"
+      ]
+    },
+    {
+      "from": "원이정",
+      "to": "서류 제출",
+      "type": "works_on",
+      "source_ids": [
+        "S005"
+      ]
+    },
+    {
+      "from": "MIGO 처리",
+      "to": "서류 제출",
+      "type": "precedes",
+      "source_ids": [
+        "S005"
+      ]
+    },
+    {
+      "from": "서류 제출",
+      "to": "마충렬",
+      "type": "recipient",
+      "source_ids": [
+        "S005"
+      ]
+    }
+  ],
+  "sources": {
+    "S001": "https://bizineer.slack.com/archives/C0C3QGPCB0Q/p1789740271219689",
+    "S002": "https://bizineer.slack.com/archives/C0C3QGPCB0Q/p1789740272372709",
+    "S003": "https://bizineer.slack.com/archives/C0C3QGPCB0Q/p1789740273707059",
+    "S004": "https://bizineer.slack.com/archives/C0C3QGPCB0Q/p1789740274515089",
+    "S005": "https://bizineer.slack.com/archives/C0C3QGPCB0Q/p1789740275873709",
+    "S006": "https://bizineer.slack.com/archives/C0C3QGPCB0Q/p1789740276941659"
+  },
+  "directly_affected_tasks": [
+    "MIGO 처리",
+    "서류 제출"
+  ],
+  "limitations": [
+    "No risk score or trained model.",
+    "Backup availability is unknown.",
+    "Reported completion is not verified in SAP.",
+    "Small illustrative graph, not exhaustive extraction."
+  ]
+}

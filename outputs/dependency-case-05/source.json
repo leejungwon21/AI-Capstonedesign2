@@ -1,0 +1,84 @@
+{
+  "case_id": "case_05",
+  "collection_method": "user_pasted_dm",
+  "data_kind": "scripted_synthetic_dialogue_posted_by_two_accounts",
+  "conversation_url": "https://app.slack.com/client/T0C264NEDRA/D0C35GEKD8C",
+  "source_url_basis": "user browser context, not independently verified",
+  "completeness": "pasted excerpt only; not verified against Slack",
+  "posting_date": null,
+  "text_policy": "typos preserved; paste formatting and trailing whitespace normalized",
+  "records": [
+    {
+      "source_id": "case_05_M001",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:43",
+      "body": "이정님, 오늘 고객사에 월간 실적 보고서 보내야하는데요, 혹시 최종 매출 집계 파일 언제 받을 수 있을까요? 오후 5시전까지 가능할까요?",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M002",
+      "speaker_label": "원이정",
+      "display_time": "오후 3:43",
+      "body": "중복 거래 3건 확인 중이에요. 정리해서 오후 5시까지 공유폴더에 올릴게요. 지금 있는 파일은 수정 전이라 사용하면 안 돼요.",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M003",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:44",
+      "body": "네네, 최종 집계가 있어야 실적 그래프랑 보고서 금액을 수정할 수가 있어서요 ㅠ 그 작업만 한시간이라ㅠㅠ",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M004",
+      "speaker_label": "원이정",
+      "display_time": "오후 3:44",
+      "body": "보고서 발송 마감은 몇 시예요?",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M005",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:44",
+      "body": "오후 6시예요. 제가 수정한 뒤 팀장님 검토도 받아야해서요! 검토는 6시쯤 받기로했어요",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M006",
+      "speaker_label": "원이정",
+      "display_time": "오후 3:44",
+      "body": "네, 중복 거래 확인 끝나면 최종 파일 경로 보내드릴게요. 최대한 빨리하고 말씀 드리겠습니다. 죄송해요",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M007",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:45",
+      "body": "알겠습니다. 보고서 틀은 만들어뒀고, 숫자랑 그래프즌 최종 파일 받은 뒤 반영하려고 합니다!",
+      "speaker_basis": "explicit pasted name",
+      "message_url": null,
+      "slack_user_id": null
+    },
+    {
+      "source_id": "case_05_M008",
+      "speaker_label": "홍길동",
+      "display_time": "오후 3:45",
+      "body": "그럼 이따 연락주세요 고생하십쇼",
+      "speaker_basis": "continuation of previous speaker in paste",
+      "message_url": null,
+      "slack_user_id": null
+    }
+  ]
+}
