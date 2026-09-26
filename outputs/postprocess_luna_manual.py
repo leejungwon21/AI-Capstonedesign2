@@ -118,6 +118,35 @@ def postprocess_event(raw_event, *, record, participants):
     }
 
 
+def link_intra_message_dependencies(events, body):
+    """Add only dependencies directly supported by the same source message."""
+    has_submission_plan = any(
+        event.get("event_type") == "plan"
+        and event.get("action") == "제출"
+        for event in events
+    )
+
+    # Example: "승인되면 제가 제출하고 접수 여부까지 확인할게요"
+    # The receipt check happens after the submission in the same sentence.
+    if has_submission_plan and "제출하고" in body:
+        for event in events:
+            subject = event.get("subject") or ""
+            action = event.get("action") or ""
+
+            if (
+                event.get("event_type") == "plan"
+                and ("접수" in subject or "접수" in event.get("evidence", ""))
+                and "확인" in action
+                and not event.get("prerequisite")
+            ):
+                event["prerequisite"] = "제출 완료"
+                event.setdefault("rule_corrections", []).append(
+                    "receipt_check_requires_submission"
+                )
+
+    return events
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -167,9 +196,21 @@ def main():
                 continue
 
             processed.append(event)
-            total_events += 1
-            total_errors += len(event["validation_errors"])
-            total_corrections += len(event["rule_corrections"])
+
+        processed = link_intra_message_dependencies(
+            processed,
+            record["body"],
+        )
+
+        total_events += len(processed)
+        total_errors += sum(
+            len(event["validation_errors"])
+            for event in processed
+        )
+        total_corrections += sum(
+            len(event["rule_corrections"])
+            for event in processed
+        )
 
         output_blocks[block_name] = {
             "source_id": record["source_id"],
