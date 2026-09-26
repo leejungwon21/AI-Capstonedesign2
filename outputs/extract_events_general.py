@@ -1527,6 +1527,32 @@ def apply_rules(
                 ] = "confirmed"
 
 
+    # 추정 인물만 남고 status/action이 비어 있는
+    # status Event는 의미가 사라지지 않도록
+    # 보수적인 상태 문구만 채운다.
+    if (
+        event.get("event_type") == "status"
+        and not event.get("status")
+        and not event.get("action")
+        and related_people
+        and event.get("certainty") == "uncertain"
+    ):
+        names = ", ".join(
+            person.get("name", "")
+            for person in related_people
+            if person.get("name")
+        )
+
+        if names:
+            event["status"] = (
+                f"{names} 관련 가능성"
+            )
+
+            corrections.append(
+                "uncertain_related_person_status_filled"
+            )
+
+
     # ==================================================
     # 10. 근거 없는 partner recipient 제거
     # ==================================================
