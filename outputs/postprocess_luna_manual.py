@@ -11,6 +11,7 @@ The raw evidence text is never rewritten.
 import argparse
 import copy
 import json
+import re
 from pathlib import Path
 
 from extract_events_general import (
@@ -147,6 +148,106 @@ def link_intra_message_dependencies(events, body):
     return events
 
 
+def add_missing_uncertain_impact_event(events, *, record):
+    """Recover a directly stated uncertain schedule-impact event if Luna omitted it."""
+    body = record["body"]
+    source_id = record["source_id"]
+    speaker = record["speaker_label"].strip()
+
+    already_has_impact = any(
+        "차질" in (event.get("evidence") or "")
+        for event in events
+    )
+
+    if already_has_impact:
+        return events
+
+    match = re.search(
+        r"([^,\n]*(?:되면|된다면|할 경우)[^,\n]*차질[^,\n]*것 같[^,\n]*)",
+        body,
+    )
+
+    if not match:
+        return events
+
+    evidence = match.group(1).strip()
+    subject = (
+        "캠페인 진행 일정"
+        if "캠페인 진행 일정" in evidence
+        else "업무 일정"
+    )
+
+    event = {
+        "source_id": source_id,
+        "speaker": speaker,
+        "evidence": evidence,
+        "subject": subject,
+        "actor": None,
+        "related_people": [],
+        "action": None,
+        "recipient": None,
+        "event_type": "status",
+        "status": "차질이 있을 가능성",
+        "time_scope": "future",
+        "deadline_text": None,
+        "prerequisite": None,
+        "constraint": None,
+        "certainty": "uncertain",
+        "rule_corrections": [
+            "missing_uncertain_schedule_impact_added"
+        ],
+        "validation_errors": [],
+    }
+
+    event["validation_errors"] = validate_event(event)
+
+    return [event] + events
+
+
+def split_compound_plan_events(events):
+    """Split clearly distinct sequential plan actions into atomic Events."""
+    result = []
+
+    for event in events:
+        evidence = event.get("evidence") or ""
+        action = event.get("action") or ""
+
+        should_split = (
+            event.get("event_type") == "plan"
+            and "작성" in action
+            and "전달" in action
+            and (
+                "작성해서" in evidence
+                or "작성하여" in evidence
+                or "작성 후" in evidence
+            )
+        )
+
+        if not should_split:
+            result.append(event)
+            continue
+
+        write_event = copy.deepcopy(event)
+        send_event = copy.deepcopy(event)
+
+        write_event["action"] = "작성"
+        send_event["action"] = "전달"
+
+        write_event.setdefault("rule_corrections", []).append(
+            "compound_plan_split_write"
+        )
+        send_event.setdefault("rule_corrections", []).append(
+            "compound_plan_split_send"
+        )
+
+        write_event["validation_errors"] = validate_event(write_event)
+        send_event["validation_errors"] = validate_event(send_event)
+
+        result.extend([write_event, send_event])
+
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -201,6 +302,20 @@ def main():
             processed,
             record["body"],
         )
+
+        processed = add_missing_uncertain_impact_event(
+            processed,
+            record=record,
+        )
+
+        processed = split_compound_plan_events(
+            processed
+        )
+
+        for index, event in enumerate(processed, start=1):
+            event["event_id"] = (
+                f"{record['source_id']}-E{index:02d}"
+            )
 
         total_events += len(processed)
         total_errors += sum(
