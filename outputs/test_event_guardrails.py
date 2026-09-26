@@ -8,7 +8,11 @@ from extract_events_general import (
     apply_rules,
     normalize_question_events,
 )
-from postprocess_luna_manual import link_intra_message_dependencies
+from postprocess_luna_manual import (
+    add_missing_uncertain_impact_event,
+    link_intra_message_dependencies,
+    split_compound_plan_events,
+)
 
 
 PARTICIPANTS = ["원이정", "홍길동"]
@@ -172,6 +176,135 @@ def test_receipt_check_requires_submission_in_same_message():
     assert "receipt_check_requires_submission" in result[1]["rule_corrections"]
 
 
+def test_expected_future_receipt_is_plan_without_inventing_actor():
+    event = {
+        "subject": "최종 결정안",
+        "actor": None,
+        "related_people": [],
+        "action": "전달 받을 예정",
+        "recipient": None,
+        "event_type": "status",
+        "status": "내일 중으로 최종 결정안 전달 받을 예정",
+        "time_scope": "future",
+        "deadline_text": None,
+        "prerequisite": None,
+        "constraint": None,
+        "certainty": "confirmed",
+    }
+
+    result = corrected(
+        event,
+        "내일 중으로 최종 결정안 전달 받을 예정입니다.",
+        "김지수",
+    )
+
+    assert result["event_type"] == "plan"
+    assert result["actor"] is None
+
+
+def test_concessive_expression_is_not_prerequisite():
+    event = {
+        "subject": "QA 진행",
+        "actor": None,
+        "related_people": [],
+        "action": "QA 진행",
+        "recipient": None,
+        "event_type": "status",
+        "status": "QA 진행에 최소 1-2일 소요",
+        "time_scope": "current",
+        "deadline_text": None,
+        "prerequisite": "고객사에서 배포 전에 수정완료",
+        "constraint": None,
+        "certainty": "confirmed",
+    }
+
+    result = corrected(
+        event,
+        "고객사에서 배포 전에 수정완료하셔도 저희 QA 진행에 최소 1-2일 소요되는데",
+        "김지수",
+    )
+
+    assert result["prerequisite"] is None
+    assert "concessive_not_prerequisite" in result["rule_corrections"]
+
+
+def test_change_result_without_decision_marker_is_status():
+    event = {
+        "subject": "서비스 배포 일정",
+        "actor": None,
+        "related_people": [],
+        "action": "10/13일로 변경",
+        "recipient": None,
+        "event_type": "decision",
+        "status": "10/13일로 변경됨",
+        "time_scope": "future",
+        "deadline_text": None,
+        "prerequisite": None,
+        "constraint": None,
+        "certainty": "confirmed",
+    }
+
+    result = corrected(
+        event,
+        "10/13일로 서비스 배포 일정 변경되어 최종 전달드립니다~!",
+        "김지수",
+    )
+
+    assert result["event_type"] == "status"
+
+
+def test_compound_write_and_send_plan_is_split():
+    events = [{
+        "source_id": "case_08_M006",
+        "speaker": "고윤정",
+        "evidence": "내일까지 딥링크 qa 가이드 문서 작성해서 전달드리는게 좋을 것 같습니다",
+        "subject": "딥링크 qa 가이드 문서",
+        "actor": "고윤정",
+        "related_people": [],
+        "action": "딥링크 QA 가이드 문서를 작성해서 전달",
+        "recipient": None,
+        "event_type": "plan",
+        "status": None,
+        "time_scope": "future",
+        "deadline_text": "내일까지",
+        "prerequisite": None,
+        "constraint": None,
+        "certainty": "uncertain",
+        "rule_corrections": [],
+        "validation_errors": [],
+    }]
+
+    result = split_compound_plan_events(events)
+
+    assert len(result) == 2
+    assert result[0]["action"] == "작성"
+    assert result[1]["action"] == "전달"
+
+
+def test_missing_uncertain_schedule_impact_is_added():
+    record = {
+        "source_id": "case_08_M003",
+        "speaker_label": "고윤정",
+        "body": "김지수 님, 딜레이가 되면 저희 캠페인 진행 일정도 차질이 있을 것 같은데, 구팀장님께서 픽스해주신 사항 있을까요?",
+    }
+    events = [{
+        "source_id": "case_08_M003",
+        "evidence": "구팀장님께서 픽스해주신 사항 있을까요?",
+        "event_type": "question",
+    }]
+
+    result = add_missing_uncertain_impact_event(
+        events,
+        record=record,
+    )
+
+    assert len(result) == 2
+    assert result[0]["event_type"] == "status"
+    assert result[0]["certainty"] == "uncertain"
+    assert result[0]["subject"] == "캠페인 진행 일정"
+    assert "차질" in result[0]["evidence"]
+
+
 def main():
     tests = [
         test_deadline_does_not_invent_schedule,
@@ -179,6 +312,11 @@ def main():
         test_question_does_not_promote_hypothesis_to_prerequisite,
         test_uncertain_related_person_status_is_not_empty,
         test_receipt_check_requires_submission_in_same_message,
+        test_expected_future_receipt_is_plan_without_inventing_actor,
+        test_concessive_expression_is_not_prerequisite,
+        test_change_result_without_decision_marker_is_status,
+        test_compound_write_and_send_plan_is_split,
+        test_missing_uncertain_schedule_impact_is_added,
     ]
 
     for test in tests:
