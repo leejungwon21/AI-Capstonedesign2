@@ -1873,7 +1873,88 @@ def apply_rules(
 
 
     # ==================================================
-    # 14. 기본값 보장
+    # 14. 대상 집단은 recipient가 아님
+    #
+    # 예: "2차 마이그레이션 전 유저 대상으로 발송"
+    # 여기서 유저는 발송 대상 집단이지 문서/업무 수신자가 아님.
+    # ==================================================
+
+    recipient = event.get("recipient")
+
+    if (
+        recipient
+        and "대상으로" in evidence
+        and "발송" in evidence
+        and f"{recipient} 대상으로" in evidence
+    ):
+        event["recipient"] = None
+
+        corrections.append(
+            "audience_not_recipient"
+        )
+
+
+    # ==================================================
+    # 15. 단순 원인 설명은 constraint가 아님
+    #
+    # "~이슈로"처럼 원인만 설명하고 실제 진행 제한이
+    # 명시되지 않은 status Event는 constraint에서 제거.
+    # ==================================================
+
+    constraint = event.get("constraint")
+
+    blocking_markers = (
+        "불가",
+        "제한",
+        "안되고",
+        "안 되고",
+        "할 수 없",
+        "해야",
+        "필요",
+        "버튼",
+        "권한",
+        "리소스",
+        "촉박",
+    )
+
+    if (
+        event.get("event_type") == "status"
+        and constraint
+        and "이슈로" in evidence
+        and not any(
+            marker in evidence
+            for marker in blocking_markers
+        )
+    ):
+        event["constraint"] = None
+
+        corrections.append(
+            "causal_issue_not_constraint"
+        )
+
+
+    # ==================================================
+    # 16. related_people 역할 보수적 보완
+    # ==================================================
+
+    for person in event.get("related_people", []):
+        name = person.get("name") or ""
+
+        if not person.get("role"):
+            if "팀장" in name:
+                person["role"] = "팀장"
+                corrections.append(
+                    "related_person_role_from_title"
+                )
+            elif "매니저" in name:
+                person["role"] = "매니저"
+                corrections.append(
+                    "related_person_role_from_title"
+                )
+
+
+    # ==================================================
+    # 17. 기본값 보장
     # ==================================================
 
     if "prerequisite" not in event:
