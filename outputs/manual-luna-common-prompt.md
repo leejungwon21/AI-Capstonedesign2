@@ -113,6 +113,8 @@ For a fair evaluation, start a **new chat** for each message or ensure the model
 - 대화 상대가 누구인지 현재 메시지만으로 알 수 없으면 actor/recipient를 임의로 채우지 않는다.
 - 요청 대상이 원문에 직접 호명되어 있고 그 사람이 수행해야 하는 요청임이 명백할 때만 actor 또는 related_people에 반영한다.
 - recipient는 "대화 상대"라는 이유만으로 채우지 않는다.
+- "유저 대상으로 발송", "고객 대상으로 노출"처럼 업무의 대상 집단을 말하는 경우 그 집단을 recipient로 넣지 않는다. recipient는 사람/조직이 결과, 문서, 요청 등을 실제로 전달받는 경우에만 사용한다.
+- "~이슈로", "~때문에"처럼 원인을 설명하는 표현은 그것만으로 constraint가 아니다. constraint는 시스템/권한/절차/리소스 등 실제 진행 제한이 원문에서 확인될 때만 기록한다.
 - 단순 인사, 감사, 감탄, 동의만 있으면 events=[].
 
 ## 출력 전 자체 점검
@@ -123,6 +125,8 @@ For a fair evaluation, start a **new chat** for each message or ensure the model
 - evidence가 입력 message 안에 **그대로** 존재하는가?
 - evidence를 요약하거나 오타 수정하지 않았는가?
 - 원문에 없는 사람, 승인, 완료, 담당, 절차를 만들지 않았는가?
+- 발송/노출의 대상 집단을 recipient로 잘못 넣지 않았는가?
+- 단순 원인 설명을 constraint로 잘못 넣지 않았는가?
 - status와 action을 혼동하지 않았는가?
 - 질문/가정을 사실로 확정하지 않았는가?
 - uncertain 표현을 confirmed로 바꾸지 않았는가?
