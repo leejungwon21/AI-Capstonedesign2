@@ -1250,6 +1250,38 @@ def apply_rules(
         )
 
 
+    # --------------------------------------------------
+    # 미래에 전달/수령될 예정인 사건
+    #
+    # 화자의 직접 행동이라고 단정하지 않고
+    # event_type만 plan으로 정규화한다.
+    # --------------------------------------------------
+
+    expected_future_markers = (
+        "받을 예정",
+        "받기로 예정",
+        "전달될 예정",
+        "전달 받을 예정",
+        "전달받을 예정",
+    )
+
+    if (
+        any(
+            marker in evidence
+            for marker in expected_future_markers
+        )
+        and "?" not in evidence
+    ):
+
+        event["event_type"] = (
+            "plan"
+        )
+
+        corrections.append(
+            "expected_future_event_to_plan"
+        )
+
+
     # ==================================================
     # 3. 상대에게 하는 Request
     # ==================================================
@@ -1383,6 +1415,36 @@ def apply_rules(
 
         corrections.append(
             "approval_prerequisite_added"
+        )
+
+
+    # --------------------------------------------------
+    # 가정적 양보 표현은 prerequisite가 아님
+    #
+    # 예: "수정완료하셔도 QA에 1-2일 소요"
+    # --------------------------------------------------
+
+    concessive_markers = (
+        "하셔도",
+        "해도",
+        "되어도",
+        "돼도",
+        "되더라도",
+    )
+
+    if (
+        event.get("prerequisite")
+        and event.get("event_type") == "status"
+        and any(
+            marker in evidence
+            for marker in concessive_markers
+        )
+    ):
+
+        event["prerequisite"] = None
+
+        corrections.append(
+            "concessive_not_prerequisite"
         )
 
 
@@ -1554,7 +1616,47 @@ def apply_rules(
 
 
     # ==================================================
-    # 10. 근거 없는 partner recipient 제거
+    # 10. 결과 상태를 decision으로 과승격하지 않기
+    #
+    # "일정 변경되어"처럼 변경 결과만 확인되고
+    # 결정/확정 행위가 직접 명시되지 않으면 status.
+    # ==================================================
+
+    decision_markers = (
+        "결정",
+        "하기로",
+        "확정",
+        "픽스",
+    )
+
+    change_result_markers = (
+        "변경되어",
+        "변경되었",
+        "변경됐",
+        "바뀌었",
+    )
+
+    if (
+        event.get("event_type") == "decision"
+        and any(
+            marker in evidence
+            for marker in change_result_markers
+        )
+        and not any(
+            marker in evidence
+            for marker in decision_markers
+        )
+    ):
+
+        event["event_type"] = "status"
+
+        corrections.append(
+            "change_result_decision_to_status"
+        )
+
+
+    # ==================================================
+    # 11. 근거 없는 partner recipient 제거
     # ==================================================
 
     recipient = event.get(
