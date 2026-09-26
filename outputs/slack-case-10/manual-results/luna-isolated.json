@@ -1,0 +1,254 @@
+{
+  "block_1": {
+    "events": [
+      {
+        "source_id": "case_10_M001",
+        "subject": "totalStageCount",
+        "actor": null,
+        "related_people": [],
+        "action": "0으로 로깅",
+        "recipient": null,
+        "event_type": "status",
+        "status": "2차 마이그레이션 진행 후 totalStageCount가 모두 0으로 로깅되는 이슈 발생",
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "2차 마이그레이션 진행 후 totalStageCount가 모두 0으로 로깅되는 이슈 발생하여 전달드립니다."
+      },
+      {
+        "source_id": "case_10_M001",
+        "subject": "totalStageCount 로깅 이슈",
+        "actor": "김지수",
+        "related_people": [],
+        "action": "이슈 전달",
+        "recipient": "고윤정",
+        "event_type": "completion",
+        "status": null,
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "고윤정 님 2차 마이그레이션 진행 후 totalStageCount가 모두 0으로 로깅되는 이슈 발생하여 전달드립니다."
+      }
+    ]
+  },
+  "block_2": {
+    "events": [
+      {
+        "source_id": "case_10_M002",
+        "subject": "푸시 세그",
+        "actor": null,
+        "related_people": [],
+        "action": "잘못 발송",
+        "recipient": null,
+        "event_type": "status",
+        "status": "잘못 발송됨",
+        "time_scope": "past",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "아 그래서 푸시 세그가 잘못 발송되었군요ㅜ"
+      },
+      {
+        "source_id": "case_10_M002",
+        "subject": "고객사내 담당자분 부재 여부",
+        "actor": null,
+        "related_people": [
+          {
+            "name": "고객사내 담당자분",
+            "role": "담당자",
+            "certainty": "confirmed"
+          }
+        ],
+        "action": "퇴사로 인한 부재 여부 확인",
+        "recipient": null,
+        "event_type": "question",
+        "status": null,
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "uncertain",
+        "evidence": "현재 고객사내 담당자분 퇴사로 부재한 거로 알고 있는데 맞을까요?"
+      }
+    ]
+  },
+  "block_3": {
+    "events": [
+      {
+        "source_id": "case_10_M003",
+        "subject": "변경",
+        "actor": null,
+        "related_people": [],
+        "action": "변경 가능성",
+        "recipient": null,
+        "event_type": "status",
+        "status": "앞으로도 변경은 거의 불가할 것으로 추정됨",
+        "time_scope": "future",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "uncertain",
+        "evidence": "앞으로도 변경은 거의 불가할 것 같다고 하시네요"
+      },
+      {
+        "source_id": "case_10_M003",
+        "subject": "이슈 책임소재",
+        "actor": null,
+        "related_people": [],
+        "action": "책임소재 판단",
+        "recipient": null,
+        "event_type": "status",
+        "status": "저희 측 책임소재가 없을 것으로 추정됨",
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "uncertain",
+        "evidence": "이건 저희 측에서 제공한 이슈가 아니니 책임소재는 없을 것 같은데"
+      },
+      {
+        "source_id": "case_10_M003",
+        "subject": "세그먼트 설정",
+        "actor": null,
+        "related_people": [],
+        "action": "주의",
+        "recipient": null,
+        "event_type": "requirement",
+        "status": null,
+        "time_scope": "future",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "uncertain",
+        "evidence": "앞으로 세그먼트 설정 시 주의해야할 것 같습니다."
+      }
+    ]
+  },
+  "block_4": {
+    "events": [
+      {
+        "source_id": "case_10_M004",
+        "subject": "해당 유저 속성",
+        "actor": null,
+        "related_people": [],
+        "action": "총 스테이지 수 비표시",
+        "recipient": null,
+        "event_type": "status",
+        "status": "참여한 총 스테이지를 나타내는 것이 아님",
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": "개발 구현 이슈",
+        "certainty": "confirmed",
+        "evidence": "해당 유저 속성 개발 구현 이슈로 참여한 총 스테이지를 나타내는 것이 아니며"
+      },
+      {
+        "source_id": "case_10_M004",
+        "subject": "해당 유저 속성",
+        "actor": null,
+        "related_people": [],
+        "action": "최초 참여 시 값 변경",
+        "recipient": null,
+        "event_type": "status",
+        "status": "처음 참여 시 0->1로 변경됨",
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "처음 참여 시 0->1로 변경되고 있습니다."
+      },
+      {
+        "source_id": "case_10_M004",
+        "subject": "해당 유저 속성",
+        "actor": null,
+        "related_people": [],
+        "action": "스테이지 참여 여부 판별",
+        "recipient": null,
+        "event_type": "status",
+        "status": "스테이지 참여 여부 판별용으로 사용 중",
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "즉 스테이지 참여 여부 판별용으로 사용 중입니다."
+      },
+      {
+        "source_id": "case_10_M004",
+        "subject": "regDate",
+        "actor": null,
+        "related_people": [],
+        "action": "after 2024.01.01로 설정",
+        "recipient": null,
+        "event_type": "decision",
+        "status": null,
+        "time_scope": "future",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "우선 regDate 를 after 2024.01.01로 설정해서"
+      },
+      {
+        "source_id": "case_10_M004",
+        "subject": "2차 마이그레이션 전 유저",
+        "actor": null,
+        "related_people": [],
+        "action": "발송",
+        "recipient": "2차 마이그레이션 전 유저",
+        "event_type": "decision",
+        "status": null,
+        "time_scope": "future",
+        "deadline_text": null,
+        "prerequisite": "regDate 를 after 2024.01.01로 설정",
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "regDate 를 after 2024.01.01로 설정해서 2차 마이그레이션 전 유저 대상으로 발송하기로 했습니다만"
+      },
+      {
+        "source_id": "case_10_M004",
+        "subject": "발송 대상 모수",
+        "actor": null,
+        "related_people": [],
+        "action": "모수 부족",
+        "recipient": null,
+        "event_type": "status",
+        "status": "모수가 적음",
+        "time_scope": "current",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": null,
+        "certainty": "confirmed",
+        "evidence": "모수가 적기 때문에"
+      },
+      {
+        "source_id": "case_10_M004",
+        "subject": "앞으로의 진행사항",
+        "actor": null,
+        "related_people": [
+          {
+            "name": "구팀장님",
+            "role": null,
+            "certainty": "confirmed"
+          }
+        ],
+        "action": "진행사항 논의",
+        "recipient": null,
+        "event_type": "requirement",
+        "status": null,
+        "time_scope": "future",
+        "deadline_text": null,
+        "prerequisite": null,
+        "constraint": "모수가 적음",
+        "certainty": "confirmed",
+        "evidence": "모수가 적기 때문에 앞으로의 진행사항 구팀장님과 논의 필요합니다."
+      }
+    ]
+  }
+}
