@@ -30,12 +30,13 @@ For a fair evaluation, start a **new chat** for each message or ensure the model
 
 4. **상태와 행동을 구분**
    - 현재 상황 설명은 status다.
-   - 앞으로 하겠다는 확정적 행동은 plan이다.
+   - 앞으로 하겠다는 확정적 행동 또는 예정된 수령/전달 같은 미래 사건은 plan이다.
    - 이미 끝난 행동은 completion이다.
    - 상대에게 행동을 요구하면 request다.
    - 절차상 반드시 필요한 행동이면 requirement다.
    - 질문은 question이다.
-   - 실제 선택·확정이 명시되면 decision이다.
+   - "결정되었다", "운영하기로 했다"처럼 실제 선택·확정이 명시되면 decision이다.
+   - 단순히 "일정이 변경되었다", "상태가 바뀌었다"처럼 결과만 확인되는 경우에는 decision으로 올리지 말고 status로 둔다.
 
 5. **완료된 것과 남은 행동을 구분**
    - 이미 완료된 준비나 검토를 다시 해야 할 행동처럼 만들지 않는다.
@@ -43,8 +44,9 @@ For a fair evaluation, start a **new chat** for each message or ensure the model
 
 6. **질문과 가정은 사실이 아님**
    - 질문 내용만으로 실제 변경, 요청, 승인, 완료, 담당 지정이 발생했다고 판단하지 않는다.
-   - "~필요하면", "~된다면", "~할 경우" 같은 가정 조건을 실제 prerequisite로 확정하지 않는다.
-   - 단, 실제 plan/requirement 문장에서 조건이 명시되면 prerequisite로 기록할 수 있다.
+   - "~필요하면", "~된다면", "~할 경우", "~해도" 같은 가정·가정적 양보 표현을 자동으로 prerequisite로 확정하지 않는다.
+   - prerequisite는 실제 행동이 그 조건 충족 이후에만 가능하다고 원문이 명시할 때만 기록한다.
+   - 단, 실제 plan/requirement/decision 문장에서 선행조건이 명시되면 prerequisite로 기록할 수 있다.
 
 7. **불확실성 유지**
    - "아마", "~일 텐데", "것 같다", "듯하다" 등은 확정 사실로 바꾸지 않는다.
@@ -63,8 +65,10 @@ For a fair evaluation, start a **new chat** for each message or ensure the model
 
 10. **한 메시지에 여러 Event 허용**
     - 실제로 서로 다른 업무 사건이 여러 개 있으면 여러 Event로 분리한다.
-    - 서로 다른 업무 행동이 병렬로 언급되면 가능한 한 각각 별도 Event로 분리한다.
+    - 서로 다른 업무 행동이 병렬 또는 연속으로 언급되면 가능한 한 각각 별도 Event로 분리한다.
     - 예: "업로드랑 완료 메일은 안 했어요"는 "업로드 미완료"와 "완료 메일 미발송"을 별도 Event로 본다.
+    - 예: "문서를 작성해서 전달하겠습니다"는 "문서 작성"과 "문서 전달"을 별도 Event로 본다.
+    - 하나의 문장에 확정 사실과 별개의 불확실한 영향/우려가 함께 있으면 각각 별도 Event로 분리한다.
     - 같은 사실을 표현만 바꿔 중복 Event로 만들지 않는다.
 
 11. **action은 짧고 원자적으로 작성**
@@ -103,7 +107,8 @@ For a fair evaluation, start a **new chat** for each message or ensure the model
 - "할게요", "하겠습니다", "확인해볼게요" → plan
 - "해주세요", "부탁드립니다", "기다려주세요" → request
 - "해야 합니다", "요청해야 해요", "필요합니다" → requirement
-- "승인되면 제출할게요"처럼 실제 행동 앞 조건이 명시되면 prerequisite에 그 조건을 기록한다.
+- "승인되면 제출할게요"처럼 실제 행동이 해당 조건 이후에만 수행됨이 명시되면 prerequisite에 그 조건을 기록한다.
+- "~수정완료하셔도 QA에 1-2일 소요"처럼 가정적 양보 표현은 prerequisite가 아니라 상태/제약으로 본다.
 - "승인이 있어야 제출 가능"처럼 시스템/절차상 제한이면 constraint에 기록한다.
 - 대화 상대가 누구인지 현재 메시지만으로 알 수 없으면 actor/recipient를 임의로 채우지 않는다.
 - 요청 대상이 원문에 직접 호명되어 있고 그 사람이 수행해야 하는 요청임이 명백할 때만 actor 또는 related_people에 반영한다.
