@@ -38,6 +38,82 @@ def load_json(path):
         return json.load(file)
 
 
+def normalize_person_key(value):
+    if not isinstance(value, str):
+        return None
+
+    key = re.sub(r"\\s+", "", value).strip()
+
+    if key.endswith("님"):
+        key = key[:-1]
+
+    return key or None
+
+
+def build_person_lookup(person_map):
+    """Build name/alias -> employee-number lookup.
+
+    Expected schema:
+    {
+      "people": [
+        {"person_id": "20260001", "name": "홍길동", "aliases": ["길동님"]}
+      ]
+    }
+    """
+    lookup = {}
+
+    if not person_map:
+        return lookup
+
+    for person in person_map.get("people", []):
+        person_id = person.get("person_id")
+        name = person.get("name")
+        aliases = person.get("aliases", [])
+
+        if not isinstance(person_id, str) or not person_id.strip():
+            continue
+
+        keys = [name, *aliases]
+
+        for value in keys:
+            key = normalize_person_key(value)
+            if key:
+                lookup[key] = person_id.strip()
+
+    return lookup
+
+
+def lookup_person_id(value, person_lookup):
+    key = normalize_person_key(value)
+    if not key:
+        return None
+    return person_lookup.get(key)
+
+
+def attach_person_ids(event, person_lookup):
+    """Attach canonical employee IDs without inventing unresolved identities."""
+    event["speaker_id"] = lookup_person_id(
+        event.get("speaker"),
+        person_lookup,
+    )
+    event["actor_id"] = lookup_person_id(
+        event.get("actor"),
+        person_lookup,
+    )
+    event["recipient_id"] = lookup_person_id(
+        event.get("recipient"),
+        person_lookup,
+    )
+
+    for person in event.get("related_people", []):
+        person["person_id"] = lookup_person_id(
+            person.get("name"),
+            person_lookup,
+        )
+
+    return event
+
+
 def source_record_for_block(block_name, block_data, records):
     events = block_data.get("events", [])
 
@@ -265,6 +341,14 @@ def main():
         default=None,
         help="Optional output path. Default: <input>-validated.json",
     )
+    parser.add_argument(
+        "--person-map",
+        default=None,
+        help=(
+            "Optional employee-ID registry JSON, relative to outputs/ or absolute. "
+            "Unresolved people remain null."
+        ),
+    )
     args = parser.parse_args()
 
     input_path = resolve_path(args.input)
@@ -274,6 +358,18 @@ def main():
     source = load_json(source_path)
     records = source["records"]
     participants = get_participants(records)
+
+    person_map_path = (
+        resolve_path(args.person_map)
+        if args.person_map
+        else None
+    )
+    person_map = (
+        load_json(person_map_path)
+        if person_map_path
+        else None
+    )
+    person_lookup = build_person_lookup(person_map)
 
     output_blocks = {}
     total_events = 0
@@ -316,6 +412,10 @@ def main():
             event["event_id"] = (
                 f"{record['source_id']}-E{index:02d}"
             )
+            attach_person_ids(
+                event,
+                person_lookup,
+            )
 
         total_events += len(processed)
         total_errors += sum(
@@ -336,6 +436,11 @@ def main():
         "version": "manual-luna-isolated-postprocess-v1",
         "source_file": str(source_path),
         "input_file": str(input_path),
+        "person_map_file": (
+            str(person_map_path)
+            if person_map_path
+            else None
+        ),
         "event_count": total_events,
         "validation_error_count": total_errors,
         "rule_correction_count": total_corrections,
