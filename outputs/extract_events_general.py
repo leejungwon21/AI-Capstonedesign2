@@ -1041,6 +1041,8 @@ def normalize_question_events(
     first["event_type"] = "question"
     first["actor"] = None
     first["status"] = None
+    first["prerequisite"] = None
+    first["constraint"] = None
 
     return [first]
 
@@ -1142,6 +1144,24 @@ def create_submission_requirement(
 
 
 # ==================================================
+# 구조화 필드의 명백한 단순 오타 정규화
+# evidence 원문은 절대 수정하지 않음
+# ==================================================
+
+def normalize_structured_text(value):
+    if not isinstance(value, str):
+        return value
+
+    # 예: "ㅅ승인자 변경" -> "승인자 변경"
+    # 한글 음절 바로 앞에 단독으로 붙은 자모만 보수적으로 제거
+    return re.sub(
+        r"(?<![가-힣ㄱ-ㅎㅏ-ㅣ])([ㄱ-ㅎㅏ-ㅣ])(?=[가-힣])",
+        "",
+        value,
+    )
+
+
+# ==================================================
 # Python 규칙 보정
 # ==================================================
 
@@ -1155,6 +1175,16 @@ def apply_rules(
 ):
 
     corrections = []
+
+    for field in ("subject", "action", "status"):
+        original = event.get(field)
+        normalized = normalize_structured_text(original)
+
+        if normalized != original:
+            event[field] = normalized
+            corrections.append(
+                f"{field}_obvious_typo_normalized"
+            )
 
 
     # ==================================================
@@ -1170,6 +1200,10 @@ def apply_rules(
         event["actor"] = None
 
         event["status"] = None
+
+        event["prerequisite"] = None
+
+        event["constraint"] = None
 
         corrections.append(
             "question_normalized"
@@ -1582,6 +1616,29 @@ def apply_rules(
             evidence
         )
     )
+
+    # ----------------------------------------------
+    # "2시까지 제출할 요청서"를 모델이
+    # 근거 없이 "제출 예정" status로 만든 경우
+    # requirement로 보수적으로 정규화
+    # ----------------------------------------------
+
+    if (
+        python_deadline
+        and "제출할" in evidence
+        and "예정" not in evidence
+        and event.get("event_type") == "status"
+        and "예정" in (event.get("status") or "")
+    ):
+        event["event_type"] = "requirement"
+        event["action"] = "제출 필요"
+        event["status"] = None
+        event["actor"] = None
+        event["deadline_text"] = python_deadline
+
+        corrections.append(
+            "unsupported_submission_schedule_to_requirement"
+        )
 
     # ----------------------------------------------
     # "2시까지 제출할 요청서 작성 완료"
