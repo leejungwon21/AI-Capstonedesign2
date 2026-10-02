@@ -154,6 +154,12 @@ def build_work_event_context(tasks, events):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case", default="THREAD-00005")
+    ap.add_argument("--save-upstream", action="store_true",
+                    help="Save Event+Task output for controlled Work experiments.")
+    ap.add_argument("--reuse-upstream", action="store_true",
+                    help="Reuse previously saved Event+Task output; skip Event/Task API calls.")
+    ap.add_argument("--relations", choices=["on", "off"], default="on",
+                    help="Enable or disable Task Relation extraction before Work integration.")
     args = ap.parse_args()
 
     case_path = ROOT / "evaluation" / "cases" / f"{args.case}.json"
@@ -163,49 +169,94 @@ def main():
 
     src = read_json(case_path)
     people = src["people"]
-    events = []
+    upstream_path = out_dir / f"{args.case}.upstream.json"
 
-    for m in src["messages"]:
-        payload = {
-            "message": {
-                "source_id": m["id"],
-                "slack_id": m["author_id"],
-                "timestamp": m["timestamp"],
-                "channel": m["channel"],
-                "text": safe_text(m["text"])
-            },
-            "people": people
-        }
-        result, _ = call_structured(system_prompt=prompt("event_extraction.md"), user_payload=payload, json_schema=EVENT_SCHEMA)
-        extracted = result["events"]
-        for e in extracted:
-            e["source_id"] = m["id"]
-        events.extend(extracted)
-        print(f'{m["id"]}: {len(extracted)} event(s)')
+    if args.reuse_upstream:
+        if not upstream_path.exists():
+            raise FileNotFoundError(
+                f"Saved upstream not found: {upstream_path}. "
+                "Run once with --save-upstream first."
+            )
+        upstream = read_json(upstream_path)
+        events = upstream["events"]
+        tasks = upstream["tasks"]
+        print(f"Reused upstream: {upstream_path}")
+        print(f"Upstream counts: events={len(events)}, tasks={len(tasks)}")
+    else:
+        events = []
 
-    assign_event_ids(events)
+        for m in src["messages"]:
+            payload = {
+                "message": {
+                    "source_id": m["id"],
+                    "slack_id": m["author_id"],
+                    "timestamp": m["timestamp"],
+                    "channel": m["channel"],
+                    "text": safe_text(m["text"])
+                },
+                "people": people
+            }
+            result, _ = call_structured(
+                system_prompt=prompt("event_extraction.md"),
+                user_payload=payload,
+                json_schema=EVENT_SCHEMA
+            )
+            extracted = result["events"]
+            for e in extracted:
+                e["source_id"] = m["id"]
+            events.extend(extracted)
+            print(f'{m["id"]}: {len(extracted)} event(s)')
 
-    task_result, _ = call_structured(
-        system_prompt=prompt("event_to_task.md"),
-        user_payload={"new_events": events, "existing_tasks": [], "people": people},
-        json_schema=TASK_SCHEMA,
-        max_output_tokens=8000
-    )
-    tasks = task_result["tasks"]
-    assign_ids(tasks, "task_id", "PTASK")
+        assign_event_ids(events)
+
+        task_result, _ = call_structured(
+            system_prompt=prompt("event_to_task.md"),
+            user_payload={"new_events": events, "existing_tasks": [], "people": people},
+            json_schema=TASK_SCHEMA,
+            max_output_tokens=8000
+        )
+        tasks = task_result["tasks"]
+        assign_ids(tasks, "task_id", "PTASK")
+
+        if args.save_upstream:
+            can_save = True
+            if gold_path.exists():
+                gold_for_check = read_json(gold_path)
+                expected_tasks = len(gold_for_check.get("tasks", []))
+                if len(tasks) != expected_tasks:
+                    can_save = False
+                    print(
+                        f"Upstream NOT saved: predicted tasks={len(tasks)}, "
+                        f"gold tasks={expected_tasks}. Run again until the controlled "
+                        "upstream has the expected Task count."
+                    )
+            if can_save:
+                upstream_path.write_text(
+                    json.dumps(
+                        {"case_id": args.case, "events": events, "tasks": tasks},
+                        ensure_ascii=False,
+                        indent=2
+                    ),
+                    encoding="utf-8"
+                )
+                print(f"Saved upstream: {upstream_path}")
 
     work_event_context = build_work_event_context(tasks, events)
 
-    relation_result, _ = call_structured(
-        system_prompt=prompt("task_relations.md"),
-        user_payload={
-            "tasks": tasks,
-            "event_context": work_event_context
-        },
-        json_schema=TASK_RELATION_SCHEMA,
-        max_output_tokens=4000
-    )
-    task_relations = relation_result["relations"]
+    if args.relations == "on":
+        relation_result, _ = call_structured(
+            system_prompt=prompt("task_relations.md"),
+            user_payload={
+                "tasks": tasks,
+                "event_context": work_event_context
+            },
+            json_schema=TASK_RELATION_SCHEMA,
+            max_output_tokens=4000
+        )
+        task_relations = relation_result["relations"]
+    else:
+        task_relations = []
+        print("Task Relation stage: OFF")
 
     work_result, _ = call_structured(
         system_prompt=prompt("task_to_work.md"),
@@ -221,8 +272,17 @@ def main():
     works = work_result["works"]
     assign_ids(works, "work_id", "PWORK")
 
-    pred = {"case_id": args.case, "events": events, "tasks": tasks, "task_relations": task_relations, "works": works}
-    pred_path = out_dir / f"{args.case}.prediction.json"
+    pred = {
+        "case_id": args.case,
+        "relations_mode": args.relations,
+        "reused_upstream": args.reuse_upstream,
+        "events": events,
+        "tasks": tasks,
+        "task_relations": task_relations,
+        "works": works
+    }
+    mode = f"relations-{args.relations}"
+    pred_path = out_dir / f"{args.case}.{mode}.prediction.json"
     pred_path.write_text(json.dumps(pred, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved: {pred_path}")
     print(f"Counts: events={len(events)}, tasks={len(tasks)}, works={len(works)}")
@@ -231,7 +291,7 @@ def main():
         gold = read_json(gold_path)
         metrics = evaluate_grouping(gold, pred)
         metrics["event_count"] = {"gold": len(gold.get("events", [])), "pred": len(events)}
-        metrics_path = out_dir / f"{args.case}.metrics.json"
+        metrics_path = out_dir / f"{args.case}.{mode}.metrics.json"
         metrics_path.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 
         issues = []
@@ -285,7 +345,14 @@ def main():
             "case_id": args.case,
             "model": "gpt-6-luna",
             "experiment": {
-                "work_input": "tasks_plus_event_context_plus_task_relations"
+                "work_input": (
+                    "tasks_plus_event_context_plus_task_relations"
+                    if args.relations == "on"
+                    else "tasks_plus_event_context"
+                ),
+                "relations": args.relations,
+                "reuse_upstream": args.reuse_upstream,
+                "upstream_path": str(upstream_path) if args.reuse_upstream else None
             },
             "scores": {
                 "event_to_task_pairwise": metrics["event_to_task_pairwise"],
