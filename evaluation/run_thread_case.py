@@ -3,6 +3,7 @@ import argparse
 import json
 import re
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -161,8 +162,82 @@ def main():
         metrics["event_count"] = {"gold": len(gold.get("events", [])), "pred": len(events)}
         metrics_path = out_dir / f"{args.case}.metrics.json"
         metrics_path.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        issues = []
+        gold_events = len(gold.get("events", []))
+        pred_events = len(events)
+        if pred_events > gold_events:
+            issues.append({
+                "type": "event_over_extraction",
+                "detail": f"Event 과추출: Gold {gold_events}, Pred {pred_events} (+{pred_events - gold_events})"
+            })
+        elif pred_events < gold_events:
+            issues.append({
+                "type": "event_under_extraction",
+                "detail": f"Event 누락: Gold {gold_events}, Pred {pred_events} ({pred_events - gold_events})"
+            })
+
+        counts = metrics["counts"]
+        if counts["pred_tasks"] != counts["gold_tasks"]:
+            issues.append({
+                "type": "task_count_mismatch",
+                "detail": f"Task 개수 불일치: Gold {counts['gold_tasks']}, Pred {counts['pred_tasks']}"
+            })
+
+        if counts["pred_works"] > counts["gold_works"]:
+            issues.append({
+                "type": "work_over_split",
+                "detail": f"Work 단위 통합 실패/과분리: Gold {counts['gold_works']}, Pred {counts['pred_works']}"
+            })
+        elif counts["pred_works"] < counts["gold_works"]:
+            issues.append({
+                "type": "work_over_merge",
+                "detail": f"Work 과통합: Gold {counts['gold_works']}, Pred {counts['pred_works']}"
+            })
+
+        work_score = metrics["task_to_work_pairwise"]
+        if work_score["f1"] == 0 and counts["gold_works"] > 0:
+            issues.append({
+                "type": "work_integration_failure",
+                "detail": "Task→Work pairwise F1=0.0: Work 단위 통합에 실패"
+            })
+
+        task_score = metrics["event_to_task_pairwise"]
+        if task_score["recall"] == 1.0 and task_score["precision"] < 1.0:
+            issues.append({
+                "type": "event_to_task_false_positives",
+                "detail": f"Event→Task Recall=1.0, Precision={task_score['precision']:.4f}: 누락은 없지만 불필요한 pair가 발생"
+            })
+
+        record = {
+            "run_at_utc": datetime.now(timezone.utc).isoformat(),
+            "case_id": args.case,
+            "model": "gpt-6-luna",
+            "scores": {
+                "event_to_task_pairwise": metrics["event_to_task_pairwise"],
+                "task_to_work_pairwise": metrics["task_to_work_pairwise"]
+            },
+            "counts": {
+                **metrics["counts"],
+                "gold_events": gold_events,
+                "pred_events": pred_events
+            },
+            "issues": issues
+        }
+
+        history_path = ROOT / "evaluation" / "experiment_history.jsonl"
+        with history_path.open("a", encoding="utf-8") as hf:
+            hf.write(json.dumps(record, ensure_ascii=False) + "\n")
+
         print(json.dumps(metrics, ensure_ascii=False, indent=2))
+        print("\nIssues:")
+        if issues:
+            for issue in issues:
+                print(f"- {issue['detail']}")
+        else:
+            print("- 감지된 주요 문제 없음")
         print(f"Saved: {metrics_path}")
+        print(f"Logged: {history_path}")
 
 if __name__ == "__main__":
     main()
