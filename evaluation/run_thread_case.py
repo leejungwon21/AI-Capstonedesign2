@@ -51,12 +51,12 @@ TASK_SCHEMA = {
         "properties":{
             "task_id":{"type":["string","null"]},"title":{"type":"string"},"subject":{"type":["string","null"]},
             "status":{"type":"string","enum":["planned","in_progress","waiting","blocked","completed","unknown"]},
-            "status_history":{"type":"array","items":{}},
+            "status_history":{"type":"array","items":{"type":"object","additionalProperties":False,"required":["from","to","changed_at"],"properties":{"from":{"type":["string","null"]},"to":{"type":["string","null"]},"changed_at":{"type":["string","null"]}}}},
             "deadline":{"type":"object","additionalProperties":False,"required":["text","at"],"properties":{"text":{"type":["string","null"]},"at":{"type":["string","null"]}}},
             "next_action":{"type":["string","null"]},
             "participants":{"type":"array","items":{"type":"object","additionalProperties":False,"required":["slack_id","name","roles","event_ids"],"properties":{"slack_id":{"type":["string","null"]},"name":{"type":"string"},"roles":{"type":"array","items":{"type":"string"}},"event_ids":{"type":"array","items":{"type":"string"}}}}},
             "events":{"type":"array","items":{"type":"object","additionalProperties":False,"required":["event_id","role"],"properties":{"event_id":{"type":"string"},"role":{"type":"string"}}}},
-            "task_links":{"type":"array","items":{}},
+            "task_links":{"type":"array","items":{"type":"object","additionalProperties":False,"required":["task_id","relation"],"properties":{"task_id":{"type":["string","null"]},"relation":{"type":["string","null"]}}}},
             "certainty":{"type":"string","enum":["confirmed","uncertain"]}
         }
     }}}
