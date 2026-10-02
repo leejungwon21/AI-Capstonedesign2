@@ -1,0 +1,48 @@
+{
+  "case_id": "THREAD-00005",
+  "experiment_id": "run_04",
+  "model": "gpt-6-luna",
+  "setup": {
+    "event_prompt": "refined_granularity",
+    "work_definition": "project_level",
+    "work_input": "tasks_plus_event_context",
+    "evaluator": "task_ids_aligned_by_slack_source_overlap"
+  },
+  "counts": {
+    "gold_events": 24,
+    "pred_events": 27,
+    "gold_tasks": 4,
+    "pred_tasks": 4,
+    "gold_works": 1,
+    "pred_works": 2
+  },
+  "metrics": {
+    "event_to_task_pairwise": {
+      "tp": 56,
+      "fp": 25,
+      "fn": 5,
+      "precision": 0.691358024691358,
+      "recall": 0.9180327868852459,
+      "f1": 0.7887323943661971
+    },
+    "task_to_work_pairwise": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 3,
+      "precision": 1,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    }
+  },
+  "task_id_alignment": {
+    "PTASK-00004": "TASK-00020",
+    "PTASK-00003": "TASK-00019",
+    "PTASK-00002": "TASK-00018",
+    "PTASK-00001": "TASK-00017"
+  },
+  "issues": [
+    "Event count differs from Gold by +3, but known differences include acceptable granularity variation and should not be treated as equally severe.",
+    "Work integration is still over-split: Gold=1 project, Pred=2 projects.",
+    "Task-to-Work precision is 1.0 and recall is 0.5, so observed same-project pairings are correct but one project connection remains missing."
+  ]
+}
