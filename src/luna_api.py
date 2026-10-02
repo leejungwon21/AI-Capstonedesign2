@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 
 OPENAI_URL = "https://api.openai.com/v1/responses"
-MODEL = "gpt-5.6-luna"
+MODEL = "gpt-6-luna"
 
 
 def call_structured(*, system_prompt, user_payload, json_schema, api_key=None, max_output_tokens=4000):
