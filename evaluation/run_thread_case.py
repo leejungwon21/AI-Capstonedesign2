@@ -63,6 +63,21 @@ TASK_SCHEMA = {
     }}}
 }
 
+TASK_RELATION_SCHEMA = {
+    "type":"object","additionalProperties":False,"required":["relations"],
+    "properties":{"relations":{"type":"array","items":{
+        "type":"object","additionalProperties":False,
+        "required":["source_task_id","target_task_id","relation","evidence","certainty"],
+        "properties":{
+            "source_task_id":{"type":"string"},
+            "target_task_id":{"type":"string"},
+            "relation":{"type":"string","enum":["handoff_to","depends_on","blocks","follows","shares_output"]},
+            "evidence":{"type":"array","items":{"type":"string"}},
+            "certainty":{"type":"string","enum":["confirmed","uncertain"]}
+        }
+    }}}
+}
+
 WORK_SCHEMA = {
     "type":"object","additionalProperties":False,"required":["works"],
     "properties":{"works":{"type":"array","items":{
@@ -181,11 +196,23 @@ def main():
 
     work_event_context = build_work_event_context(tasks, events)
 
+    relation_result, _ = call_structured(
+        system_prompt=prompt("task_relations.md"),
+        user_payload={
+            "tasks": tasks,
+            "event_context": work_event_context
+        },
+        json_schema=TASK_RELATION_SCHEMA,
+        max_output_tokens=4000
+    )
+    task_relations = relation_result["relations"]
+
     work_result, _ = call_structured(
         system_prompt=prompt("task_to_work.md"),
         user_payload={
             "tasks": tasks,
             "event_context": work_event_context,
+            "task_relations": task_relations,
             "existing_works": []
         },
         json_schema=WORK_SCHEMA,
@@ -194,7 +221,7 @@ def main():
     works = work_result["works"]
     assign_ids(works, "work_id", "PWORK")
 
-    pred = {"case_id": args.case, "events": events, "tasks": tasks, "works": works}
+    pred = {"case_id": args.case, "events": events, "tasks": tasks, "task_relations": task_relations, "works": works}
     pred_path = out_dir / f"{args.case}.prediction.json"
     pred_path.write_text(json.dumps(pred, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved: {pred_path}")
@@ -258,7 +285,7 @@ def main():
             "case_id": args.case,
             "model": "gpt-6-luna",
             "experiment": {
-                "work_input": "tasks_plus_event_context"
+                "work_input": "tasks_plus_event_context_plus_task_relations"
             },
             "scores": {
                 "event_to_task_pairwise": metrics["event_to_task_pairwise"],
