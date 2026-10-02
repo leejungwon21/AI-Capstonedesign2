@@ -98,6 +98,44 @@ def assign_ids(items, key, prefix):
         if not x.get(key):
             x[key] = f"{prefix}-{i:05d}"
 
+def build_work_event_context(tasks, events):
+    """Preserve source-grounded Event context for Task -> Work integration."""
+    event_map = {e["event_id"]: e for e in events}
+    context = []
+
+    for task in tasks:
+        task_event_ids = [x["event_id"] for x in task.get("events", [])]
+        task_events = []
+
+        for event_id in task_event_ids:
+            e = event_map.get(event_id)
+            if not e:
+                continue
+            task_events.append({
+                "event_id": event_id,
+                "source_id": e.get("source_id"),
+                "subject": e.get("subject"),
+                "action": e.get("action"),
+                "event_type": e.get("event_type"),
+                "status": e.get("status"),
+                "prerequisite": e.get("prerequisite"),
+                "constraint": e.get("constraint"),
+                "actor": e.get("actor"),
+                "recipient": e.get("recipient"),
+                "related_people": e.get("related_people", []),
+                "deadline": e.get("deadline"),
+                "evidence": e.get("evidence")
+            })
+
+        context.append({
+            "task_id": task["task_id"],
+            "title": task.get("title"),
+            "next_action": task.get("next_action"),
+            "events": task_events
+        })
+
+    return context
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case", default="THREAD-00005")
@@ -141,9 +179,15 @@ def main():
     tasks = task_result["tasks"]
     assign_ids(tasks, "task_id", "PTASK")
 
+    work_event_context = build_work_event_context(tasks, events)
+
     work_result, _ = call_structured(
         system_prompt=prompt("task_to_work.md"),
-        user_payload={"tasks": tasks, "existing_works": []},
+        user_payload={
+            "tasks": tasks,
+            "event_context": work_event_context,
+            "existing_works": []
+        },
         json_schema=WORK_SCHEMA,
         max_output_tokens=5000
     )
@@ -213,6 +257,9 @@ def main():
             "run_at_utc": datetime.now(timezone.utc).isoformat(),
             "case_id": args.case,
             "model": "gpt-6-luna",
+            "experiment": {
+                "work_input": "tasks_plus_event_context"
+            },
             "scores": {
                 "event_to_task_pairwise": metrics["event_to_task_pairwise"],
                 "task_to_work_pairwise": metrics["task_to_work_pairwise"]
