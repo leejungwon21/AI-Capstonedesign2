@@ -6,11 +6,13 @@
 
 - tasks
 - event_context: 각 Task에 실제로 묶인 Event들의 핵심 원문 근거와 연결 정보
+- task_relations: Event 근거에서 별도 추출한 Task 간 명시적 업무 관계
 - existing_works가 있으면 함께 제공
 - Gold Answer는 제공되지 않는다.
 
 event_context는 정답 힌트가 아니라, Task 통합 과정에서 압축될 수 있는 원래 업무 맥락을 보존하기 위한 근거다.
-Work 판단 시 Task 제목만 보지 말고 event_context의 선행조건, handoff, actor/recipient, evidence를 함께 사용한다.
+Work 판단 시 Task 제목만 보지 말고 event_context의 선행조건, handoff, actor/recipient, evidence와 task_relations를 함께 사용한다.
+task_relations는 Work 정답이 아니라 원문에서 추출한 객관적 연결이다. 제목/키워드 유사성보다 명시적 task_relations를 우선한다.
 
 ## 목표
 
@@ -26,12 +28,14 @@ Task 사이의 직접적인 선후관계가 약하더라도 동일한 프로젝�
 
 Work를 바로 생성하지 말고 반드시 다음 순서로 판단한다.
 
-1. 각 Task가 어떤 상위 프로젝트 목표·산출물·업무 맥락에 속하는지 판단한다.
-2. 모든 Task 쌍을 비교해 동일 프로젝트에 속하는 근거가 있는지 확인한다.
-3. event_context에서 선행/후속, handoff, 공통 산출물, 공통 이슈, actor/recipient 연결을 찾아 같은 프로젝트를 판단하는 보조 근거로 사용한다.
-4. 직접 연결이 약해도 동일한 상위 프로젝트 목적을 공유하면 같은 후보 cluster로 묶는다.
-5. 후보 cluster가 하나의 프로젝트 단위로 자연스럽게 설명되는지 검증한다.
-6. 검증된 프로젝트 cluster마다 Work 하나를 만든다.
+1. task_relations에서 Task 간 명시적 연결을 먼저 확인한다.
+2. 연결된 Task들의 경로와 묶음을 파악한다.
+3. 각 Task가 어떤 상위 프로젝트 목표·산출물·업무 맥락에 속하는지 판단한다.
+4. 모든 Task 쌍을 비교해 동일 프로젝트에 속하는 추가 근거가 있는지 확인한다.
+5. event_context에서 선행/후속, handoff, 공통 산출물, 공통 이슈, actor/recipient 연결을 보조 근거로 사용한다.
+6. 직접 연결이 약해도 동일한 상위 프로젝트 목적을 공유하면 같은 후보 cluster로 묶는다.
+7. 후보 cluster가 하나의 프로젝트 단위로 자연스럽게 설명되는지 검증한다.
+8. 검증된 프로젝트 cluster마다 Work 하나를 만든다.
 
 Task 하나마다 Work 하나를 만드는 것을 기본값으로 삼지 않는다.
 
