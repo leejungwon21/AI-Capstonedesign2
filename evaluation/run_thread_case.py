@@ -3,6 +3,7 @@ import argparse
 import json
 import re
 import sys
+import statistics
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -160,7 +161,11 @@ def main():
                     help="Reuse previously saved Event+Task output; skip Event/Task API calls.")
     ap.add_argument("--relations", choices=["on", "off"], default="on",
                     help="Enable or disable Task Relation extraction before Work integration.")
+    ap.add_argument("--repeat", type=int, default=1,
+                    help="Repeat only the Work stage N times on the same upstream and report mean/std.")
     args = ap.parse_args()
+    if args.repeat < 1:
+        raise ValueError("--repeat must be >= 1")
 
     case_path = ROOT / "evaluation" / "cases" / f"{args.case}.json"
     gold_path = ROOT / "evaluation" / "cases" / f"{args.case}.gold.json"
@@ -243,54 +248,71 @@ def main():
 
     work_event_context = build_work_event_context(tasks, events)
 
-    if args.relations == "on":
-        relation_result, _ = call_structured(
-            system_prompt=prompt("task_relations.md"),
+    gold = read_json(gold_path) if gold_path.exists() else None
+    mode = f"relations-{args.relations}"
+    run_results = []
+
+    for run_idx in range(1, args.repeat + 1):
+        if args.relations == "on":
+            relation_result, _ = call_structured(
+                system_prompt=prompt("task_relations.md"),
+                user_payload={
+                    "tasks": tasks,
+                    "event_context": work_event_context
+                },
+                json_schema=TASK_RELATION_SCHEMA,
+                max_output_tokens=4000
+            )
+            task_relations = relation_result["relations"]
+        else:
+            task_relations = []
+            if run_idx == 1:
+                print("Task Relation stage: OFF")
+
+        work_result, _ = call_structured(
+            system_prompt=prompt("task_to_work.md"),
             user_payload={
                 "tasks": tasks,
-                "event_context": work_event_context
+                "event_context": work_event_context,
+                "task_relations": task_relations,
+                "existing_works": []
             },
-            json_schema=TASK_RELATION_SCHEMA,
-            max_output_tokens=4000
+            json_schema=WORK_SCHEMA,
+            max_output_tokens=5000
         )
-        task_relations = relation_result["relations"]
-    else:
-        task_relations = []
-        print("Task Relation stage: OFF")
+        works = work_result["works"]
+        assign_ids(works, "work_id", "PWORK")
 
-    work_result, _ = call_structured(
-        system_prompt=prompt("task_to_work.md"),
-        user_payload={
+        pred = {
+            "case_id": args.case,
+            "relations_mode": args.relations,
+            "reused_upstream": args.reuse_upstream,
+            "events": events,
             "tasks": tasks,
-            "event_context": work_event_context,
             "task_relations": task_relations,
-            "existing_works": []
-        },
-        json_schema=WORK_SCHEMA,
-        max_output_tokens=5000
-    )
-    works = work_result["works"]
-    assign_ids(works, "work_id", "PWORK")
+            "works": works
+        }
 
-    pred = {
-        "case_id": args.case,
-        "relations_mode": args.relations,
-        "reused_upstream": args.reuse_upstream,
-        "events": events,
-        "tasks": tasks,
-        "task_relations": task_relations,
-        "works": works
-    }
-    mode = f"relations-{args.relations}"
+        metrics = evaluate_grouping(gold, pred) if gold else None
+        if metrics is not None:
+            metrics["event_count"] = {"gold": len(gold.get("events", [])), "pred": len(events)}
+        run_results.append({"run": run_idx, "prediction": pred, "metrics": metrics})
+        if metrics is not None:
+            wf1 = metrics["task_to_work_pairwise"]["f1"]
+            print(f"Run {run_idx}/{args.repeat}: works={len(works)}, work_f1={wf1:.4f}")
+        else:
+            print(f"Run {run_idx}/{args.repeat}: works={len(works)}")
+
+    # Save only the final prediction for inspection, not every repeated run.
+    pred = run_results[-1]["prediction"]
+    works = pred["works"]
     pred_path = out_dir / f"{args.case}.{mode}.prediction.json"
     pred_path.write_text(json.dumps(pred, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved: {pred_path}")
     print(f"Counts: events={len(events)}, tasks={len(tasks)}, works={len(works)}")
 
-    if gold_path.exists():
-        gold = read_json(gold_path)
-        metrics = evaluate_grouping(gold, pred)
-        metrics["event_count"] = {"gold": len(gold.get("events", [])), "pred": len(events)}
+    if gold is not None:
+        metrics = run_results[-1]["metrics"]
         metrics_path = out_dir / f"{args.case}.{mode}.metrics.json"
         metrics_path.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -340,6 +362,19 @@ def main():
                 "detail": f"Event→Task Recall=1.0, Precision={task_score['precision']:.4f}: 누락은 없지만 불필요한 pair가 발생"
             })
 
+        work_f1_values = [
+            x["metrics"]["task_to_work_pairwise"]["f1"]
+            for x in run_results if x["metrics"] is not None
+        ]
+        work_counts = [len(x["prediction"]["works"]) for x in run_results]
+        repeat_summary = {
+            "runs": args.repeat,
+            "work_f1_mean": statistics.mean(work_f1_values),
+            "work_f1_std": statistics.pstdev(work_f1_values) if len(work_f1_values) > 1 else 0.0,
+            "work_f1_values": work_f1_values,
+            "work_count_values": work_counts
+        }
+
         record = {
             "run_at_utc": datetime.now(timezone.utc).isoformat(),
             "case_id": args.case,
@@ -352,11 +387,12 @@ def main():
                 ),
                 "relations": args.relations,
                 "reuse_upstream": args.reuse_upstream,
-                "upstream_path": str(upstream_path) if args.reuse_upstream else None
+                "repeat": args.repeat
             },
             "scores": {
                 "event_to_task_pairwise": metrics["event_to_task_pairwise"],
-                "task_to_work_pairwise": metrics["task_to_work_pairwise"]
+                "task_to_work_pairwise_last_run": metrics["task_to_work_pairwise"],
+                "task_to_work_repeat_summary": repeat_summary
             },
             "counts": {
                 **metrics["counts"],
@@ -367,10 +403,50 @@ def main():
         }
 
         history_path = ROOT / "evaluation" / "experiment_history.jsonl"
-        with history_path.open("a", encoding="utf-8") as hf:
-            hf.write(json.dumps(record, ensure_ascii=False) + "\n")
+        previous = None
+        if history_path.exists():
+            lines = [line for line in history_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+            if lines:
+                previous = json.loads(lines[-1])
+
+        meaningful = previous is None
+        reasons = []
+        if previous is not None:
+            prev_exp = previous.get("experiment", {})
+            prev_scores = previous.get("scores", {})
+            prev_counts = previous.get("counts", {})
+            prev_summary = prev_scores.get("task_to_work_repeat_summary", {})
+            prev_mean = prev_summary.get(
+                "work_f1_mean",
+                prev_scores.get("task_to_work_pairwise", {}).get("f1",
+                prev_scores.get("task_to_work_pairwise_last_run", {}).get("f1"))
+            )
+            cur_mean = repeat_summary["work_f1_mean"]
+
+            if prev_exp.get("relations") != args.relations:
+                meaningful = True
+                reasons.append("relations mode changed")
+            if prev_exp.get("work_input") != record["experiment"]["work_input"]:
+                meaningful = True
+                reasons.append("work input changed")
+            if prev_counts.get("pred_tasks") != record["counts"]["pred_tasks"]:
+                meaningful = True
+                reasons.append("Task count changed")
+            if prev_counts.get("pred_works") != record["counts"]["pred_works"]:
+                meaningful = True
+                reasons.append("Work count changed")
+            if prev_mean is None or abs(cur_mean - prev_mean) >= 0.05:
+                meaningful = True
+                reasons.append("Work F1 mean changed by >= 0.05")
+            prev_issue_types = {x.get("type") for x in previous.get("issues", [])}
+            cur_issue_types = {x.get("type") for x in issues}
+            if prev_issue_types != cur_issue_types:
+                meaningful = True
+                reasons.append("issue types changed")
 
         print(json.dumps(metrics, ensure_ascii=False, indent=2))
+        print("\nRepeat summary:")
+        print(json.dumps(repeat_summary, ensure_ascii=False, indent=2))
         print("\nIssues:")
         if issues:
             for issue in issues:
@@ -378,7 +454,14 @@ def main():
         else:
             print("- 감지된 주요 문제 없음")
         print(f"Saved: {metrics_path}")
-        print(f"Logged: {history_path}")
+
+        if meaningful:
+            record["change_reasons"] = reasons or ["first recorded experiment"]
+            with history_path.open("a", encoding="utf-8") as hf:
+                hf.write(json.dumps(record, ensure_ascii=False) + "\n")
+            print(f"Logged meaningful change: {history_path}")
+        else:
+            print("Not logged: no meaningful process/result change.")
 
 if __name__ == "__main__":
     main()
