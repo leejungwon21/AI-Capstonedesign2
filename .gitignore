@@ -1,0 +1,16 @@
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.DS_Store
+.idea/
+.vscode/
+results/
+tmp/
+*.log
+src/slack/collected/
+evaluation/predictions/
