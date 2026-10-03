@@ -1,3 +1,9 @@
+# Archived Experiment: Task Relation Extraction
+
+> 상태: 비활성/실험 보관용. 현재 파이프라인에서는 호출하지 않는다.
+> 이유: THREAD-00005 고정 upstream 5회 A/B에서 relations OFF 평균 Work F1=0.9333, ON=0.8571이었고 ON의 변동성도 더 컸다. 구조 복잡도와 추가 API 호출 대비 이득이 확인되지 않아 제거했다.
+> 이 파일은 시도 이력을 남기기 위해 삭제하지 않는다.
+
 # GPT-6 Luna Task Relation Extraction Prompt
 
 너는 Task들 사이의 명시적 업무 관계를 구조화하는 분석기다.
