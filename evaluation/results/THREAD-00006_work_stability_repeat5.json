@@ -1,0 +1,47 @@
+{
+  "case_id": "THREAD-00006",
+  "run_type": "fixed_upstream_work_stability_repeat5",
+  "model": "gpt-6-luna",
+  "upstream": "fixed",
+  "metrics": {
+    "event_to_task_pairwise": {
+      "precision": 0.7454545454545455,
+      "recall": 0.8913043478260869,
+      "f1": 0.8118811881188119
+    },
+    "work_repeat": {
+      "runs": 5,
+      "f1_values": [
+        0,
+        0,
+        0.5,
+        0,
+        1
+      ],
+      "mean": 0.3,
+      "std": 0.4,
+      "work_count_values": [
+        4,
+        4,
+        2,
+        4,
+        1
+      ]
+    }
+  },
+  "diagnosis": [
+    {
+      "issue": "Work integration is highly unstable on identical upstream",
+      "cause_status": "supported_by_repeat",
+      "evidence": "Same fixed Event/Task upstream produced 4,4,2,4,1 Works and Work F1 values 0,0,0.5,0,1.0.",
+      "likely_cause": "The Task->Work stage relies on one stochastic LLM clustering decision. The prompt contains the needed handoff-chain rules, but a single generation does not apply them consistently."
+    },
+    {
+      "issue": "Single-run Work F1=1.0 was not representative",
+      "cause_status": "supported_by_repeat",
+      "evidence": "5-run mean=0.3, std=0.4 despite one perfect run.",
+      "likely_cause": "High output variance rather than upstream changes."
+    }
+  ],
+  "decision": "Do not accept single-run Work output as stable. Next change should target decision stability, not more Event prompt tuning."
+}
