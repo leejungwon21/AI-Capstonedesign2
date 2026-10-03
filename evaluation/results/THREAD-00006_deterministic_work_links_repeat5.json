@@ -1,0 +1,67 @@
+{
+  "case_id": "THREAD-00006",
+  "run_type": "deterministic_work_links_repeat5",
+  "model": "gpt-6-luna",
+  "upstream": "fixed",
+  "metrics": {
+    "event_to_task_pairwise": {
+      "precision": 0.7454545454545455,
+      "recall": 0.8913043478260869,
+      "f1": 0.8118811881188119
+    },
+    "work_repeat": {
+      "runs": 5,
+      "f1_values": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "mean": 1,
+      "std": 0,
+      "work_count_values": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "comparison_to_previous_repeat": {
+    "previous_mean": 0.3,
+    "previous_std": 0.4,
+    "previous_work_counts": [
+      4,
+      4,
+      2,
+      4,
+      1
+    ],
+    "current_mean": 1,
+    "current_std": 0,
+    "current_work_counts": [
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "diagnosis": [
+    {
+      "issue": "Work instability resolved on THREAD-00006 fixed upstream",
+      "cause_status": "supported_by_repeat",
+      "evidence": "5/5 runs produced exactly 1 Work with F1=1.0.",
+      "likely_cause": "Deterministic strong links and must-link clusters removed reliance on a single stochastic LLM clustering decision for explicit handoff/prerequisite chains."
+    },
+    {
+      "issue": "Event→Task remains main bottleneck",
+      "cause_status": "supported_by_metrics",
+      "evidence": "Event→Task F1 remains 0.8119 because upstream is fixed.",
+      "likely_cause": "Remaining errors are upstream Event granularity and Task membership boundaries, not Work grouping."
+    }
+  ],
+  "decision": "Keep deterministic Work link derivation. Next optimization target: Event extraction and Event→Task boundary accuracy. Validate the deterministic Work rule on additional threads before treating it as generally reliable."
+}
