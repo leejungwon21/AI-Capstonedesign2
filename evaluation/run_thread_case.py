@@ -64,21 +64,6 @@ TASK_SCHEMA = {
     }}}
 }
 
-TASK_RELATION_SCHEMA = {
-    "type":"object","additionalProperties":False,"required":["relations"],
-    "properties":{"relations":{"type":"array","items":{
-        "type":"object","additionalProperties":False,
-        "required":["source_task_id","target_task_id","relation","evidence","certainty"],
-        "properties":{
-            "source_task_id":{"type":"string"},
-            "target_task_id":{"type":"string"},
-            "relation":{"type":"string","enum":["handoff_to","depends_on","blocks","follows","shares_output"]},
-            "evidence":{"type":"array","items":{"type":"string"}},
-            "certainty":{"type":"string","enum":["confirmed","uncertain"]}
-        }
-    }}}
-}
-
 WORK_SCHEMA = {
     "type":"object","additionalProperties":False,"required":["works"],
     "properties":{"works":{"type":"array","items":{
@@ -159,8 +144,6 @@ def main():
                     help="Save Event+Task output for controlled Work experiments.")
     ap.add_argument("--reuse-upstream", action="store_true",
                     help="Reuse previously saved Event+Task output; skip Event/Task API calls.")
-    ap.add_argument("--relations", choices=["on", "off"], default="on",
-                    help="Enable or disable Task Relation extraction before Work integration.")
     ap.add_argument("--repeat", type=int, default=1,
                     help="Repeat only the Work stage N times on the same upstream and report mean/std.")
     args = ap.parse_args()
@@ -249,32 +232,14 @@ def main():
     work_event_context = build_work_event_context(tasks, events)
 
     gold = read_json(gold_path) if gold_path.exists() else None
-    mode = f"relations-{args.relations}"
     run_results = []
 
     for run_idx in range(1, args.repeat + 1):
-        if args.relations == "on":
-            relation_result, _ = call_structured(
-                system_prompt=prompt("task_relations.md"),
-                user_payload={
-                    "tasks": tasks,
-                    "event_context": work_event_context
-                },
-                json_schema=TASK_RELATION_SCHEMA,
-                max_output_tokens=4000
-            )
-            task_relations = relation_result["relations"]
-        else:
-            task_relations = []
-            if run_idx == 1:
-                print("Task Relation stage: OFF")
-
         work_result, _ = call_structured(
             system_prompt=prompt("task_to_work.md"),
             user_payload={
                 "tasks": tasks,
                 "event_context": work_event_context,
-                "task_relations": task_relations,
                 "existing_works": []
             },
             json_schema=WORK_SCHEMA,
@@ -285,11 +250,9 @@ def main():
 
         pred = {
             "case_id": args.case,
-            "relations_mode": args.relations,
             "reused_upstream": args.reuse_upstream,
             "events": events,
             "tasks": tasks,
-            "task_relations": task_relations,
             "works": works
         }
 
@@ -306,14 +269,14 @@ def main():
     # Save only the final prediction for inspection, not every repeated run.
     pred = run_results[-1]["prediction"]
     works = pred["works"]
-    pred_path = out_dir / f"{args.case}.{mode}.prediction.json"
+    pred_path = out_dir / f"{args.case}.prediction.json"
     pred_path.write_text(json.dumps(pred, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved: {pred_path}")
     print(f"Counts: events={len(events)}, tasks={len(tasks)}, works={len(works)}")
 
     if gold is not None:
         metrics = run_results[-1]["metrics"]
-        metrics_path = out_dir / f"{args.case}.{mode}.metrics.json"
+        metrics_path = out_dir / f"{args.case}.metrics.json"
         metrics_path.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 
         issues = []
@@ -380,12 +343,7 @@ def main():
             "case_id": args.case,
             "model": "gpt-6-luna",
             "experiment": {
-                "work_input": (
-                    "tasks_plus_event_context_plus_task_relations"
-                    if args.relations == "on"
-                    else "tasks_plus_event_context"
-                ),
-                "relations": args.relations,
+                "work_input": "tasks_plus_event_context",
                 "reuse_upstream": args.reuse_upstream,
                 "repeat": args.repeat
             },
@@ -423,9 +381,6 @@ def main():
             )
             cur_mean = repeat_summary["work_f1_mean"]
 
-            if prev_exp.get("relations") != args.relations:
-                meaningful = True
-                reasons.append("relations mode changed")
             if prev_exp.get("work_input") != record["experiment"]["work_input"]:
                 meaningful = True
                 reasons.append("work input changed")
