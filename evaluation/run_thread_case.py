@@ -23,7 +23,7 @@ EVENT_SCHEMA = {
             "items": {
                 "type": "object",
                 "additionalProperties": False,
-                "required": ["source_id","subject","actor","related_people","action","recipient","event_type","status","time_scope","deadline","prerequisite","constraint","certainty","evidence"],
+                "required": ["source_id","subject","actor","related_people","action","recipient","event_type","status","time_scope","deadline","prerequisite","constraint","note","certainty","evidence"],
                 "properties": {
                     "source_id": {"type": "string"},
                     "subject": {"type": ["string","null"]},
@@ -37,6 +37,7 @@ EVENT_SCHEMA = {
                     "deadline": {"type":"object","additionalProperties":False,"required":["text","at"],"properties":{"text":{"type":["string","null"]},"at":{"type":["string","null"]}}},
                     "prerequisite": {"type":["string","null"]},
                     "constraint": {"type":["string","null"]},
+                    "note": {"type":["string","null"]},
                     "certainty": {"type":"string","enum":["confirmed","uncertain"]},
                     "evidence": {"type":"string"}
                 }
@@ -121,6 +122,7 @@ def build_work_event_context(tasks, events):
                 "status": e.get("status"),
                 "prerequisite": e.get("prerequisite"),
                 "constraint": e.get("constraint"),
+                "note": e.get("note"),
                 "actor": e.get("actor"),
                 "recipient": e.get("recipient"),
                 "related_people": e.get("related_people", []),
