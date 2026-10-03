@@ -137,6 +137,134 @@ def build_work_event_context(tasks, events):
 
     return context
 
+def _msg_order(source_id):
+    if not source_id:
+        return -1
+    m = re.search(r"(\d+)$", source_id)
+    return int(m.group(1)) if m else -1
+
+def derive_strong_work_links(tasks, event_context):
+    """Derive only high-confidence Task links from existing Event evidence.
+
+    This is deterministic and uses no extra LLM/API call. The goal is to
+    stabilize Work grouping with explicit handoff/prerequisite evidence.
+    """
+    task_by_id = {t["task_id"]: t for t in tasks}
+    ctx_by_id = {c["task_id"]: c for c in event_context}
+    titles = {
+        t["task_id"]: (t.get("title") or "").strip()
+        for t in tasks
+        if (t.get("title") or "").strip()
+    }
+
+    task_actor_ids = {}
+    task_first_order = {}
+    for task_id, ctx in ctx_by_id.items():
+        actors = set()
+        orders = []
+        for e in ctx.get("events", []):
+            actor = e.get("actor") or {}
+            if actor.get("slack_id"):
+                actors.add(actor["slack_id"])
+            order = _msg_order(e.get("source_id"))
+            if order >= 0:
+                orders.append(order)
+        task_actor_ids[task_id] = actors
+        task_first_order[task_id] = min(orders) if orders else 10**9
+
+    links = []
+    seen = set()
+
+    def add_link(source, target, reason, evidence):
+        if not source or not target or source == target:
+            return
+        key = (source, target, reason, evidence)
+        if key in seen:
+            return
+        seen.add(key)
+        links.append({
+            "source_task_id": source,
+            "target_task_id": target,
+            "reason": reason,
+            "evidence": evidence
+        })
+
+    # 1) Exact Task-title reference in prerequisite/evidence/next_action.
+    for source_id, ctx in ctx_by_id.items():
+        texts = []
+        next_action = (task_by_id[source_id].get("next_action") or "").strip()
+        if next_action:
+            texts.append(("next_action", next_action))
+        for e in ctx.get("events", []):
+            for field in ("prerequisite", "evidence", "action"):
+                value = (e.get(field) or "").strip()
+                if value:
+                    texts.append((field, value))
+        for field, text in texts:
+            for target_id, title in titles.items():
+                if target_id != source_id and len(title) >= 4 and title in text:
+                    # If current Task explicitly cites another Task title as a
+                    # prerequisite/context, they are strongly linked.
+                    add_link(target_id, source_id, f"explicit_{field}_task_reference", text)
+
+    # 2) Explicit handoff: recipient in one Task becomes actor of a later Task.
+    handoff_terms = ("이어", "넘기", "전달", "다음 단계", "후속", "정리본 기준", "참고 부탁")
+    for source_id, ctx in ctx_by_id.items():
+        for e in ctx.get("events", []):
+            text = " ".join([
+                str(e.get("action") or ""),
+                str(e.get("evidence") or ""),
+            ])
+            if not any(term in text for term in handoff_terms):
+                continue
+            recipient = e.get("recipient") or {}
+            rid = recipient.get("slack_id")
+            if not rid:
+                continue
+            event_order = _msg_order(e.get("source_id"))
+            candidates = [
+                target_id for target_id, actors in task_actor_ids.items()
+                if target_id != source_id
+                and rid in actors
+                and task_first_order.get(target_id, 10**9) > event_order
+            ]
+            if candidates:
+                target_id = min(candidates, key=lambda x: task_first_order[x])
+                add_link(source_id, target_id, "explicit_handoff_to_later_actor", e.get("evidence") or text)
+
+    return links
+
+def build_must_link_clusters(tasks, links):
+    """Union connected Tasks into deterministic must-link Work candidates."""
+    parent = {t["task_id"]: t["task_id"] for t in tasks}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    for link in links:
+        a = link["source_task_id"]
+        b = link["target_task_id"]
+        if a in parent and b in parent:
+            union(a, b)
+
+    groups = {}
+    for task_id in parent:
+        groups.setdefault(find(task_id), []).append(task_id)
+
+    return [
+        sorted(group)
+        for group in groups.values()
+        if len(group) > 1
+    ]
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--case", default="THREAD-00005")
@@ -230,6 +358,10 @@ def main():
                 print(f"Saved upstream: {upstream_path}")
 
     work_event_context = build_work_event_context(tasks, events)
+    derived_work_links = derive_strong_work_links(tasks, work_event_context)
+    must_link_clusters = build_must_link_clusters(tasks, derived_work_links)
+    print(f"Derived strong Work links: {len(derived_work_links)}")
+    print(f"Must-link clusters: {must_link_clusters}")
 
     gold = read_json(gold_path) if gold_path.exists() else None
     run_results = []
@@ -240,6 +372,8 @@ def main():
             user_payload={
                 "tasks": tasks,
                 "event_context": work_event_context,
+                "derived_strong_links": derived_work_links,
+                "must_link_clusters": must_link_clusters,
                 "existing_works": []
             },
             json_schema=WORK_SCHEMA,
@@ -253,6 +387,8 @@ def main():
             "reused_upstream": args.reuse_upstream,
             "events": events,
             "tasks": tasks,
+            "derived_strong_links": derived_work_links,
+            "must_link_clusters": must_link_clusters,
             "works": works
         }
 
@@ -343,7 +479,7 @@ def main():
             "case_id": args.case,
             "model": "gpt-6-luna",
             "experiment": {
-                "work_input": "tasks_plus_event_context",
+                "work_input": "tasks_plus_event_context_plus_deterministic_links",
                 "reuse_upstream": args.reuse_upstream,
                 "repeat": args.repeat
             },
