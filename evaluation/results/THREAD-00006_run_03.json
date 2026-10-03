@@ -1,0 +1,74 @@
+{
+  "case_id": "THREAD-00006",
+  "run_type": "post_relation_removal",
+  "model": "gpt-6-luna",
+  "pipeline": "Slack -> Event -> Task -> Work (tasks + event_context only)",
+  "metrics": {
+    "gold_events": 21,
+    "pred_events": 23,
+    "event_to_task_pairwise": {
+      "tp": 41,
+      "fp": 14,
+      "fn": 5,
+      "precision": 0.7454545454545455,
+      "recall": 0.8913043478260869,
+      "f1": 0.8118811881188119
+    },
+    "gold_tasks": 4,
+    "pred_tasks": 4,
+    "gold_works": 1,
+    "pred_works": 1,
+    "task_to_work_pairwise": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    }
+  },
+  "comparison": {
+    "baseline": {
+      "event_to_task_f1": 0.6344827586206897,
+      "pred_events": 30,
+      "pred_tasks": 4,
+      "pred_works": 4,
+      "task_to_work_f1": 0
+    },
+    "previous_run": {
+      "event_to_task_f1": 0.7777777777777778,
+      "pred_events": 22,
+      "pred_tasks": 5,
+      "pred_works": 3,
+      "task_to_work_f1": 0.2222222222222222
+    },
+    "current": {
+      "event_to_task_f1": 0.8118811881188119,
+      "pred_events": 23,
+      "pred_tasks": 4,
+      "pred_works": 1,
+      "task_to_work_f1": 1
+    }
+  },
+  "diagnosis": [
+    {
+      "issue": "Event over-extraction remains small (+2)",
+      "cause_status": "inferred",
+      "evidence": "Gold 21 vs Pred 23.",
+      "likely_cause": "A small number of multi-action Slack messages are still being split more finely than the Gold granularity."
+    },
+    {
+      "issue": "Event→Task is improved but not perfect",
+      "cause_status": "supported_by_metrics",
+      "evidence": "Precision 0.7455, Recall 0.8913, F1 0.8119; TP 41, FP 14, FN 5.",
+      "likely_cause": "Most grouping is correct, but some event pairs are still placed across the wrong Task boundary. Because Task count is exactly 4, the remaining error is primarily membership/boundary assignment rather than Task-count over-splitting."
+    },
+    {
+      "issue": "Task→Work reached perfect score in this run",
+      "cause_status": "supported_by_metrics",
+      "evidence": "Gold Work 1, Pred Work 1, pairwise F1 1.0.",
+      "likely_cause": "The direct event_context handoff-chain rules were sufficient in this run, so the separate Task relation stage was unnecessary."
+    }
+  ],
+  "decision": "Keep relation stage removed. Do not tune Work prompt from this single successful run; verify stability with repeated Work-stage runs on the saved fixed upstream. Event/Task remains the main quality bottleneck."
+}
