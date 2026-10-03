@@ -1,0 +1,148 @@
+{
+  "case_id": "THREAD-00006",
+  "channel": "#bmw-customer-claim",
+  "people": [
+    {
+      "slack_id": "U00001",
+      "name": "김지수"
+    },
+    {
+      "slack_id": "U00002",
+      "name": "원이정"
+    },
+    {
+      "slack_id": "U00003",
+      "name": "박서연"
+    },
+    {
+      "slack_id": "U00006",
+      "name": "정다은"
+    },
+    {
+      "slack_id": "U00018",
+      "name": "아이유"
+    },
+    {
+      "slack_id": "U00019",
+      "name": "정해인"
+    }
+  ],
+  "messages": [
+    {
+      "id": "MSG-00061",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00006",
+      "timestamp": "2026-09-25T04:00:00.000Z",
+      "text": "딜러 쪽에서는 딜러 불만·미등록 차량 정보 접수 자료를 아직 못 받았다고 하네요. @박서연님, 최신본이 어느 건지만 봐주실 수 있을까요? 9월 25일 오후 6시까지는 보내야 한대요.\n관련 문서: https://demo.bmw-handoff.local/WORK-00006/01",
+      "reference_urls": [
+        "https://demo.bmw-handoff.local/WORK-00006/01"
+      ]
+    },
+    {
+      "id": "MSG-00062",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00003",
+      "timestamp": "2026-09-25T04:35:00.000Z",
+      "text": "아 그 파일이면 제가 오전에 본 게 맞아요. 다만 숫자 하나가 애매해서요. @정다은님 원본 위치만 알려주시면 보고 @아이유님께 넘길게요.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00063",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00006",
+      "timestamp": "2026-09-25T05:10:00.000Z",
+      "text": "딜러 불만·미등록 차량 정보 접수 최신본으로 교체해두었습니다. 아까 말씀드린 숫자도 원본과 맞췄고 @아이유님께 전달했어요.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00064",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00018",
+      "timestamp": "2026-09-26T04:00:00.000Z",
+      "text": "어제 이야기한 판매 자료·보증 등록 상태 병렬 확인, 여기서 아직 멈춰 있는 것 같아요. @정해인님 쪽 확인만 오면 될까요? 9월 26일 오후 6시까지라 조금 마음이 급하네요 ㅠ 고객 식별정보는 마스킹하며 내부 확인 채널 밖으로 공유 금지.\n관련 문서: https://demo.bmw-handoff.local/WORK-00006/02",
+      "reference_urls": [
+        "https://demo.bmw-handoff.local/WORK-00006/02"
+      ]
+    },
+    {
+      "id": "MSG-00065",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00019",
+      "timestamp": "2026-09-26T04:35:00.000Z",
+      "text": "네, 저희 쪽 답만 남은 건 맞습니다. 회의 하나 끝나고 볼게요 ㅎㅎ 확인 전에는 @김지수님이 먼저 보내지 않도록 부탁드려요.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00066",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00018",
+      "timestamp": "2026-09-26T05:10:00.000Z",
+      "text": "판매 자료·보증 등록 상태 병렬 확인 답변 받아서 닫았습니다. 기다려주셔서 감사합니다 ㅠ @김지수님은 정리본 기준으로 이어가시면 됩니다.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00067",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00001",
+      "timestamp": "2026-09-27T03:00:00.000Z",
+      "text": "혹시 제가 잘못 본 걸 수도 있는데 딜러 안내 문구·내부 확인 결과 수렴 내용이 이전 자료랑 안 맞는 것 같아요. 시간 될 때 제가 한 번 더 확인해보겠습니다. 9월 27일 오후 5시까지 의견이 필요합니다. 앞 단계인 '판매 자료·보증 등록 상태 병렬 확인' 결과를 기준으로 보고 있어요. 고객 식별정보는 마스킹하며 내부 확인 채널 밖으로 공유 금지.\n관련 문서: https://demo.bmw-handoff.local/WORK-00006/03",
+      "reference_urls": [
+        "https://demo.bmw-handoff.local/WORK-00006/03"
+      ]
+    },
+    {
+      "id": "MSG-00068",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00001",
+      "timestamp": "2026-09-27T03:35:00.000Z",
+      "text": "저도 같은 부분이 조금 이상해 보였어요. 이전 회차 자료까지 같이 대조해보고 결과 정리하겠습니다. @원이정님은 잠시만 기다려주세요.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00069",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00001",
+      "timestamp": "2026-09-27T04:10:00.000Z",
+      "text": "딜러 안내 문구·내부 확인 결과 수렴 이전 회차 자료까지 대조 완료했습니다. 차이 사유를 메모해두었으니 @원이정님 참고 부탁드려요.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00070",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00002",
+      "timestamp": "2026-09-28T03:00:00.000Z",
+      "text": "지금 정리된 Customer Claim 딜러 회신·후속 추적 그대로 다음 팀에 보내도 괜찮을지 걸리는 부분이 없는지 한 번 더 확인해보겠습니다.\n관련 문서: https://demo.bmw-handoff.local/WORK-00006/04",
+      "reference_urls": [
+        "https://demo.bmw-handoff.local/WORK-00006/04"
+      ]
+    },
+    {
+      "id": "MSG-00071",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00002",
+      "timestamp": "2026-09-28T03:35:00.000Z",
+      "text": "큰 문제는 없어 보이는데 표현 하나는 수정하는 게 좋겠습니다. 수정 코멘트 남기고, 반영본 나오면 @김지수님께 바로 공유할게요.",
+      "reference_urls": []
+    },
+    {
+      "id": "MSG-00072",
+      "thread_id": "THREAD-00006",
+      "channel": "#bmw-customer-claim",
+      "author_id": "U00002",
+      "timestamp": "2026-09-28T04:10:00.000Z",
+      "text": "Customer Claim 딜러 회신·후속 추적 마지막 표현 수정까지 반영했습니다. 이 버전으로 확정했고 @김지수님께 다음 단계 요청드렸습니다.",
+      "reference_urls": []
+    }
+  ]
+}

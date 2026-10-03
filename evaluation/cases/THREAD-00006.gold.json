@@ -1,0 +1,425 @@
+{
+  "case_id": "THREAD-00006",
+  "events": [
+    {
+      "event_id": "EVENT-00061-01",
+      "source_id": "MSG-00061",
+      "event_type": "request",
+      "subject": "딜러 불만·미등록 차량 정보 접수",
+      "action": "최신본 확인 요청",
+      "status": null,
+      "time_scope": "current",
+      "deadline": {
+        "text": "9월 25일 오후 6시까지",
+        "at": "2026-09-25"
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "@박서연님, 최신본이 어느 건지만 봐주실 수 있을까요? 9월 25일 오후 6시까지는 보내야 한대요."
+    },
+    {
+      "event_id": "EVENT-00062-01",
+      "source_id": "MSG-00062",
+      "event_type": "request",
+      "subject": "딜러 불만·미등록 차량 정보 접수",
+      "action": "원본 위치 확인 요청",
+      "status": null,
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "@정다은님 원본 위치만 알려주시면"
+    },
+    {
+      "event_id": "EVENT-00062-02",
+      "source_id": "MSG-00062",
+      "event_type": "plan",
+      "subject": "딜러 불만·미등록 차량 정보 접수",
+      "action": "원본 확인 후 아이유에게 전달",
+      "status": null,
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": "원본 위치 확인",
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "보고 @아이유님께 넘길게요."
+    },
+    {
+      "event_id": "EVENT-00063-01",
+      "source_id": "MSG-00063",
+      "event_type": "completion",
+      "subject": "딜러 불만·미등록 차량 정보 접수",
+      "action": "최신본 교체·숫자 대조·전달 완료",
+      "status": "completed",
+      "time_scope": "past",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "딜러 불만·미등록 차량 정보 접수 최신본으로 교체해두었습니다. 아까 말씀드린 숫자도 원본과 맞췄고 @아이유님께 전달했어요."
+    },
+    {
+      "event_id": "EVENT-00064-01",
+      "source_id": "MSG-00064",
+      "event_type": "status",
+      "subject": "판매 자료·보증 등록 상태 병렬 확인",
+      "action": "정해인 확인 대기",
+      "status": "waiting",
+      "time_scope": "current",
+      "deadline": {
+        "text": "9월 26일 오후 6시까지",
+        "at": "2026-09-26"
+      },
+      "prerequisite": "정해인 쪽 확인",
+      "constraint": "고객 식별정보는 마스킹하며 내부 확인 채널 밖으로 공유 금지",
+      "certainty": "confirmed",
+      "evidence": "어제 이야기한 판매 자료·보증 등록 상태 병렬 확인, 여기서 아직 멈춰 있는 것 같아요. @정해인님 쪽 확인만 오면 될까요?"
+    },
+    {
+      "event_id": "EVENT-00065-01",
+      "source_id": "MSG-00065",
+      "event_type": "status",
+      "subject": "판매 자료·보증 등록 상태 병렬 확인",
+      "action": "정해인 측 답변만 남은 상태 확인",
+      "status": "waiting",
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "네, 저희 쪽 답만 남은 건 맞습니다."
+    },
+    {
+      "event_id": "EVENT-00065-02",
+      "source_id": "MSG-00065",
+      "event_type": "plan",
+      "subject": "판매 자료·보증 등록 상태 병렬 확인",
+      "action": "회의 후 확인",
+      "status": null,
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "회의 하나 끝나고 볼게요 ㅎㅎ"
+    },
+    {
+      "event_id": "EVENT-00065-03",
+      "source_id": "MSG-00065",
+      "event_type": "request",
+      "subject": "판매 자료·보증 등록 상태 병렬 확인",
+      "action": "확인 전 선발송 금지 요청",
+      "status": null,
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": "정해인 확인 전",
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "확인 전에는 @김지수님이 먼저 보내지 않도록 부탁드려요."
+    },
+    {
+      "event_id": "EVENT-00066-01",
+      "source_id": "MSG-00066",
+      "event_type": "completion",
+      "subject": "판매 자료·보증 등록 상태 병렬 확인",
+      "action": "답변 수신 후 확인 종료",
+      "status": "completed",
+      "time_scope": "past",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "판매 자료·보증 등록 상태 병렬 확인 답변 받아서 닫았습니다."
+    },
+    {
+      "event_id": "EVENT-00066-02",
+      "source_id": "MSG-00066",
+      "event_type": "request",
+      "subject": "후속 업무",
+      "action": "김지수에게 정리본 기준 후속 진행 요청",
+      "status": "planned",
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": "판매 자료·보증 등록 상태 병렬 확인 완료",
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "@김지수님은 정리본 기준으로 이어가시면 됩니다."
+    },
+    {
+      "event_id": "EVENT-00067-01",
+      "source_id": "MSG-00067",
+      "event_type": "plan",
+      "subject": "딜러 안내 문구·내부 확인 결과 수렴",
+      "action": "이전 자료 불일치 여부 재확인",
+      "status": "in_progress",
+      "time_scope": "future",
+      "deadline": {
+        "text": "9월 27일 오후 5시까지",
+        "at": "2026-09-27"
+      },
+      "prerequisite": "판매 자료·보증 등록 상태 병렬 확인 결과",
+      "constraint": "고객 식별정보는 마스킹하며 내부 확인 채널 밖으로 공유 금지",
+      "certainty": "confirmed",
+      "evidence": "혹시 제가 잘못 본 걸 수도 있는데 딜러 안내 문구·내부 확인 결과 수렴 내용이 이전 자료랑 안 맞는 것 같아요. 시간 될 때 제가 한 번 더 확인해보겠습니다."
+    },
+    {
+      "event_id": "EVENT-00068-01",
+      "source_id": "MSG-00068",
+      "event_type": "plan",
+      "subject": "딜러 안내 문구·내부 확인 결과 수렴",
+      "action": "이전 회차 자료까지 대조 후 결과 정리",
+      "status": null,
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "이전 회차 자료까지 같이 대조해보고 결과 정리하겠습니다."
+    },
+    {
+      "event_id": "EVENT-00068-02",
+      "source_id": "MSG-00068",
+      "event_type": "request",
+      "subject": "딜러 안내 문구·내부 확인 결과 수렴",
+      "action": "원이정에게 대기 요청",
+      "status": "waiting",
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": "대조 결과 확인 전",
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "@원이정님은 잠시만 기다려주세요."
+    },
+    {
+      "event_id": "EVENT-00069-01",
+      "source_id": "MSG-00069",
+      "event_type": "completion",
+      "subject": "딜러 안내 문구·내부 확인 결과 수렴",
+      "action": "이전 회차 자료 대조 완료",
+      "status": "completed",
+      "time_scope": "past",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "딜러 안내 문구·내부 확인 결과 수렴 이전 회차 자료까지 대조 완료했습니다."
+    },
+    {
+      "event_id": "EVENT-00069-02",
+      "source_id": "MSG-00069",
+      "event_type": "request",
+      "subject": "딜러 안내 문구·내부 확인 결과 수렴",
+      "action": "차이 사유 메모 참고 요청",
+      "status": null,
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "차이 사유를 메모해두었으니 @원이정님 참고 부탁드려요."
+    },
+    {
+      "event_id": "EVENT-00070-01",
+      "source_id": "MSG-00070",
+      "event_type": "plan",
+      "subject": "Customer Claim 딜러 회신·후속 추적",
+      "action": "다음 팀 전달 전 걸리는 부분 재확인",
+      "status": "in_progress",
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "지금 정리된 Customer Claim 딜러 회신·후속 추적 그대로 다음 팀에 보내도 괜찮을지 걸리는 부분이 없는지 한 번 더 확인해보겠습니다."
+    },
+    {
+      "event_id": "EVENT-00071-01",
+      "source_id": "MSG-00071",
+      "event_type": "decision",
+      "subject": "Customer Claim 딜러 회신·후속 추적",
+      "action": "표현 하나 수정 필요 판단",
+      "status": "in_progress",
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "큰 문제는 없어 보이는데 표현 하나는 수정하는 게 좋겠습니다."
+    },
+    {
+      "event_id": "EVENT-00071-02",
+      "source_id": "MSG-00071",
+      "event_type": "plan",
+      "subject": "Customer Claim 딜러 회신·후속 추적",
+      "action": "수정 코멘트 후 반영본을 김지수에게 공유",
+      "status": null,
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": "수정 반영본 생성",
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "수정 코멘트 남기고, 반영본 나오면 @김지수님께 바로 공유할게요."
+    },
+    {
+      "event_id": "EVENT-00072-01",
+      "source_id": "MSG-00072",
+      "event_type": "completion",
+      "subject": "Customer Claim 딜러 회신·후속 추적",
+      "action": "마지막 표현 수정 반영 완료",
+      "status": "completed",
+      "time_scope": "past",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "Customer Claim 딜러 회신·후속 추적 마지막 표현 수정까지 반영했습니다."
+    },
+    {
+      "event_id": "EVENT-00072-02",
+      "source_id": "MSG-00072",
+      "event_type": "decision",
+      "subject": "Customer Claim 딜러 회신·후속 추적",
+      "action": "현재 버전 확정",
+      "status": "completed",
+      "time_scope": "current",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": null,
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "이 버전으로 확정했고"
+    },
+    {
+      "event_id": "EVENT-00072-03",
+      "source_id": "MSG-00072",
+      "event_type": "request",
+      "subject": "후속 업무",
+      "action": "김지수에게 다음 단계 진행 요청",
+      "status": "planned",
+      "time_scope": "future",
+      "deadline": {
+        "text": null,
+        "at": null
+      },
+      "prerequisite": "Customer Claim 딜러 회신·후속 추적 확정",
+      "constraint": null,
+      "certainty": "confirmed",
+      "evidence": "@김지수님께 다음 단계 요청드렸습니다."
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "TASK-00021",
+      "title": "딜러 불만·미등록 차량 정보 접수",
+      "status": "completed",
+      "event_ids": [
+        "EVENT-00061-01",
+        "EVENT-00062-01",
+        "EVENT-00062-02",
+        "EVENT-00063-01"
+      ]
+    },
+    {
+      "task_id": "TASK-00022",
+      "title": "판매 자료·보증 등록 상태 병렬 확인",
+      "status": "completed",
+      "event_ids": [
+        "EVENT-00064-01",
+        "EVENT-00065-01",
+        "EVENT-00065-02",
+        "EVENT-00065-03",
+        "EVENT-00066-01",
+        "EVENT-00066-02"
+      ]
+    },
+    {
+      "task_id": "TASK-00023",
+      "title": "딜러 안내 문구·내부 확인 결과 수렴",
+      "status": "completed",
+      "event_ids": [
+        "EVENT-00067-01",
+        "EVENT-00068-01",
+        "EVENT-00068-02",
+        "EVENT-00069-01",
+        "EVENT-00069-02"
+      ]
+    },
+    {
+      "task_id": "TASK-00024",
+      "title": "Customer Claim 딜러 회신·후속 추적",
+      "status": "completed",
+      "event_ids": [
+        "EVENT-00070-01",
+        "EVENT-00071-01",
+        "EVENT-00071-02",
+        "EVENT-00072-01",
+        "EVENT-00072-02",
+        "EVENT-00072-03"
+      ]
+    }
+  ],
+  "works": [
+    {
+      "work_id": "WORK-00006",
+      "title": "딜러가 전달한 보증 패키지 미등록 사례",
+      "task_ids": [
+        "TASK-00021",
+        "TASK-00022",
+        "TASK-00023",
+        "TASK-00024"
+      ]
+    }
+  ]
+}
