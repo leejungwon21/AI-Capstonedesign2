@@ -257,24 +257,6 @@
       "event_id": "EVENT-00251-01",
       "source_id": "MSG-00251",
       "subject": "발송 기록·후속 문의 정리",
-      "action": "점심 후 확인",
-      "event_type": "plan",
-      "status": "planned",
-      "time_scope": "future",
-      "deadline": {
-        "text": null,
-        "at": null
-      },
-      "prerequisite": null,
-      "constraint": null,
-      "note": null,
-      "certainty": "confirmed",
-      "evidence": "점심 먹고 바로 확인해볼게요."
-    },
-    {
-      "event_id": "EVENT-00251-02",
-      "source_id": "MSG-00251",
-      "subject": "발송 기록·후속 문의 정리",
       "action": "선행 결과 확정 후 최민준 업무 시작 구조 확인",
       "event_type": "status",
       "status": "planned",
@@ -386,7 +368,6 @@
         "EVENT-00250-01",
         "EVENT-00250-02",
         "EVENT-00251-01",
-        "EVENT-00251-02",
         "EVENT-00252-01",
         "EVENT-00252-02",
         "EVENT-00252-03"
