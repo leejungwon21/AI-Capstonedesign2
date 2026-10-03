@@ -15,6 +15,7 @@
       },
       "prerequisite": null,
       "constraint": "대외 회신은 지정된 공용 메일 계정과 승인된 서식만 사용",
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@원이정님, 딜러 변경사항 긴급 메일 직접 발송 건 확인 부탁드립니다. 오늘 오후 6시까지 다음 단계로 넘겨야 해서 현재 자료와 이전 기록을 먼저 공유드려요."
     },
@@ -32,6 +33,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "누락된 조건이 없는지 다시 보고 오늘 오후 6시까지 전에 의견드릴게요. 이후 업무는 @유재석님이 이어서 진행하는 걸로 이해했습니다."
     },
@@ -49,6 +51,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "딜러 변경사항 긴급 메일 직접 발송 현재 in_progress 상태입니다."
     },
@@ -66,6 +69,7 @@
       },
       "prerequisite": "선행 확인 결과",
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@유재석님, 선행 확인 결과를 반영해 다음 업무 부탁드립니다."
     },
@@ -83,6 +87,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "변경 사항이 생기면 여기서 바로 공유드릴게요."
     },
@@ -100,28 +105,12 @@
       },
       "prerequisite": null,
       "constraint": "발주서와 증빙이 없는 비용은 정산 대상에 포함 금지",
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@서도윤님 혹시 딜러 수신 여부 확인 지난번 버전으로 전달된 건 아니죠? 내일 오후 6시까지 마감이라 변경 이력까지 같이 확인 부탁드릴게요."
     },
     {
       "event_id": "EVENT-00245-01",
-      "source_id": "MSG-00245",
-      "subject": "딜러 수신 여부 확인",
-      "action": "확인 진행",
-      "event_type": "plan",
-      "status": "planned",
-      "time_scope": "future",
-      "deadline": {
-        "text": null,
-        "at": null
-      },
-      "prerequisite": null,
-      "constraint": null,
-      "certainty": "confirmed",
-      "evidence": "넵 확인해볼게요!"
-    },
-    {
-      "event_id": "EVENT-00245-02",
       "source_id": "MSG-00245",
       "subject": "딜러 수신 여부 확인",
       "action": "유재석에게 자료 기준일 재확인 요청",
@@ -134,11 +123,12 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@유재석님, 자료 기준일만 한 번 더 확인 부탁드립니다."
     },
     {
-      "event_id": "EVENT-00245-03",
+      "event_id": "EVENT-00245-02",
       "source_id": "MSG-00245",
       "subject": "딜러 수신 여부 확인",
       "action": "검토 후 원이정에게 전달",
@@ -151,6 +141,7 @@
       },
       "prerequisite": "검토 완료",
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "검토 끝나면 @원이정님께 바로 넘기겠습니다."
     },
@@ -168,6 +159,7 @@
       },
       "prerequisite": "남은 확인 건",
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "딜러 수신 여부 확인 중간 진행 상황 공유드립니다. 남은 확인 건 때문에 아직 확정 전이고, 정리되는 대로 @원이정님께 넘기겠습니다."
     },
@@ -185,6 +177,7 @@
       },
       "prerequisite": "선행 자료",
       "constraint": "발주서와 증빙이 없는 비용은 정산 대상에 포함 금지",
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@최민준님 누락 딜러 재전달 판단 하나 더 확인 부탁드려요. 선행 자료는 올려두었고 이번 주 토요일 오후 5시까지 의견이 필요합니다."
     },
@@ -202,6 +195,7 @@
       },
       "prerequisite": "자료 수령 완료",
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "자료 받았습니다. 오늘 중으로 가능할 것 같아요. 수정이 필요한 부분은 표시해서 @원이정님께 공유드릴게요."
     },
@@ -219,25 +213,9 @@
       },
       "prerequisite": "한 가지 추가 확인",
       "constraint": null,
+      "note": "결과는 이 스레드에 업데이트 예정",
       "certainty": "confirmed",
-      "evidence": "현재 누락 딜러 재전달 판단 검토 중입니다. 한 가지 확인이 더 필요해서 해당 업무는 잠시 대기하겠습니다."
-    },
-    {
-      "event_id": "EVENT-00249-02",
-      "source_id": "MSG-00249",
-      "subject": "누락 딜러 재전달 판단",
-      "action": "결과를 스레드에 업데이트",
-      "event_type": "plan",
-      "status": "waiting",
-      "time_scope": "future",
-      "deadline": {
-        "text": null,
-        "at": null
-      },
-      "prerequisite": "추가 확인 완료",
-      "constraint": null,
-      "certainty": "confirmed",
-      "evidence": "결과는 이 스레드에 업데이트하겠습니다."
+      "evidence": "현재 누락 딜러 재전달 판단 검토 중입니다. 한 가지 확인이 더 필요해서 해당 업무는 잠시 대기하겠습니다. 결과는 이 스레드에 업데이트하겠습니다."
     },
     {
       "event_id": "EVENT-00250-01",
@@ -253,6 +231,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@김지수님 발송 기록·후속 문의 정리 진행하려고 합니다."
     },
@@ -270,6 +249,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "현재 확인된 내용과 남은 쟁점을 스레드에 정리했으니 일정과 함께 검토 부탁드려요."
     },
@@ -287,6 +267,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "점심 먹고 바로 확인해볼게요."
     },
@@ -304,6 +285,7 @@
       },
       "prerequisite": "선행 결과 확정",
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "선행 결과가 확정되면 @최민준님 업무가 시작되는 구조 맞습니다."
     },
@@ -321,6 +303,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "발송 기록·후속 문의 정리 일정은 유지 중입니다."
     },
@@ -338,6 +321,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "지금까지 확인한 내용은 공유 문서에 반영했고"
     },
@@ -355,6 +339,7 @@
       },
       "prerequisite": null,
       "constraint": null,
+      "note": null,
       "certainty": "confirmed",
       "evidence": "@최민준님 후속 작업 준비 부탁드립니다."
     }
@@ -380,7 +365,6 @@
         "EVENT-00244-01",
         "EVENT-00245-01",
         "EVENT-00245-02",
-        "EVENT-00245-03",
         "EVENT-00246-01"
       ]
     },
@@ -391,8 +375,7 @@
       "event_ids": [
         "EVENT-00247-01",
         "EVENT-00248-01",
-        "EVENT-00249-01",
-        "EVENT-00249-02"
+        "EVENT-00249-01"
       ]
     },
     {
