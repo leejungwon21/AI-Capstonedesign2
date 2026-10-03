@@ -1,0 +1,71 @@
+{
+  "case_id": "THREAD-00006",
+  "run_type": "improved_event_work_prompt_before_relation_removal",
+  "model": "gpt-6-luna",
+  "comparison_to_baseline": {
+    "event_count": {
+      "baseline_pred": 30,
+      "current_pred": 22,
+      "gold": 21,
+      "change": "over-extraction +9 -> +1"
+    },
+    "event_to_task_f1": {
+      "baseline": 0.6344827586206897,
+      "current": 0.7777777777777778,
+      "delta": 0.1432950191570881
+    },
+    "task_count": {
+      "baseline_pred": 4,
+      "current_pred": 5,
+      "gold": 4
+    },
+    "work_count": {
+      "baseline_pred": 4,
+      "current_pred": 3,
+      "gold": 1
+    },
+    "task_to_work_f1": {
+      "baseline": 0,
+      "current": 0.2222222222222222,
+      "delta": 0.2222222222222222
+    }
+  },
+  "current_metrics": {
+    "event_to_task_pairwise": {
+      "precision": 0.7954545454545454,
+      "recall": 0.7608695652173914,
+      "f1": 0.7777777777777778
+    },
+    "task_to_work_pairwise": {
+      "precision": 0.3333333333333333,
+      "recall": 0.16666666666666666,
+      "f1": 0.2222222222222222
+    },
+    "counts": {
+      "gold_events": 21,
+      "pred_events": 22,
+      "gold_tasks": 4,
+      "pred_tasks": 5,
+      "gold_works": 1,
+      "pred_works": 3
+    }
+  },
+  "diagnosis": [
+    {
+      "issue": "Event over-extraction greatly reduced",
+      "cause_status": "supported_by_change",
+      "cause": "The independence check added to the Event prompt reduced mechanical splitting of background/status/detail from the core action."
+    },
+    {
+      "issue": "Event→Task recall fell and predicted Task count increased to 5",
+      "cause_status": "inferred",
+      "cause": "After Event granularity changed, at least one logical Task boundary was split. The evaluator shows FN=11 and one extra Task, so the remaining error is now mainly Task grouping rather than Event over-extraction."
+    },
+    {
+      "issue": "Work still over-split: 3 vs Gold 1",
+      "cause_status": "inferred",
+      "cause": "Work handoff-chain prompting improved grouping slightly (4 -> 3 Works) but still does not consistently recover the full four-Task project chain from event_context."
+    }
+  ],
+  "decision": "Keep Event independence-check change. Next focus: Task grouping robustness and Work project-level clustering. Task relation stage remains removed/archived."
+}
