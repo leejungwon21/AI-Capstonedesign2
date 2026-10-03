@@ -1,0 +1,47 @@
+{
+  "case_id": "THREAD-00006",
+  "run_type": "baseline",
+  "model": "gpt-6-luna",
+  "experiment": {
+    "relations": "off",
+    "reuse_upstream": false,
+    "repeat": 1,
+    "work_input": "tasks_plus_event_context"
+  },
+  "metrics": {
+    "gold_events": 21,
+    "pred_events": 30,
+    "event_to_task_pairwise": {
+      "precision": 0.46464646464646464,
+      "recall": 1,
+      "f1": 0.6344827586206897
+    },
+    "gold_tasks": 4,
+    "pred_tasks": 4,
+    "gold_works": 1,
+    "pred_works": 4,
+    "task_to_work_pairwise": {
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    }
+  },
+  "diagnosis": [
+    {
+      "issue": "Event over-extraction (+9)",
+      "evidence": "Gold 21 vs Pred 30; Event→Task recall 1.0 but precision 0.4646.",
+      "cause_status": "inferred",
+      "likely_cause": "The Event stage is still splitting multi-clause Slack messages too aggressively into separately trackable events. This creates extra events without causing event omissions."
+    },
+    {
+      "issue": "Work over-split (Gold 1 vs Pred 4)",
+      "evidence": "Four predicted Tasks were each left in separate Works; Task→Work F1 0.0.",
+      "cause_status": "inferred",
+      "likely_cause": "The Work stage is not giving enough weight to cross-task handoff/prerequisite continuity in event_context when task_relations is off, so it defaults toward one Work per Task."
+    }
+  ],
+  "next_change": {
+    "event_prompt": "Strengthen the rule that status/reason/detail + request/plan referring to one practical action should remain one Event unless they can be independently completed or waited on.",
+    "work_prompt": "Strengthen explicit handoff-chain clustering using prerequisite names, recipient→next actor continuity, and adjacent follow-up statements from event_context before allowing single-Task Works."
+  }
+}
