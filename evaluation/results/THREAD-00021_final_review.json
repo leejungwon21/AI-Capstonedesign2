@@ -1,0 +1,31 @@
+{
+  "case_id": "THREAD-00021",
+  "status": "pass",
+  "model": "gpt-6-luna",
+  "final_counts": {
+    "gold_events": 17,
+    "pred_events": 17,
+    "gold_tasks": 4,
+    "pred_tasks": 4,
+    "gold_works": 1,
+    "pred_works": 1
+  },
+  "issues": [],
+  "issue_summary": "감지된 주요 문제 없음",
+  "metric_note": "이번 최종 실행에서 사용자가 공유한 출력은 Issues 섹션만 포함되어 pairwise precision/recall/F1 원값은 이 기록에 포함하지 않았다. 개수 일치와 Issues 없음은 확인됨.",
+  "cause_and_changes": [
+    "Event 과분리 원인: 진행 상태와 같은 업무의 조건부 전달 계획을 별도 Event로 분리하던 문제를 수정했다.",
+    "Task 과병합 원인: 같은 Work 내 연속 흐름이라는 이유로 '긴급 메일 직접 발송'과 '딜러 수신 여부/버전/변경 이력 확인'을 하나의 Task로 합치던 문제를 수정했다.",
+    "Task 과분리 원인: 담당자 변경·후속 표현·prerequisite만으로 새 Task를 만들던 문제를 완화했다.",
+    "최종 기준: 목적과 완료 조건이 다르면 별도 Task, 동일 목적의 준비·검토·전달 단계는 같은 Task로 통합한다."
+  ],
+  "final_structure": {
+    "task_count": 4,
+    "work_count": 1,
+    "work_grouping": "THREAD-00021의 4개 Task가 하나의 Work로 통합"
+  },
+  "related_prompt_commits": [
+    "396c4350d097a42c8fac4e6c7571588b4fbc8966",
+    "7c4f196cd962441d029336517eab36bab3456061"
+  ]
+}
