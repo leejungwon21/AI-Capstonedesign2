@@ -6,11 +6,22 @@
 
 - tasks
 - event_context: 각 Task에 실제로 묶인 Event들의 핵심 원문 근거와 연결 정보
+- derived_strong_links: Event 근거에서 코드가 결정적으로 추출한 강한 Task 연결
+- must_link_clusters: derived_strong_links의 연결 성분. 같은 cluster 안의 Task는 반드시 같은 Work에 속해야 함
 - existing_works가 있으면 함께 제공
 - Gold Answer는 제공되지 않는다.
 
 event_context는 정답 힌트가 아니라, Task 통합 과정에서 압축될 수 있는 원래 업무 맥락을 보존하기 위한 근거다.
 Work 판단 시 Task 제목만 보지 말고 event_context의 선행조건, handoff, actor/recipient, evidence를 함께 사용한다.
+derived_strong_links와 must_link_clusters는 별도 LLM 추론이 아니라 입력 Event에서 코드로 추출한 명시적 연결이다.
+
+## must-link 강제 규칙
+
+- must_link_clusters 안에 함께 들어 있는 Task들은 반드시 같은 Work로 출력한다.
+- 이 cluster를 여러 Work로 쪼개지 않는다.
+- 서로 다른 must-link cluster끼리는 상위 프로젝트 맥락이 충분하면 추가로 합칠 수 있다.
+- must-link에 없는 Task는 event_context 근거를 이용해 독립적으로 판단한다.
+- derived_strong_links의 evidence를 Work 판단 근거로 우선 확인한다.
 
 ## 목표
 
