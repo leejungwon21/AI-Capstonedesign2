@@ -194,16 +194,16 @@
       "subject": "누락 딜러 재전달 판단",
       "action": "오늘 중 검토 후 수정 필요 부분 표시하여 공유",
       "event_type": "plan",
-      "status": "in_progress",
+      "status": "자료 수령 완료, 검토 및 공유 예정",
       "time_scope": "future",
       "deadline": {
         "text": "오늘 중으로",
         "at": "2026-10-01"
       },
-      "prerequisite": null,
+      "prerequisite": "자료 수령 완료",
       "constraint": null,
       "certainty": "confirmed",
-      "evidence": "오늘 중으로 가능할 것 같아요. 수정이 필요한 부분은 표시해서 @원이정님께 공유드릴게요."
+      "evidence": "자료 받았습니다. 오늘 중으로 가능할 것 같아요. 수정이 필요한 부분은 표시해서 @원이정님께 공유드릴게요."
     },
     {
       "event_id": "EVENT-00249-01",
