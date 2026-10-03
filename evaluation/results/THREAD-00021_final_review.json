@@ -12,7 +12,7 @@
   },
   "issues": [],
   "issue_summary": "감지된 주요 문제 없음",
-  "metric_note": "이번 최종 실행에서 사용자가 공유한 출력은 Issues 섹션만 포함되어 pairwise precision/recall/F1 원값은 이 기록에 포함하지 않았다. 개수 일치와 Issues 없음은 확인됨.",
+  "metric_note": "최종 실행 전체 출력 기준으로 pairwise 지표와 Work 반복 요약을 기록했다.",
   "cause_and_changes": [
     "Event 과분리 원인: 진행 상태와 같은 업무의 조건부 전달 계획을 별도 Event로 분리하던 문제를 수정했다.",
     "Task 과병합 원인: 같은 Work 내 연속 흐름이라는 이유로 '긴급 메일 직접 발송'과 '딜러 수신 여부/버전/변경 이력 확인'을 하나의 Task로 합치던 문제를 수정했다.",
@@ -27,5 +27,41 @@
   "related_prompt_commits": [
     "396c4350d097a42c8fac4e6c7571588b4fbc8966",
     "7c4f196cd962441d029336517eab36bab3456061"
-  ]
+  ],
+  "final_metrics": {
+    "event_to_task_pairwise": {
+      "tp": 22,
+      "fp": 7,
+      "fn": 8,
+      "precision": 0.7586206896551724,
+      "recall": 0.7333333333333333,
+      "f1": 0.7457627118644068
+    },
+    "task_to_work_pairwise": {
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    },
+    "work_repeat_summary": {
+      "runs": 1,
+      "work_f1_mean": 1,
+      "work_f1_std": 0,
+      "work_f1_values": [
+        1
+      ],
+      "work_count_values": [
+        1
+      ]
+    }
+  },
+  "task_id_alignment": {
+    "PTASK-00001": "TASK-00081",
+    "PTASK-00002": "TASK-00082",
+    "PTASK-00003": "TASK-00083",
+    "PTASK-00004": "TASK-00084"
+  },
+  "upstream_saved": true
 }
