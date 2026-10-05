@@ -3,9 +3,9 @@
   "component_cases": [
     "DEMO-00001"
   ],
-  "purpose": "독립적인 legacy handover-demo 30개 메시지에서 10개 Task와 2개 Work 경계를 찾는 외부 회귀/일반화 테스트",
+  "purpose": "독립적인 legacy handover-demo 30개 메시지에서 12개 Task와 2개 Work 경계를 찾는 외부 회귀/일반화 테스트",
   "expected": {
-    "tasks": 10,
+    "tasks": 12,
     "works": 2
   },
   "leakage_control": {
@@ -14,5 +14,5 @@
     "project_labels_to_llm": false,
     "note": "원본 Slack-like 메시지만 Event 추출에 사용하며 legacy answer-key의 Task/Project 정답은 evaluator에서만 사용한다."
   },
-  "evaluation_note": "현재 Gold Event는 source message당 canonical Event 1개로 구성되어 Event→Task 점수는 보조지표로 사용한다. Task count와 Task→Work grouping을 우선 본다."
+  "evaluation_note": "Gold Event는 current Event extraction의 완전 주석이 아니라 Task grouping용 source anchor다. Source→Task와 Task→Work를 주 지표로 사용한다."
 }
