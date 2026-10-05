@@ -1,0 +1,78 @@
+{
+  "prompt_commit": "4f2de55a34f5be67f1571f28f2d451babe7a4ed4",
+  "status": "complete_01_02_03",
+  "change_summary": "General project-level recheck and anti-over-splitting guidance in Task->Work prompt.",
+  "comparison": {
+    "GLOBAL-00001": {
+      "before": {
+        "mean": 0.9159335288367546,
+        "std": 0.06602402655236868,
+        "counts": [
+          4,
+          3,
+          5
+        ]
+      },
+      "after": {
+        "mean": 0.9393939393939393,
+        "std": 0.04285495643554835,
+        "counts": [
+          4,
+          4,
+          3
+        ]
+      },
+      "delta_mean": 0.02346041055718472,
+      "recurring_error": "TASK-00020 split from TASK-00017/18/19 remains 2/3"
+    },
+    "GLOBAL-00002": {
+      "before": {
+        "mean": 0.7641686811710986,
+        "std": 0.040834799343300546,
+        "counts": [
+          3,
+          3,
+          2
+        ]
+      },
+      "after": {
+        "mean": 0.7087753134040501,
+        "std": 0.03750325261838005,
+        "counts": [
+          3,
+          4,
+          3
+        ]
+      },
+      "delta_mean": -0.05539336776704851,
+      "recurring_error": "T10 split from T06/T07/T08/T09/T12 worsened from 2/3 to 3/3"
+    },
+    "GLOBAL-00003": {
+      "before": {
+        "mean": 0.7718462502265796,
+        "std": 0.052664026114252846,
+        "counts": [
+          4,
+          5,
+          6
+        ]
+      },
+      "after": {
+        "mean": 0.8724396546291044,
+        "std": 0.0194301731012374,
+        "counts": [
+          5,
+          5,
+          4
+        ]
+      },
+      "delta_mean": 0.10059340440252479,
+      "recurring_error": "New-car cross-thread Work improved substantially; remaining recurring FN is G-T00014-01 split from G-T00014-02/03/04. Some recurring FP pairs involve UNMAPPED predicted Tasks and are downstream of Task mismatch."
+    }
+  },
+  "macro_mean_before": 0.8173161534114776,
+  "macro_mean_after": 0.8402029691423646,
+  "macro_delta": 0.022886815730887022,
+  "decision": "Do not accept this prompt change as the final stable prompt yet. Although macro mean and GLOBAL-00003 improve, GLOBAL-00002 regresses materially and its recurring split becomes deterministic. Generalization requirement is not satisfied. Preserve the experiment record and revert the prompt change before the next development cycle.",
+  "prompt_change_final_status": "revert_recommended"
+}
