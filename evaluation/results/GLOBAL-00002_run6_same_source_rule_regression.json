@@ -1,0 +1,55 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run6_same_source_rule_regression",
+  "mode": "reuse_events",
+  "counts": {
+    "gold_events": 30,
+    "pred_events": 41,
+    "gold_tasks": 12,
+    "pred_tasks": 14,
+    "gold_works": 2,
+    "pred_works": 2
+  },
+  "source_to_task_pairwise": {
+    "tp": 24,
+    "fp": 2,
+    "fn": 2,
+    "precision": 0.9230769230769231,
+    "recall": 0.9230769230769231,
+    "f1": 0.9230769230769231,
+    "false_positive_pairs": [
+      [
+        "M019",
+        "M020"
+      ],
+      [
+        "M019",
+        "M021"
+      ]
+    ],
+    "false_negative_pairs": [
+      [
+        "M001",
+        "M002"
+      ],
+      [
+        "M002",
+        "M003"
+      ]
+    ]
+  },
+  "task_to_work_pairwise": {
+    "tp": 30,
+    "fp": 13,
+    "fn": 0,
+    "precision": 0.6976744186046512,
+    "recall": 1,
+    "f1": 0.8219178082191781
+  },
+  "diagnosis": [
+    "The prompt rule added to split Events from the same Slack message did not remove the M019 source-pair false positives.",
+    "It introduced new false negatives for M001-M002 and M002-M003, contradicting the human decision that material preparation and review are one Task.",
+    "The remaining M019 source-pair errors are an evaluator/Gold representation issue: human adjudication says M019 contains facts for two different Tasks, but legacy Gold currently represents each source message with only one canonical Event.",
+    "Therefore the prompt change should be reverted, and Gold should allow M019 to contribute separate Gold Events to the two adjudicated Tasks."
+  ]
+}
