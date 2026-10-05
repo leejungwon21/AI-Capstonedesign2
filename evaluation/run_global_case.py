@@ -150,6 +150,8 @@ def main():
             extracted = result["events"]
             for e in extracted:
                 e["source_id"] = m["id"]
+                e["source_channel"] = m.get("channel")
+                e["source_timestamp"] = m.get("timestamp")
             events.extend(extracted)
             print(f'{m["id"]}: {len(extracted)} event(s)')
 
