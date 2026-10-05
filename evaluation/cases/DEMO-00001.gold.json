@@ -9,7 +9,8 @@
       "Q2": "M004-M006 remain one Task: 테스트 발송",
       "Q3": "M008 split from 본 발송 into separate Task",
       "Q4": "M019 code-writing split from 운영 검증 into separate Task",
-      "note": "For Q4, legacy one-event-per-message Gold assigns M019 to SDK code writing; M020-M021 remain validation evidence."
+      "note": "For Q4, legacy one-event-per-message Gold assigns M019 to SDK code writing; M020-M021 remain validation evidence.",
+      "M019_multi_task": "M019 contains two facts: SDK code writing completed (T12) and operational verification dependency/status (T07). Gold therefore uses two Events with the same source_id."
     }
   },
   "events": [
@@ -132,6 +133,10 @@
     {
       "event_id": "EVENT-M030-01",
       "source_id": "M030"
+    },
+    {
+      "event_id": "EVENT-M019-02",
+      "source_id": "M019"
     }
   ],
   "tasks": [
@@ -199,6 +204,7 @@
       "title": "결제 연동 검증",
       "status": "blocked",
       "event_ids": [
+        "EVENT-M019-02",
         "EVENT-M020-01",
         "EVENT-M021-01"
       ]
