@@ -116,6 +116,8 @@ def build_work_event_context(tasks, events):
             task_events.append({
                 "event_id": event_id,
                 "source_id": e.get("source_id"),
+                "source_channel": e.get("source_channel"),
+                "source_timestamp": e.get("source_timestamp"),
                 "subject": e.get("subject"),
                 "action": e.get("action"),
                 "event_type": e.get("event_type"),
@@ -160,18 +162,23 @@ def derive_strong_work_links(tasks, event_context):
     }
 
     task_actor_ids = {}
+    task_channels = {}
     task_first_order = {}
     for task_id, ctx in ctx_by_id.items():
         actors = set()
+        channels = set()
         orders = []
         for e in ctx.get("events", []):
             actor = e.get("actor") or {}
             if actor.get("slack_id"):
                 actors.add(actor["slack_id"])
+            if e.get("source_channel"):
+                channels.add(e["source_channel"])
             order = _msg_order(e.get("source_id"))
             if order >= 0:
                 orders.append(order)
         task_actor_ids[task_id] = actors
+        task_channels[task_id] = channels
         task_first_order[task_id] = min(orders) if orders else 10**9
 
     links = []
@@ -210,17 +217,27 @@ def derive_strong_work_links(tasks, event_context):
                     add_link(target_id, source_id, f"explicit_{field}_task_reference", text)
 
     # 2) Explicit execution handoff only.
-    # Generic delivery/reference is not enough for a deterministic must-link.
+    # Same person later appearing in another Task is not enough.
+    # Require an explicit assignment plus contextual continuity.
     strong_assignment_terms = ("다음 업무", "후속 업무", "후속 작업", "이어가", "이어서 진행", "정리본 기준으로 이어")
-    generic_next_terms = ("다음 단계",)
+    generic_tokens = {"딜러", "자료", "확인", "업무", "후속", "결과", "진행", "요청", "검토", "정리", "공유"}
+
+    def meaningful_tokens(task_id):
+        task = task_by_id[task_id]
+        text = " ".join([
+            str(task.get("title") or ""),
+            str(task.get("subject") or ""),
+        ])
+        return {
+            tok for tok in re.findall(r"[가-힣A-Za-z0-9]+", text)
+            if len(tok) >= 2 and tok not in generic_tokens
+        }
+
     for source_id, ctx in ctx_by_id.items():
         for e in ctx.get("events", []):
             action = str(e.get("action") or "").strip()
             evidence = str(e.get("evidence") or "").strip()
-
-            is_strong_assignment = any(term in action for term in strong_assignment_terms)
-            is_generic_next = any(term in action for term in generic_next_terms)
-            if not is_strong_assignment and not is_generic_next:
+            if not any(term in action for term in strong_assignment_terms):
                 continue
 
             recipient = e.get("recipient") or {}
@@ -238,26 +255,23 @@ def derive_strong_work_links(tasks, event_context):
             if not candidates:
                 continue
 
-            target_id = min(candidates, key=lambda x: task_first_order[x])
+            source_channels = task_channels.get(source_id, set())
+            source_tokens = meaningful_tokens(source_id)
+            qualified = []
+            for target_id in candidates:
+                same_channel = bool(source_channels & task_channels.get(target_id, set()))
+                topic_overlap = bool(source_tokens & meaningful_tokens(target_id))
+                if same_channel or topic_overlap:
+                    qualified.append(target_id)
 
-            if is_generic_next and not is_strong_assignment:
-                source_text = " ".join([
-                    str(task_by_id[source_id].get("title") or ""),
-                    str(task_by_id[source_id].get("subject") or ""),
-                ])
-                target_text = " ".join([
-                    str(task_by_id[target_id].get("title") or ""),
-                    str(task_by_id[target_id].get("subject") or ""),
-                ])
-                source_tokens = {tok for tok in re.findall(r"[가-힣A-Za-z0-9]+", source_text) if len(tok) >= 2}
-                target_tokens = {tok for tok in re.findall(r"[가-힣A-Za-z0-9]+", target_text) if len(tok) >= 2}
-                if not (source_tokens & target_tokens):
-                    continue
+            if not qualified:
+                continue
 
+            target_id = min(qualified, key=lambda x: task_first_order[x])
             add_link(
                 source_id,
                 target_id,
-                "explicit_assignment_to_later_actor",
+                "explicit_assignment_with_context",
                 evidence or action
             )
 
@@ -349,6 +363,8 @@ def main():
             extracted = result["events"]
             for e in extracted:
                 e["source_id"] = m["id"]
+                e["source_channel"] = m.get("channel")
+                e["source_timestamp"] = m.get("timestamp")
             events.extend(extracted)
             print(f'{m["id"]}: {len(extracted)} event(s)')
 
