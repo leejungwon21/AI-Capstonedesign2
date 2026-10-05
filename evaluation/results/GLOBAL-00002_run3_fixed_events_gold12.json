@@ -1,0 +1,38 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run3_fixed_events_gold12",
+  "mode": "reuse_events",
+  "gold_adjudication": "Q1 same Task, Q2 same Task, Q3 split, Q4 split",
+  "counts": {
+    "gold_events": 30,
+    "pred_events": 41,
+    "gold_tasks": 12,
+    "pred_tasks": 12,
+    "gold_works": 2,
+    "pred_works": 2
+  },
+  "event_to_task_pairwise": {
+    "tp": 26,
+    "fp": 37,
+    "fn": 0,
+    "precision": 0.4126984126984127,
+    "recall": 1,
+    "f1": 0.5842696629213483
+  },
+  "task_to_work_pairwise": {
+    "tp": 30,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "interpretation": [
+    "Task count matches exactly: 12 Gold vs 12 predicted.",
+    "All 12 predicted Tasks align one-to-one with the 12 Gold Tasks.",
+    "Task->Work grouping is perfect: precision=1.0, recall=1.0, F1=1.0, with exact Work count 2.",
+    "The Event->Task pairwise precision is not a trustworthy Task-grouping quality measure for this case because Gold has one canonical Event per source message while predictions contain 41 finer-grained Events. Direct Event-ID pair scoring therefore creates artificial false-positive pairs when multiple predicted Events from one Gold message are grouped into a Task.",
+    "For GLOBAL-00002, Task count/alignment and Task->Work F1 are the primary valid metrics until Event Gold is re-annotated to current Event granularity or the evaluator is changed to source-message/semantic alignment."
+  ],
+  "next_step": "Do not tune Event->Task prompt against the 0.5843 pairwise F1. Either re-annotate Event Gold at current granularity or update evaluation to compare Task grouping by source-message membership/semantic alignment."
+}
