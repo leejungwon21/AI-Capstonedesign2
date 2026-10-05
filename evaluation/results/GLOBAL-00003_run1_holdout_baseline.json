@@ -1,0 +1,50 @@
+{
+  "case_id": "GLOBAL-00003",
+  "model": "gpt-6-luna",
+  "run_label": "run1_holdout_baseline",
+  "input": {
+    "messages": 96,
+    "leakage_controlled": true
+  },
+  "counts": {
+    "gold_task": 32,
+    "pred_task": 35,
+    "gold_work": 5,
+    "pred_work": 7,
+    "pred_events": 143
+  },
+  "metrics": {
+    "source_to_task_pairwise": {
+      "tp": 76,
+      "fp": 9,
+      "fn": 20,
+      "precision": 0.8941176470588236,
+      "recall": 0.7916666666666666,
+      "f1": 0.839779005524862
+    },
+    "source_task_coverage": {
+      "gold_sources": 96,
+      "pred_sources": 91,
+      "matched_sources": 91,
+      "precision": 1,
+      "recall": 0.9479166666666666,
+      "f1": 0.9732620320855615
+    },
+    "task_to_work_pairwise": {
+      "tp": 53,
+      "fp": 45,
+      "fn": 59,
+      "precision": 0.5408163265306123,
+      "recall": 0.4732142857142857,
+      "f1": 0.5047619047619049
+    }
+  },
+  "scoring_note": "Gold has 96 canonical source anchors only for grouping-boundary evaluation. Event count 143 vs 96 and legacy Event-ID pairwise=0 are not valid Event extraction metrics.",
+  "diagnosis": [
+    "Task grouping is materially weaker than prior development cases: source-level F1 0.8398, with 35 predicted Tasks vs 32 Gold and 5 Gold sources missing from all predicted Tasks.",
+    "The missing Task sources are not Event-extraction misses: every one of the 96 messages produced at least one Event. They were dropped or separated during Event-to-Task integration.",
+    "Several Task false positives come from near-identical generic synthetic reply messages reused across different projects. With thread identity completely removed, those messages become semantically indistinguishable after message-level Event extraction.",
+    "Work F1 0.5048 is also contaminated by deterministic must-link errors. Two must-link clusters bridge Gold Work boundaries, showing that recurring people/channel/topic overlap is unsafe as a deterministic global handoff rule.",
+    "General fix: preserve an opaque Slack thread context key as auxiliary evidence (not a boundary), and restrict deterministic handoff must-links to explicit assignments within the same opaque thread. No case-specific prompt examples were added."
+  ]
+}
