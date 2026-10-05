@@ -1,0 +1,70 @@
+{
+  "case_id": "GLOBAL-00003",
+  "model": "gpt-6-luna",
+  "run_label": "run3_work_repeat3_fixed_upstream",
+  "upstream_fixed": true,
+  "repeat": 3,
+  "counts": {
+    "gold_tasks": 32,
+    "pred_tasks": 33,
+    "gold_works": 5,
+    "work_count_values": [
+      4,
+      5,
+      6
+    ],
+    "pred_events": 142
+  },
+  "task_metrics": {
+    "source_to_task_pairwise": {
+      "tp": 73,
+      "fp": 8,
+      "fn": 23,
+      "precision": 0.9012345679012346,
+      "recall": 0.7604166666666666,
+      "f1": 0.824858757062147
+    },
+    "source_task_coverage": {
+      "gold_sources": 96,
+      "pred_sources": 85,
+      "matched_sources": 85,
+      "precision": 1,
+      "recall": 0.8854166666666666,
+      "f1": 0.9392265193370166
+    }
+  },
+  "work_repeat": {
+    "f1_values": [
+      0.8449612403100776,
+      0.7230046948356808,
+      0.7475728155339806
+    ],
+    "f1_mean": 0.7718462502265796,
+    "f1_std": 0.052664026114252846,
+    "best_f1": 0.8449612403100776,
+    "worst_f1": 0.7230046948356808,
+    "work_count_values": [
+      4,
+      5,
+      6
+    ]
+  },
+  "last_run_work_metrics": {
+    "tp": 77,
+    "fp": 17,
+    "fn": 35,
+    "precision": 0.8191489361702128,
+    "recall": 0.6875,
+    "f1": 0.7475728155339806
+  },
+  "diagnosis": [
+    "Work output is materially unstable on the same fixed Task/Event input: predicted Work count changes 4 -> 5 -> 6 and Work F1 ranges 0.7230-0.8450.",
+    "The instability is therefore attributable to the Task-to-Work LLM stage, not Event or Task variation in this repeat test.",
+    "In the last run, the main false-negative block is the new-car project: Tasks from the first and second new-car task groups are grouped together, but the third new-car task group is split away, causing many missing within-Work pairs.",
+    "The battery-warranty cross-thread Work does not appear in the last-run false-negative pairs, indicating that cross-thread inference can succeed; the failure is not a blanket inability to merge across threads.",
+    "A second last-run split occurs inside the customer-complaint Work, where the first Task is separated from the other Tasks.",
+    "False-positive Work pairs involving UNMAPPED predicted Tasks are partly downstream of Task over-splitting/alignment error, so they should not be interpreted as pure Work-semantic errors.",
+    "No prompt change is justified from this case alone. Next step is repeated fixed-upstream regression across multiple global cases and/or a consensus/deterministic stabilization strategy if the same Work variance persists."
+  ],
+  "prompt_changed": false
+}
