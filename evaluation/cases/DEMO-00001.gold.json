@@ -3,7 +3,14 @@
   "provenance": {
     "source_commit": "eed36f37fd50138e20d18682398b364f5c5f0ac3",
     "annotation_basis": "Legacy answer-key task/project labels. One canonical evaluator Event ID is assigned per source message only for grouping evaluation.",
-    "caution": "Event extraction granularity is not independently re-annotated for the current prompt, so Event→Task F1 should be interpreted cautiously."
+    "caution": "Event extraction granularity is not independently re-annotated for the current prompt, so Event→Task F1 should be interpreted cautiously.",
+    "human_adjudication_2026_10_05": {
+      "Q1": "M001-M003 remain one Task: 캠페인 소재 검수",
+      "Q2": "M004-M006 remain one Task: 테스트 발송",
+      "Q3": "M008 split from 본 발송 into separate Task",
+      "Q4": "M019 code-writing split from 운영 검증 into separate Task",
+      "note": "For Q4, legacy one-event-per-message Gold assigns M019 to SDK code writing; M020-M021 remain validation evidence."
+    }
   },
   "events": [
     {
@@ -154,7 +161,6 @@
       "status": "waiting",
       "event_ids": [
         "EVENT-M007-01",
-        "EVENT-M008-01",
         "EVENT-M009-01"
       ]
     },
@@ -193,7 +199,6 @@
       "title": "결제 연동 검증",
       "status": "blocked",
       "event_ids": [
-        "EVENT-M019-01",
         "EVENT-M020-01",
         "EVENT-M021-01"
       ]
@@ -227,6 +232,22 @@
         "EVENT-M029-01",
         "EVENT-M030-01"
       ]
+    },
+    {
+      "task_id": "T11",
+      "title": "캠페인 타깃 고객 선정 및 발송 일정 합의",
+      "status": "completed",
+      "event_ids": [
+        "EVENT-M008-01"
+      ]
+    },
+    {
+      "task_id": "T12",
+      "title": "SDK 연동 코드 작성",
+      "status": "completed",
+      "event_ids": [
+        "EVENT-M019-01"
+      ]
     }
   ],
   "works": [
@@ -238,7 +259,8 @@
         "T02",
         "T03",
         "T04",
-        "T05"
+        "T05",
+        "T11"
       ]
     },
     {
@@ -249,7 +271,8 @@
         "T07",
         "T08",
         "T09",
-        "T10"
+        "T10",
+        "T12"
       ]
     }
   ]
