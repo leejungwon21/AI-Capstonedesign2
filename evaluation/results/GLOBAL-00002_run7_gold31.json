@@ -1,0 +1,57 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run7_gold31",
+  "mode": "reuse_events",
+  "counts": {
+    "gold_events": 31,
+    "pred_events": 41,
+    "gold_tasks": 12,
+    "pred_tasks": 12,
+    "gold_works": 2,
+    "pred_works": 3
+  },
+  "source_to_task_pairwise": {
+    "tp": 28,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.9333333333333333,
+    "recall": 1,
+    "f1": 0.9655172413793104,
+    "false_positive_pairs": [
+      [
+        "M006",
+        "M007"
+      ],
+      [
+        "M006",
+        "M009"
+      ]
+    ],
+    "false_negative_pairs": []
+  },
+  "source_task_coverage": {
+    "gold_sources": 30,
+    "pred_sources": 30,
+    "matched_sources": 30,
+    "missing_sources": [],
+    "extra_sources": [],
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "task_to_work_pairwise": {
+    "tp": 25,
+    "fp": 0,
+    "fn": 5,
+    "precision": 1,
+    "recall": 0.8333333333333334,
+    "f1": 0.9090909090909091
+  },
+  "diagnosis": [
+    "Task count matches exactly at 12/12 and source-level Task F1 remains high at 0.9655.",
+    "The only source-level Task false positives are M006-M007 and M006-M009. Human adjudication keeps M006 in the test-send Task while M007/M009 belong to the separate main-send Task, so this is a genuine mild overmerge.",
+    "Work count is 3 vs Gold 2 with precision 1.0 and recall 0.8333, indicating one Gold Work was split into two predicted Works rather than cross-Work overmerge.",
+    "The exact Work split cannot be identified from current console output because evaluator does not yet expose false-negative aligned Task pairs."
+  ],
+  "next_step": "Expose Task->Work false-positive/false-negative aligned Task pairs, then rerun with --reuse-events to locate the exact Work split before changing prompts."
+}
