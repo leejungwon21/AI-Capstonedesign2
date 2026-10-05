@@ -13,6 +13,10 @@
 
 event_context는 정답 힌트가 아니라, Task 통합 과정에서 압축될 수 있는 원래 업무 맥락을 보존하기 위한 근거다.
 Work 판단 시 Task 제목만 보지 말고 event_context의 선행조건, handoff, actor/recipient, evidence를 함께 사용한다.
+event_context의 source_channel과 source_timestamp는 Slack 원본 메타데이터이며 보조 근거로만 사용한다.
+- 같은 채널에서 시간적으로 이어지고 actor/recipient 흐름까지 연결되면 동일 Work 가능성을 높이는 근거가 된다.
+- 같은 채널이라는 이유만으로 합치지 않는다.
+- 다른 채널/DM이라는 이유만으로 분리하지 않는다. 명시적 handoff나 동일 프로젝트 목적이 있으면 채널을 넘어 같은 Work일 수 있다.
 derived_strong_links와 must_link_clusters는 별도 LLM 추론이 아니라 입력 Event에서 코드로 추출한 명시적 연결이다.
 
 ## must-link 강제 규칙
