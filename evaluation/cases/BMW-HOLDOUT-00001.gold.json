@@ -1,0 +1,749 @@
+{
+  "case_id": "BMW-HOLDOUT-00001",
+  "gold_scope": "grouping_boundary_gold",
+  "annotation_policy": {
+    "event_note": "Canonical one-event-per-source anchors are only for source-based Task grouping evaluation; they are not a complete Event fact gold.",
+    "task_note": "Task boundaries were adjudicated from Slack message goals. Thread IDs and thread titles are not present in model input.",
+    "work_note": "Work groups represent inferred shared project purpose across Tasks. Model input contains no thread title, thread ID, Gold ID, or WORK URL identifier."
+  },
+  "events": [
+    {
+      "event_id": "GE-A36BEADC",
+      "source_id": "SRC-A36BEADC"
+    },
+    {
+      "event_id": "GE-A66BEF95",
+      "source_id": "SRC-A66BEF95"
+    },
+    {
+      "event_id": "GE-A56BEE02",
+      "source_id": "SRC-A56BEE02"
+    },
+    {
+      "event_id": "GE-A86BF2BB",
+      "source_id": "SRC-A86BF2BB"
+    },
+    {
+      "event_id": "GE-A76BF128",
+      "source_id": "SRC-A76BF128"
+    },
+    {
+      "event_id": "GE-3A6906FA",
+      "source_id": "SRC-3A6906FA"
+    },
+    {
+      "event_id": "GE-3B69088D",
+      "source_id": "SRC-3B69088D"
+    },
+    {
+      "event_id": "GE-386903D4",
+      "source_id": "SRC-386903D4"
+    },
+    {
+      "event_id": "GE-39690567",
+      "source_id": "SRC-39690567"
+    },
+    {
+      "event_id": "GE-366900AE",
+      "source_id": "SRC-366900AE"
+    },
+    {
+      "event_id": "GE-37690241",
+      "source_id": "SRC-37690241"
+    },
+    {
+      "event_id": "GE-3468FD88",
+      "source_id": "SRC-3468FD88"
+    },
+    {
+      "event_id": "GE-275322C2",
+      "source_id": "SRC-275322C2"
+    },
+    {
+      "event_id": "GE-2653212F",
+      "source_id": "SRC-2653212F"
+    },
+    {
+      "event_id": "GE-25531F9C",
+      "source_id": "SRC-25531F9C"
+    },
+    {
+      "event_id": "GE-2C532AA1",
+      "source_id": "SRC-2C532AA1"
+    },
+    {
+      "event_id": "GE-2B53290E",
+      "source_id": "SRC-2B53290E"
+    },
+    {
+      "event_id": "GE-9E500C80",
+      "source_id": "SRC-9E500C80"
+    },
+    {
+      "event_id": "GE-9F500E13",
+      "source_id": "SRC-9F500E13"
+    },
+    {
+      "event_id": "GE-A0500FA6",
+      "source_id": "SRC-A0500FA6"
+    },
+    {
+      "event_id": "GE-A1501139",
+      "source_id": "SRC-A1501139"
+    },
+    {
+      "event_id": "GE-A25012CC",
+      "source_id": "SRC-A25012CC"
+    },
+    {
+      "event_id": "GE-A350145F",
+      "source_id": "SRC-A350145F"
+    },
+    {
+      "event_id": "GE-A45015F2",
+      "source_id": "SRC-A45015F2"
+    },
+    {
+      "event_id": "GE-A5501785",
+      "source_id": "SRC-A5501785"
+    },
+    {
+      "event_id": "GE-A6501918",
+      "source_id": "SRC-A6501918"
+    },
+    {
+      "event_id": "GE-A7501AAB",
+      "source_id": "SRC-A7501AAB"
+    },
+    {
+      "event_id": "GE-B5CF58C6",
+      "source_id": "SRC-B5CF58C6"
+    },
+    {
+      "event_id": "GE-B6CF5A59",
+      "source_id": "SRC-B6CF5A59"
+    },
+    {
+      "event_id": "GE-B3CF55A0",
+      "source_id": "SRC-B3CF55A0"
+    },
+    {
+      "event_id": "GE-B4CF5733",
+      "source_id": "SRC-B4CF5733"
+    },
+    {
+      "event_id": "GE-B9CF5F12",
+      "source_id": "SRC-B9CF5F12"
+    },
+    {
+      "event_id": "GE-BACF60A5",
+      "source_id": "SRC-BACF60A5"
+    },
+    {
+      "event_id": "GE-B7CF5BEC",
+      "source_id": "SRC-B7CF5BEC"
+    },
+    {
+      "event_id": "GE-B8CF5D7F",
+      "source_id": "SRC-B8CF5D7F"
+    },
+    {
+      "event_id": "GE-BDCF655E",
+      "source_id": "SRC-BDCF655E"
+    },
+    {
+      "event_id": "GE-48C7F16A",
+      "source_id": "SRC-48C7F16A"
+    },
+    {
+      "event_id": "GE-3BC7DCF3",
+      "source_id": "SRC-3BC7DCF3"
+    },
+    {
+      "event_id": "GE-3AC7DB60",
+      "source_id": "SRC-3AC7DB60"
+    },
+    {
+      "event_id": "GE-B1C047F0",
+      "source_id": "SRC-B1C047F0"
+    },
+    {
+      "event_id": "GE-B2C04983",
+      "source_id": "SRC-B2C04983"
+    },
+    {
+      "event_id": "GE-B3C04B16",
+      "source_id": "SRC-B3C04B16"
+    },
+    {
+      "event_id": "GE-B4C04CA9",
+      "source_id": "SRC-B4C04CA9"
+    },
+    {
+      "event_id": "GE-B5C04E3C",
+      "source_id": "SRC-B5C04E3C"
+    },
+    {
+      "event_id": "GE-B6C04FCF",
+      "source_id": "SRC-B6C04FCF"
+    },
+    {
+      "event_id": "GE-B7C05162",
+      "source_id": "SRC-B7C05162"
+    },
+    {
+      "event_id": "GE-B8C052F5",
+      "source_id": "SRC-B8C052F5"
+    },
+    {
+      "event_id": "GE-B9C05488",
+      "source_id": "SRC-B9C05488"
+    },
+    {
+      "event_id": "GE-BAC0561B",
+      "source_id": "SRC-BAC0561B"
+    },
+    {
+      "event_id": "GE-B7C28FF9",
+      "source_id": "SRC-B7C28FF9"
+    },
+    {
+      "event_id": "GE-B6C28E66",
+      "source_id": "SRC-B6C28E66"
+    },
+    {
+      "event_id": "GE-B5C28CD3",
+      "source_id": "SRC-B5C28CD3"
+    },
+    {
+      "event_id": "GE-B4C28B40",
+      "source_id": "SRC-B4C28B40"
+    },
+    {
+      "event_id": "GE-BBC29645",
+      "source_id": "SRC-BBC29645"
+    },
+    {
+      "event_id": "GE-BAC294B2",
+      "source_id": "SRC-BAC294B2"
+    },
+    {
+      "event_id": "GE-B9C2931F",
+      "source_id": "SRC-B9C2931F"
+    },
+    {
+      "event_id": "GE-B8C2918C",
+      "source_id": "SRC-B8C2918C"
+    },
+    {
+      "event_id": "GE-BFC29C91",
+      "source_id": "SRC-BFC29C91"
+    },
+    {
+      "event_id": "GE-BEC29AFE",
+      "source_id": "SRC-BEC29AFE"
+    },
+    {
+      "event_id": "GE-C5E2F9AE",
+      "source_id": "SRC-C5E2F9AE"
+    },
+    {
+      "event_id": "GE-D232D66E",
+      "source_id": "SRC-D232D66E"
+    },
+    {
+      "event_id": "GE-C5308360",
+      "source_id": "SRC-C5308360"
+    },
+    {
+      "event_id": "GE-C63084F3",
+      "source_id": "SRC-C63084F3"
+    },
+    {
+      "event_id": "GE-C7308686",
+      "source_id": "SRC-C7308686"
+    },
+    {
+      "event_id": "GE-C8308819",
+      "source_id": "SRC-C8308819"
+    },
+    {
+      "event_id": "GE-C93089AC",
+      "source_id": "SRC-C93089AC"
+    },
+    {
+      "event_id": "GE-CA308B3F",
+      "source_id": "SRC-CA308B3F"
+    },
+    {
+      "event_id": "GE-CB308CD2",
+      "source_id": "SRC-CB308CD2"
+    },
+    {
+      "event_id": "GE-CC308E65",
+      "source_id": "SRC-CC308E65"
+    },
+    {
+      "event_id": "GE-CD308FF8",
+      "source_id": "SRC-CD308FF8"
+    },
+    {
+      "event_id": "GE-CE30918B",
+      "source_id": "SRC-CE30918B"
+    },
+    {
+      "event_id": "GE-CF41DC3F",
+      "source_id": "SRC-CF41DC3F"
+    },
+    {
+      "event_id": "GE-5C3A6B71",
+      "source_id": "SRC-5C3A6B71"
+    },
+    {
+      "event_id": "GE-553A606C",
+      "source_id": "SRC-553A606C"
+    },
+    {
+      "event_id": "GE-563A61FF",
+      "source_id": "SRC-563A61FF"
+    },
+    {
+      "event_id": "GE-474B9383",
+      "source_id": "SRC-474B9383"
+    },
+    {
+      "event_id": "GE-464B91F0",
+      "source_id": "SRC-464B91F0"
+    },
+    {
+      "event_id": "GE-494B96A9",
+      "source_id": "SRC-494B96A9"
+    },
+    {
+      "event_id": "GE-484B9516",
+      "source_id": "SRC-484B9516"
+    },
+    {
+      "event_id": "GE-4B4B99CF",
+      "source_id": "SRC-4B4B99CF"
+    },
+    {
+      "event_id": "GE-4A4B983C",
+      "source_id": "SRC-4A4B983C"
+    },
+    {
+      "event_id": "GE-4D4B9CF5",
+      "source_id": "SRC-4D4B9CF5"
+    },
+    {
+      "event_id": "GE-4C4B9B62",
+      "source_id": "SRC-4C4B9B62"
+    },
+    {
+      "event_id": "GE-4F4BA01B",
+      "source_id": "SRC-4F4BA01B"
+    },
+    {
+      "event_id": "GE-D8638BE3",
+      "source_id": "SRC-D8638BE3"
+    },
+    {
+      "event_id": "GE-D9638D76",
+      "source_id": "SRC-D9638D76"
+    },
+    {
+      "event_id": "GE-DA638F09",
+      "source_id": "SRC-DA638F09"
+    },
+    {
+      "event_id": "GE-DB63909C",
+      "source_id": "SRC-DB63909C"
+    },
+    {
+      "event_id": "GE-DC63922F",
+      "source_id": "SRC-DC63922F"
+    },
+    {
+      "event_id": "GE-DD6393C2",
+      "source_id": "SRC-DD6393C2"
+    },
+    {
+      "event_id": "GE-DE639555",
+      "source_id": "SRC-DE639555"
+    },
+    {
+      "event_id": "GE-DF6396E8",
+      "source_id": "SRC-DF6396E8"
+    },
+    {
+      "event_id": "GE-E063987B",
+      "source_id": "SRC-E063987B"
+    },
+    {
+      "event_id": "GE-DD65D259",
+      "source_id": "SRC-DD65D259"
+    },
+    {
+      "event_id": "GE-DC65D0C6",
+      "source_id": "SRC-DC65D0C6"
+    },
+    {
+      "event_id": "GE-DB65CF33",
+      "source_id": "SRC-DB65CF33"
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "G-T00003-01",
+      "title": "디자인 시안·최신 판매 사양표 취합",
+      "event_ids": [
+        "GE-A36BEADC",
+        "GE-A66BEF95",
+        "GE-A56BEE02"
+      ]
+    },
+    {
+      "task_id": "G-T00003-02",
+      "title": "시안·사양표 불일치 항목 표시",
+      "event_ids": [
+        "GE-A86BF2BB",
+        "GE-A76BF128",
+        "GE-3A6906FA"
+      ]
+    },
+    {
+      "task_id": "G-T00003-03",
+      "title": "Technical 기술 검수·배포본 확정",
+      "event_ids": [
+        "GE-3B69088D",
+        "GE-386903D4",
+        "GE-39690567"
+      ]
+    },
+    {
+      "task_id": "G-T00003-04",
+      "title": "7개 딜러 배포·수신 확인",
+      "event_ids": [
+        "GE-366900AE",
+        "GE-37690241",
+        "GE-3468FD88"
+      ]
+    },
+    {
+      "task_id": "G-T00008-01",
+      "title": "경쟁사 비교·배터리 보증 초안 취합",
+      "event_ids": [
+        "GE-275322C2",
+        "GE-2653212F",
+        "GE-25531F9C"
+      ]
+    },
+    {
+      "task_id": "G-T00008-02",
+      "title": "보증 조건·기술 표현·딜러 FAQ 검토",
+      "event_ids": [
+        "GE-2C532AA1",
+        "GE-2B53290E",
+        "GE-9E500C80"
+      ]
+    },
+    {
+      "task_id": "G-T00008-03",
+      "title": "검토 결과 수렴·설명 자료 확정",
+      "event_ids": [
+        "GE-9F500E13",
+        "GE-A0500FA6",
+        "GE-A1501139"
+      ]
+    },
+    {
+      "task_id": "G-T00008-04",
+      "title": "딜러 배포·질문 회수",
+      "event_ids": [
+        "GE-A25012CC",
+        "GE-A350145F",
+        "GE-A45015F2"
+      ]
+    },
+    {
+      "task_id": "G-T00009-01",
+      "title": "7개 딜러 배터리 보증 질문 취합",
+      "event_ids": [
+        "GE-A5501785",
+        "GE-A6501918",
+        "GE-A7501AAB"
+      ]
+    },
+    {
+      "task_id": "G-T00009-02",
+      "title": "정책 질문·기술 질문 분류",
+      "event_ids": [
+        "GE-B5CF58C6",
+        "GE-B6CF5A59",
+        "GE-B3CF55A0"
+      ]
+    },
+    {
+      "task_id": "G-T00009-03",
+      "title": "Warranty·Technical 답변 수렴",
+      "event_ids": [
+        "GE-B4CF5733",
+        "GE-B9CF5F12",
+        "GE-BACF60A5"
+      ]
+    },
+    {
+      "task_id": "G-T00009-04",
+      "title": "공통 답변 자료 갱신·배포",
+      "event_ids": [
+        "GE-B7CF5BEC",
+        "GE-B8CF5D7F",
+        "GE-BDCF655E"
+      ]
+    },
+    {
+      "task_id": "G-T00014-01",
+      "title": "딜러 고객 불만·기존 홍보 문구 접수",
+      "event_ids": [
+        "GE-48C7F16A",
+        "GE-3BC7DCF3",
+        "GE-3AC7DB60"
+      ]
+    },
+    {
+      "task_id": "G-T00014-02",
+      "title": "기술 사실·딜러 배포 이력 확인",
+      "event_ids": [
+        "GE-B1C047F0",
+        "GE-B2C04983",
+        "GE-B3C04B16"
+      ]
+    },
+    {
+      "task_id": "G-T00014-03",
+      "title": "영향 홍보물 범위·수정 문구 확정",
+      "event_ids": [
+        "GE-B4C04CA9",
+        "GE-B5C04E3C",
+        "GE-B6C04FCF"
+      ]
+    },
+    {
+      "task_id": "G-T00014-04",
+      "title": "수정 자료 배포·딜러 회신 추적",
+      "event_ids": [
+        "GE-B7C05162",
+        "GE-B8C052F5",
+        "GE-B9C05488"
+      ]
+    },
+    {
+      "task_id": "G-T00015-01",
+      "title": "딜러별 수신 자료 버전 현황 취합",
+      "event_ids": [
+        "GE-BAC0561B",
+        "GE-B7C28FF9",
+        "GE-B6C28E66"
+      ]
+    },
+    {
+      "task_id": "G-T00015-02",
+      "title": "Marketing 수정 내역·Technical 검수본 대조",
+      "event_ids": [
+        "GE-B5C28CD3",
+        "GE-B4C28B40",
+        "GE-BBC29645"
+      ]
+    },
+    {
+      "task_id": "G-T00015-03",
+      "title": "재배포 대상 딜러·최종 버전 확정",
+      "event_ids": [
+        "GE-BAC294B2",
+        "GE-B9C2931F",
+        "GE-B8C2918C"
+      ]
+    },
+    {
+      "task_id": "G-T00015-04",
+      "title": "정정본 재배포·구버전 폐기 확인",
+      "event_ids": [
+        "GE-BFC29C91",
+        "GE-BEC29AFE",
+        "GE-C5E2F9AE"
+      ]
+    },
+    {
+      "task_id": "G-T00020-01",
+      "title": "본사 원본·국내 기존 자료 변경 이력 대조",
+      "event_ids": [
+        "GE-D232D66E",
+        "GE-C5308360",
+        "GE-C63084F3"
+      ]
+    },
+    {
+      "task_id": "G-T00020-02",
+      "title": "국내 사양·기술 표현·제작 납기 병렬 검토",
+      "event_ids": [
+        "GE-C7308686",
+        "GE-C8308819",
+        "GE-C93089AC"
+      ]
+    },
+    {
+      "task_id": "G-T00020-03",
+      "title": "수정 항목·승인 대기 항목 수렴",
+      "event_ids": [
+        "GE-CA308B3F",
+        "GE-CB308CD2",
+        "GE-CC308E65"
+      ]
+    },
+    {
+      "task_id": "G-T00020-04",
+      "title": "현지화 콘텐츠 확정·딜러 배포 준비",
+      "event_ids": [
+        "GE-CD308FF8",
+        "GE-CE30918B",
+        "GE-CF41DC3F"
+      ]
+    },
+    {
+      "task_id": "G-T00024-01",
+      "title": "현장 앱 장애 로그·운영 영향 접수",
+      "event_ids": [
+        "GE-5C3A6B71",
+        "GE-553A606C",
+        "GE-563A61FF"
+      ]
+    },
+    {
+      "task_id": "G-T00024-02",
+      "title": "Technical 원인·업체 지원 시간 확인",
+      "event_ids": [
+        "GE-474B9383",
+        "GE-464B91F0",
+        "GE-494B96A9"
+      ]
+    },
+    {
+      "task_id": "G-T00024-03",
+      "title": "우회 동선·운영 변경안 수렴",
+      "event_ids": [
+        "GE-484B9516",
+        "GE-4B4B99CF",
+        "GE-4A4B983C"
+      ]
+    },
+    {
+      "task_id": "G-T00024-04",
+      "title": "현장 공지·복구 상태 추적",
+      "event_ids": [
+        "GE-4D4B9CF5",
+        "GE-4C4B9B62",
+        "GE-4F4BA01B"
+      ]
+    },
+    {
+      "task_id": "G-T00026-01",
+      "title": "교육 참석자 정정 요청 접수",
+      "event_ids": [
+        "GE-D8638BE3",
+        "GE-D9638D76",
+        "GE-DA638F09"
+      ]
+    },
+    {
+      "task_id": "G-T00026-02",
+      "title": "개인정보 동의 범위·CRM 원본 확인",
+      "event_ids": [
+        "GE-DB63909C",
+        "GE-DC63922F",
+        "GE-DD6393C2"
+      ]
+    },
+    {
+      "task_id": "G-T00026-03",
+      "title": "교육 명단·CRM 기록 정정안 수렴",
+      "event_ids": [
+        "GE-DE639555",
+        "GE-DF6396E8",
+        "GE-E063987B"
+      ]
+    },
+    {
+      "task_id": "G-T00026-04",
+      "title": "정정 결과 통지·접근 기록 보관",
+      "event_ids": [
+        "GE-DD65D259",
+        "GE-DC65D0C6",
+        "GE-DB65CF33"
+      ]
+    }
+  ],
+  "works": [
+    {
+      "work_id": "GW-NEWCAR-LAUNCH",
+      "title": "신차 출시 자료 현지화·검수·딜러 배포",
+      "task_ids": [
+        "G-T00003-01",
+        "G-T00003-02",
+        "G-T00003-03",
+        "G-T00003-04",
+        "G-T00015-01",
+        "G-T00015-02",
+        "G-T00015-03",
+        "G-T00015-04",
+        "G-T00020-01",
+        "G-T00020-02",
+        "G-T00020-03",
+        "G-T00020-04"
+      ]
+    },
+    {
+      "work_id": "GW-BATTERY-WARRANTY",
+      "title": "배터리 보증 딜러 설명·FAQ 운영",
+      "task_ids": [
+        "G-T00008-01",
+        "G-T00008-02",
+        "G-T00008-03",
+        "G-T00008-04",
+        "G-T00009-01",
+        "G-T00009-02",
+        "G-T00009-03",
+        "G-T00009-04"
+      ]
+    },
+    {
+      "work_id": "GW-CUSTOMER-COMPLAINT",
+      "title": "딜러 고객 불만 기반 홍보 문구 검토·수정",
+      "task_ids": [
+        "G-T00014-01",
+        "G-T00014-02",
+        "G-T00014-03",
+        "G-T00014-04"
+      ]
+    },
+    {
+      "work_id": "GW-EVENT-APP-INCIDENT",
+      "title": "행사 현장 앱 장애 대응",
+      "task_ids": [
+        "G-T00024-01",
+        "G-T00024-02",
+        "G-T00024-03",
+        "G-T00024-04"
+      ]
+    },
+    {
+      "work_id": "GW-TRAINING-PRIVACY",
+      "title": "딜러 교육 참석자 개인정보 정정",
+      "task_ids": [
+        "G-T00026-01",
+        "G-T00026-02",
+        "G-T00026-03",
+        "G-T00026-04"
+      ]
+    }
+  ]
+}
