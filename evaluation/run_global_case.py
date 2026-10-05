@@ -88,6 +88,7 @@ def main():
     ap.add_argument("--case", default="GLOBAL-00001")
     ap.add_argument("--save-upstream", action="store_true")
     ap.add_argument("--reuse-upstream", action="store_true")
+    ap.add_argument("--reuse-events", action="store_true")
     ap.add_argument("--repeat", type=int, default=1)
     args = ap.parse_args()
     if args.repeat < 1:
@@ -130,32 +131,39 @@ def main():
         tasks = upstream["tasks"]
         print(f"Reused upstream: {upstream_path}")
     else:
-        events = []
-        for m in all_messages:
-            payload = {
-                "message": {
-                    "source_id": m["id"],
-                    "slack_id": m["author_id"],
-                    "timestamp": m["timestamp"],
-                    "channel": m["channel"],
-                    "text": safe_text(m["text"]),
-                },
-                "people": people,
-            }
-            result, _ = call_structured(
-                system_prompt=prompt("event_extraction.md"),
-                user_payload=payload,
-                json_schema=EVENT_SCHEMA,
-            )
-            extracted = result["events"]
-            for e in extracted:
-                e["source_id"] = m["id"]
-                e["source_channel"] = m.get("channel")
-                e["source_timestamp"] = m.get("timestamp")
-            events.extend(extracted)
-            print(f'{m["id"]}: {len(extracted)} event(s)')
+        if args.reuse_events:
+            if not upstream_path.exists():
+                raise FileNotFoundError(f"Saved upstream not found: {upstream_path}")
+            upstream = read_json(upstream_path)
+            events = upstream["events"]
+            print(f"Reused events only: {upstream_path}")
+        else:
+            events = []
+            for m in all_messages:
+                payload = {
+                    "message": {
+                        "source_id": m["id"],
+                        "slack_id": m["author_id"],
+                        "timestamp": m["timestamp"],
+                        "channel": m["channel"],
+                        "text": safe_text(m["text"]),
+                    },
+                    "people": people,
+                }
+                result, _ = call_structured(
+                    system_prompt=prompt("event_extraction.md"),
+                    user_payload=payload,
+                    json_schema=EVENT_SCHEMA,
+                )
+                extracted = result["events"]
+                for e in extracted:
+                    e["source_id"] = m["id"]
+                    e["source_channel"] = m.get("channel")
+                    e["source_timestamp"] = m.get("timestamp")
+                events.extend(extracted)
+                print(f'{m["id"]}: {len(extracted)} event(s)')
 
-        assign_event_ids(events)
+            assign_event_ids(events)
 
         task_result, _ = call_structured(
             system_prompt=prompt("event_to_task.md"),
@@ -168,14 +176,13 @@ def main():
 
         if args.save_upstream:
             expected_tasks = len(gold.get("tasks", []))
-            if len(tasks) == expected_tasks:
-                upstream_path.write_text(
-                    json.dumps({"case_id": args.case, "events": events, "tasks": tasks}, ensure_ascii=False, indent=2),
-                    encoding="utf-8",
-                )
-                print(f"Saved upstream: {upstream_path}")
-            else:
-                print(f"Upstream NOT saved: predicted tasks={len(tasks)}, gold tasks={expected_tasks}.")
+            upstream_path.write_text(
+                json.dumps({"case_id": args.case, "events": events, "tasks": tasks}, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            print(f"Saved upstream: {upstream_path}")
+            if len(tasks) != expected_tasks:
+                print(f"Warning: saved upstream has predicted tasks={len(tasks)}, gold tasks={expected_tasks}.")
 
     event_context = build_work_event_context(tasks, events)
     derived_links = derive_strong_work_links(tasks, event_context)
