@@ -1,0 +1,61 @@
+{
+  "case_id": "GLOBAL-00001",
+  "run_label": "run4",
+  "status": "work_grouping_target_reached",
+  "mode": "reuse_upstream",
+  "counts": {
+    "gold_events": 62,
+    "pred_events": 54,
+    "gold_tasks": 12,
+    "pred_tasks": 12,
+    "gold_works": 3,
+    "pred_works": 3
+  },
+  "event_to_task_pairwise": {
+    "tp": 82,
+    "fp": 18,
+    "fn": 55,
+    "precision": 0.82,
+    "recall": 0.5985401459854015,
+    "f1": 0.6919831223628692
+  },
+  "task_to_work_pairwise": {
+    "tp": 18,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "repeat_summary": {
+    "runs": 1,
+    "work_f1_mean": 1,
+    "work_f1_std": 0,
+    "work_f1_values": [
+      1
+    ],
+    "work_count_values": [
+      3
+    ]
+  },
+  "derived_strong_work_links": 3,
+  "must_link_clusters": [
+    [
+      "PTASK-00002",
+      "PTASK-00004"
+    ],
+    [
+      "PTASK-00003",
+      "PTASK-00005"
+    ]
+  ],
+  "diagnosis": [
+    "Task count remained exact at 12/12.",
+    "Work count matched Gold exactly at 3/3.",
+    "Task-to-Work precision, recall, and F1 all reached 1.0.",
+    "The previous over-split was resolved by expanding candidate Work clusters using multiple auxiliary continuity signals rather than a hard channel rule.",
+    "No false-positive or false-negative Task-to-Work pairs remained in this run.",
+    "Event-to-Task F1 remains unchanged because the same saved upstream was reused; this score is not a clean current extraction benchmark because merged Gold includes older THREAD-00005 and THREAD-00006 event granularity."
+  ],
+  "next_step": "Repeat the Work stage several times on the same upstream to test stability, then move to additional global and cross-channel/DM cases before treating 1.0 as generalized performance."
+}
