@@ -1,0 +1,103 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run8_variance_diagnostic",
+  "mode": "reuse_events",
+  "counts": {
+    "gold_events": 31,
+    "pred_events": 41,
+    "gold_tasks": 12,
+    "pred_tasks": 13,
+    "gold_works": 2,
+    "pred_works": 3
+  },
+  "source_to_task_pairwise": {
+    "tp": 26,
+    "fp": 2,
+    "fn": 2,
+    "precision": 0.9285714285714286,
+    "recall": 0.9285714285714286,
+    "f1": 0.9285714285714286,
+    "false_positive_pairs": [
+      [
+        "M006",
+        "M007"
+      ],
+      [
+        "M006",
+        "M009"
+      ]
+    ],
+    "false_negative_pairs": [
+      [
+        "M001",
+        "M002"
+      ],
+      [
+        "M002",
+        "M003"
+      ]
+    ]
+  },
+  "task_to_work_pairwise": {
+    "tp": 25,
+    "fp": 6,
+    "fn": 5,
+    "precision": 0.8064516129032258,
+    "recall": 0.8333333333333334,
+    "f1": 0.819672131147541,
+    "false_positive_pairs": [
+      [
+        "T01",
+        "UNMAPPED:PTASK-00002"
+      ],
+      [
+        "T02",
+        "UNMAPPED:PTASK-00002"
+      ],
+      [
+        "T03",
+        "UNMAPPED:PTASK-00002"
+      ],
+      [
+        "T04",
+        "UNMAPPED:PTASK-00002"
+      ],
+      [
+        "T05",
+        "UNMAPPED:PTASK-00002"
+      ],
+      [
+        "T11",
+        "UNMAPPED:PTASK-00002"
+      ]
+    ],
+    "false_negative_pairs": [
+      [
+        "T06",
+        "T10"
+      ],
+      [
+        "T07",
+        "T10"
+      ],
+      [
+        "T08",
+        "T10"
+      ],
+      [
+        "T09",
+        "T10"
+      ],
+      [
+        "T10",
+        "T12"
+      ]
+    ]
+  },
+  "diagnosis": [
+    "The extra unmapped PTASK-00002 is consistent with an over-split of Gold T01: M001/M003 remain together while M002 is separated, producing the two source-level false-negative pairs M001-M002 and M002-M003.",
+    "All Work false-negative pairs involve T10, so the third predicted Work is the FAQ Task split away from the rest of payment Work.",
+    "Compared with the previous fixed-event run, the same Events produced different Task counts and different Work counts. This confirms stage-level output variance rather than a deterministic prompt bug.",
+    "Do not tune prompts from this single run. Measure repeated Task/Work stability on the same fixed Events first."
+  ]
+}
