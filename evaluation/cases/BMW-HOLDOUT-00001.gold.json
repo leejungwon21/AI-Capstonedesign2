@@ -4,7 +4,7 @@
   "annotation_policy": {
     "event_note": "Canonical one-event-per-source anchors are only for source-based Task grouping evaluation; they are not a complete Event fact gold.",
     "task_note": "Task boundaries were adjudicated from Slack message goals. Thread IDs and thread titles are not present in model input.",
-    "work_note": "Work groups represent inferred shared project purpose across Tasks. Model input contains no thread title, thread ID, Gold ID, or WORK URL identifier."
+    "work_note": "For GLOBAL-00003, Work boundaries follow the original BMW dataset's authored Work units. Related topics are not post-hoc merged across authored Works. Cross-thread hidden-project inference is evaluated separately."
   },
   "events": [
     {
@@ -684,31 +684,29 @@
   ],
   "works": [
     {
-      "work_id": "GW-NEWCAR-LAUNCH",
-      "title": "신차 출시 자료 현지화·검수·딜러 배포",
+      "work_id": "GW-BMW-01",
+      "title": "신차 소개 자료 딜러 배포",
       "task_ids": [
         "G-T00003-01",
         "G-T00003-02",
         "G-T00003-03",
-        "G-T00003-04",
-        "G-T00015-01",
-        "G-T00015-02",
-        "G-T00015-03",
-        "G-T00015-04",
-        "G-T00020-01",
-        "G-T00020-02",
-        "G-T00020-03",
-        "G-T00020-04"
+        "G-T00003-04"
       ]
     },
     {
-      "work_id": "GW-BATTERY-WARRANTY",
-      "title": "배터리 보증 딜러 설명·FAQ 운영",
+      "work_id": "GW-BMW-02",
+      "title": "전기차 배터리 보증 딜러 설명 자료",
       "task_ids": [
         "G-T00008-01",
         "G-T00008-02",
         "G-T00008-03",
-        "G-T00008-04",
+        "G-T00008-04"
+      ]
+    },
+    {
+      "work_id": "GW-BMW-03",
+      "title": "배터리 보증 질문의 공통 답변 작성",
+      "task_ids": [
         "G-T00009-01",
         "G-T00009-02",
         "G-T00009-03",
@@ -716,8 +714,8 @@
       ]
     },
     {
-      "work_id": "GW-CUSTOMER-COMPLAINT",
-      "title": "딜러 고객 불만 기반 홍보 문구 검토·수정",
+      "work_id": "GW-BMW-04",
+      "title": "딜러가 전달한 고객 불만과 홍보 문구 검토",
       "task_ids": [
         "G-T00014-01",
         "G-T00014-02",
@@ -726,7 +724,27 @@
       ]
     },
     {
-      "work_id": "GW-EVENT-APP-INCIDENT",
+      "work_id": "GW-BMW-05",
+      "title": "딜러별 신차 자료 버전 불일치",
+      "task_ids": [
+        "G-T00015-01",
+        "G-T00015-02",
+        "G-T00015-03",
+        "G-T00015-04"
+      ]
+    },
+    {
+      "work_id": "GW-BMW-06",
+      "title": "신차 출시 캠페인 콘텐츠 현지화 및 배포 준비",
+      "task_ids": [
+        "G-T00020-01",
+        "G-T00020-02",
+        "G-T00020-03",
+        "G-T00020-04"
+      ]
+    },
+    {
+      "work_id": "GW-BMW-07",
       "title": "행사 현장 앱 장애 대응",
       "task_ids": [
         "G-T00024-01",
@@ -736,7 +754,7 @@
       ]
     },
     {
-      "work_id": "GW-TRAINING-PRIVACY",
+      "work_id": "GW-BMW-08",
       "title": "딜러 교육 참석자 개인정보 정정",
       "task_ids": [
         "G-T00026-01",
