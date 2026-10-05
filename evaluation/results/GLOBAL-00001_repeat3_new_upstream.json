@@ -1,0 +1,89 @@
+{
+  "case_id": "GLOBAL-00001",
+  "model": "gpt-6-luna",
+  "run_label": "repeat3_fixed_new_upstream",
+  "upstream_fixed": true,
+  "repeat": 3,
+  "counts": {
+    "gold_tasks": 12,
+    "pred_tasks": 12,
+    "gold_works": 3,
+    "work_count_values": [
+      4,
+      3,
+      5
+    ],
+    "gold_events": 62,
+    "pred_events": 51
+  },
+  "task_metrics": {
+    "source_to_task_pairwise": {
+      "tp": 32,
+      "fp": 3,
+      "fn": 4,
+      "precision": 0.9142857142857143,
+      "recall": 0.8888888888888888,
+      "f1": 0.9014084507042254
+    },
+    "source_task_coverage": {
+      "gold_sources": 36,
+      "pred_sources": 35,
+      "matched_sources": 35,
+      "precision": 1,
+      "recall": 0.9722222222222222,
+      "f1": 0.9859154929577464,
+      "missing_sources": [
+        "MSG-00059"
+      ]
+    }
+  },
+  "work_repeat": {
+    "f1_values": [
+      0.9090909090909091,
+      1,
+      0.8387096774193548
+    ],
+    "f1_mean": 0.9159335288367546,
+    "f1_std": 0.06602402655236868,
+    "work_count_values": [
+      4,
+      3,
+      5
+    ],
+    "recurring_false_positive_pairs": [],
+    "recurring_false_negative_pairs": [
+      {
+        "pair": [
+          "TASK-00017",
+          "TASK-00020"
+        ],
+        "count": 2,
+        "rate": 0.6666666666666666
+      },
+      {
+        "pair": [
+          "TASK-00018",
+          "TASK-00020"
+        ],
+        "count": 2,
+        "rate": 0.6666666666666666
+      },
+      {
+        "pair": [
+          "TASK-00019",
+          "TASK-00020"
+        ],
+        "count": 2,
+        "rate": 0.6666666666666666
+      }
+    ]
+  },
+  "diagnosis": [
+    "On the newly regenerated fixed upstream, Work grouping varies from 3 to 5 Works although Gold has 3.",
+    "There are no recurring false-positive Work pairs; the repeated error is under-merging/over-splitting.",
+    "TASK-00020 is separated from TASK-00017/18/19 in two of three runs, so GLOBAL-00001 now also exhibits a recurring project-level split rather than only one-off variance.",
+    "Together with GLOBAL-00002 and GLOBAL-00003, the cross-case pattern is increasingly consistent: the Task-to-Work stage tends to split weaker/peripheral/follow-up Tasks from an otherwise common project Work.",
+    "No case-specific rule should be added. A general stabilization or project-level grouping rule should be tested across all global cases."
+  ],
+  "prompt_changed": false
+}
