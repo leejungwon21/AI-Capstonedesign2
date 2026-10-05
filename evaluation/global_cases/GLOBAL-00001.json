@@ -1,0 +1,18 @@
+{
+  "case_id": "GLOBAL-00001",
+  "component_cases": [
+    "THREAD-00005",
+    "THREAD-00006",
+    "THREAD-00021"
+  ],
+  "purpose": "여러 독립 Slack thread의 메시지를 한 번에 섞어 Event→Task→Work 경계를 스스로 찾는 global grouping 기본 테스트",
+  "expected": {
+    "tasks": 12,
+    "works": 3
+  },
+  "leakage_control": {
+    "component_case_id_to_llm": false,
+    "thread_boundary_to_task_llm": false,
+    "note": "각 메시지는 Event 추출만 개별 수행하고, Task 통합에는 모든 Event를 한꺼번에 제공한다."
+  }
+}
