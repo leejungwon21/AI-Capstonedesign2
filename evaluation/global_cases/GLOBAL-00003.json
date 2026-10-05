@@ -1,0 +1,7 @@
+{
+  "case_id": "GLOBAL-00003",
+  "component_cases": [
+    "BMW-HOLDOUT-00001"
+  ],
+  "description": "Leakage-controlled BMW mixed-channel holdout with opaque source IDs and cross-thread Work gold."
+}
