@@ -1,0 +1,54 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run5_pair_diagnostics",
+  "mode": "reuse_events",
+  "counts": {
+    "gold_events": 30,
+    "pred_events": 41,
+    "gold_tasks": 12,
+    "pred_tasks": 13,
+    "gold_works": 2,
+    "pred_works": 2
+  },
+  "source_to_task_pairwise": {
+    "tp": 26,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.9285714285714286,
+    "recall": 1,
+    "f1": 0.962962962962963,
+    "false_positive_pairs": [
+      [
+        "M019",
+        "M020"
+      ],
+      [
+        "M019",
+        "M021"
+      ]
+    ],
+    "false_negative_pairs": []
+  },
+  "source_task_coverage": {
+    "gold_sources": 30,
+    "pred_sources": 30,
+    "matched_sources": 30,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "task_to_work_pairwise": {
+    "tp": 30,
+    "fp": 6,
+    "fn": 0,
+    "precision": 0.8333333333333334,
+    "recall": 1,
+    "f1": 0.9090909090909091
+  },
+  "diagnosis": [
+    "The exact source-level Task overmerge is M019 with M020 and M021.",
+    "This conflicts with the human adjudication that SDK code writing and operational verification are separate Tasks.",
+    "The 13-vs-12 Task count indicates at least one additional Task-boundary issue beyond this overmerge. Because source-level FN is zero, that extra issue is likely a same-source Event split/duplicate or another structure not visible from source-pair diagnostics alone.",
+    "Do not change the prompt again until the current prediction JSON is inspected for the extra predicted Task."
+  ]
+}
