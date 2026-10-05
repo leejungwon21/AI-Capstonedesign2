@@ -1,0 +1,81 @@
+{
+  "case_id": "GLOBAL-00002",
+  "model": "gpt-6-luna",
+  "run_label": "repeat3_fixed_upstream_regression",
+  "upstream_fixed": true,
+  "repeat": 3,
+  "counts": {
+    "gold_tasks": 12,
+    "pred_tasks": 14,
+    "gold_works": 2,
+    "work_count_values": [
+      3,
+      3,
+      2
+    ],
+    "gold_event_anchors": 31,
+    "pred_events": 41
+  },
+  "task_metrics": {
+    "source_to_task_pairwise": {
+      "tp": 26,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1,
+      "recall": 0.9285714285714286,
+      "f1": 0.962962962962963
+    },
+    "source_task_coverage": {
+      "gold_sources": 30,
+      "pred_sources": 30,
+      "matched_sources": 30,
+      "precision": 1,
+      "recall": 1,
+      "f1": 1
+    }
+  },
+  "work_repeat": {
+    "f1_values": [
+      0.7352941176470588,
+      0.7352941176470588,
+      0.8219178082191781
+    ],
+    "f1_mean": 0.7641686811710986,
+    "f1_std": 0.040834799343300546,
+    "work_count_values": [
+      3,
+      3,
+      2
+    ],
+    "recurring_false_negative_pairs": [
+      [
+        "T06",
+        "T10"
+      ],
+      [
+        "T07",
+        "T10"
+      ],
+      [
+        "T08",
+        "T10"
+      ],
+      [
+        "T09",
+        "T10"
+      ],
+      [
+        "T10",
+        "T12"
+      ]
+    ]
+  },
+  "diagnosis": [
+    "Source-based Task grouping is strong (F1 0.9630) and covers all 30 source messages, but the model outputs 14 Tasks for 12 Gold Tasks, indicating over-splitting rather than source loss.",
+    "All recurring Work false-positive pairs involve UNMAPPED predicted Tasks PTASK-00002 or PTASK-00004, so a substantial portion of Work precision loss is downstream of Task over-splitting/alignment rather than a pure Work semantic merge error.",
+    "A genuine Work-stage pattern remains: Gold Task T10 (결제 FAQ 초안) is separated from multiple other 결제 연동 B Tasks in two of three Work runs, showing recurring project-level under-merging of a support/documentation Task.",
+    "GLOBAL-00001 had no recurring Work pair error, while GLOBAL-00002 and GLOBAL-00003 both show Work under-merging/variance. This supports testing a stabilization method before adding case-specific prompt rules.",
+    "The DEMO Gold Event layer is grouping-oriented rather than a complete Event-fact annotation, so raw Event over-extraction should not be scored as extraction performance."
+  ],
+  "prompt_changed": false
+}
