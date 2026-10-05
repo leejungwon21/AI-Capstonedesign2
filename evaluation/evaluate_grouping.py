@@ -47,6 +47,13 @@ def score(gold_pairs, pred_pairs):
     }
 
 
+def score_with_pairs(gold_pairs, pred_pairs):
+    out = score(gold_pairs, pred_pairs)
+    out["false_positive_pairs"] = [list(x) for x in sorted(pred_pairs - gold_pairs)]
+    out["false_negative_pairs"] = [list(x) for x in sorted(gold_pairs - pred_pairs)]
+    return out
+
+
 def source_by_event(data):
     return {e["event_id"]: e.get("source_id") for e in data.get("events", [])}
 
@@ -148,7 +155,7 @@ def evaluate(gold, pred):
 
     return {
         "event_to_task_pairwise": score(gold_task_pairs, pred_task_pairs),
-        "source_to_task_pairwise": score(gold_source_task_pairs, pred_source_task_pairs),
+        "source_to_task_pairwise": score_with_pairs(gold_source_task_pairs, pred_source_task_pairs),
         "source_task_coverage": source_task_coverage(gold, pred),
         "task_to_work_pairwise": score(gold_work_pairs, pred_work_pairs),
         "task_id_alignment": alignment,
