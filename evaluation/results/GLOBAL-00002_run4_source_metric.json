@@ -1,0 +1,56 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run4_source_metric",
+  "mode": "reuse_events",
+  "counts": {
+    "gold_events": 30,
+    "pred_events": 41,
+    "gold_tasks": 12,
+    "pred_tasks": 12,
+    "gold_works": 2,
+    "pred_works": 2
+  },
+  "event_to_task_pairwise_legacy": {
+    "tp": 26,
+    "fp": 37,
+    "fn": 0,
+    "precision": 0.4126984126984127,
+    "recall": 1,
+    "f1": 0.5842696629213483
+  },
+  "source_to_task_pairwise": {
+    "tp": 26,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.9285714285714286,
+    "recall": 1,
+    "f1": 0.962962962962963
+  },
+  "source_task_coverage": {
+    "gold_sources": 30,
+    "pred_sources": 30,
+    "matched_sources": 30,
+    "missing_sources": [],
+    "extra_sources": [],
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "task_to_work_pairwise": {
+    "tp": 30,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1,
+    "recall": 1,
+    "f1": 1
+  },
+  "interpretation": [
+    "Source-message Task grouping is the primary valid Task metric for this legacy case.",
+    "All 30 source messages are covered exactly; there are no missing or extra source messages.",
+    "Source->Task recall is 1.0 with only two false-positive source pairs, so no Gold Task was split, but one or more predicted Tasks merged neighboring Gold message groups slightly too broadly.",
+    "Task count and one-to-one Task alignment are exact at 12/12.",
+    "Task->Work grouping is perfect at F1=1.0 with exact Work count 2.",
+    "Legacy Event-ID pairwise F1 remains non-diagnostic because Event granularity differs between Gold and prediction."
+  ],
+  "next_step": "Inspect the current GLOBAL-00002.prediction.json to identify the exact two false-positive source-message pairs before changing any prompt."
+}
