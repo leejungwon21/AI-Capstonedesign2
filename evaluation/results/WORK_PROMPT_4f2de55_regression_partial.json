@@ -1,0 +1,101 @@
+{
+  "prompt_commit": "4f2de55a34f5be67f1571f28f2d451babe7a4ed4",
+  "status": "partial_01_02_complete_03_pending",
+  "change_summary": "Added general project-level recheck, complete Task assignment, and anti-over-splitting guidance in Task->Work prompt.",
+  "cases": {
+    "GLOBAL-00001": {
+      "before": {
+        "work_f1_mean": 0.9159335288367546,
+        "work_f1_std": 0.06602402655236868,
+        "work_f1_values": [
+          0.9090909090909091,
+          1,
+          0.8387096774193548
+        ],
+        "work_count_values": [
+          4,
+          3,
+          5
+        ],
+        "recurring_fn": [
+          [
+            "TASK-00017",
+            "TASK-00020"
+          ],
+          [
+            "TASK-00018",
+            "TASK-00020"
+          ],
+          [
+            "TASK-00019",
+            "TASK-00020"
+          ]
+        ]
+      },
+      "after": {
+        "work_f1_mean": 0.9393939393939393,
+        "work_f1_std": 0.04285495643554835,
+        "work_f1_values": [
+          0.9090909090909091,
+          0.9090909090909091,
+          1
+        ],
+        "work_count_values": [
+          4,
+          4,
+          3
+        ],
+        "recurring_fn": [
+          [
+            "TASK-00017",
+            "TASK-00020"
+          ],
+          [
+            "TASK-00018",
+            "TASK-00020"
+          ],
+          [
+            "TASK-00019",
+            "TASK-00020"
+          ]
+        ]
+      },
+      "diagnosis": "Slight mean/stability improvement, but the same recurring project split remains. The prompt change did not eliminate the core error."
+    },
+    "GLOBAL-00002": {
+      "before": {
+        "work_f1_mean": 0.7641686811710986,
+        "work_f1_std": 0.040834799343300546,
+        "work_f1_values": [
+          0.7352941176470588,
+          0.7352941176470588,
+          0.8219178082191781
+        ],
+        "work_count_values": [
+          3,
+          3,
+          2
+        ],
+        "recurring_fn_rate": 0.6666666666666666
+      },
+      "after": {
+        "work_f1_mean": 0.7087753134040501,
+        "work_f1_std": 0.03750325261838005,
+        "work_f1_values": [
+          0.7352941176470588,
+          0.6557377049180327,
+          0.7352941176470588
+        ],
+        "work_count_values": [
+          3,
+          4,
+          3
+        ],
+        "recurring_fn_rate": 1
+      },
+      "diagnosis": "Regression. The same T10 support/documentation Task split became fully recurring (3/3), and Work count moved farther from Gold in one run. The general anti-over-splitting prompt did not help this case and may have increased instability in candidate partitioning."
+    }
+  },
+  "decision": "Do not change or revert the prompt until GLOBAL-00003 post-change result is collected. Evaluate all three cases together before deciding.",
+  "prompt_changed_after_result": false
+}
