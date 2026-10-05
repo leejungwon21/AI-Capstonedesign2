@@ -1,0 +1,47 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run1",
+  "status": "task_over_split_and_work_overmerge",
+  "counts": {
+    "gold_events": 30,
+    "pred_events": 40,
+    "gold_tasks": 10,
+    "pred_tasks": 13,
+    "gold_works": 2,
+    "pred_works": 2
+  },
+  "event_to_task_pairwise": {
+    "tp": 24,
+    "fp": 30,
+    "fn": 6,
+    "precision": 0.4444444444444444,
+    "recall": 0.8,
+    "f1": 0.5714285714285714
+  },
+  "task_to_work_pairwise": {
+    "tp": 20,
+    "fp": 16,
+    "fn": 0,
+    "precision": 0.5555555555555556,
+    "recall": 1,
+    "f1": 0.7142857142857143
+  },
+  "repeat_summary": {
+    "runs": 1,
+    "work_f1_mean": 0.7142857142857143,
+    "work_f1_std": 0,
+    "work_f1_values": [
+      0.7142857142857143
+    ],
+    "work_count_values": [
+      2
+    ]
+  },
+  "diagnosis": [
+    "Predicted Task count is 13 vs Gold 10, so the current Event→Task stage over-split at least three logical Tasks.",
+    "Predicted Work count is 2 vs Gold 2, but Work pairwise precision is only 0.5556 with recall 1.0. This means the two predicted Works preserve all same-Work Gold pairs but also contain many cross-Work false-positive pairs, consistent with incorrect Task-to-Gold alignment caused by Task over-splitting and/or Work over-merging.",
+    "No deterministic strong Work links were derived, so this run is driven almost entirely by LLM grouping at Work stage.",
+    "The Event count comparison (40 vs 30) is not a valid extraction-quality judgment because GLOBAL-00002 Gold intentionally uses one canonical evaluator Event per source message rather than current Event-granularity annotation.",
+    "Primary next step is to inspect GLOBAL-00002.prediction.json and identify the three extra predicted Tasks before modifying prompts or Work logic."
+  ]
+}
