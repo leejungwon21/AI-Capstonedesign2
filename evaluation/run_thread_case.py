@@ -209,20 +209,25 @@ def derive_strong_work_links(tasks, event_context):
                     # prerequisite/context, they are strongly linked.
                     add_link(target_id, source_id, f"explicit_{field}_task_reference", text)
 
-    # 2) Explicit handoff: recipient in one Task becomes actor of a later Task.
-    handoff_terms = ("이어", "넘기", "전달", "다음 단계", "후속", "정리본 기준", "참고 부탁")
+    # 2) Explicit execution handoff only.
+    # Generic delivery/reference is not enough for a deterministic must-link.
+    strong_assignment_terms = ("다음 업무", "후속 업무", "후속 작업", "이어가", "이어서 진행", "정리본 기준으로 이어")
+    generic_next_terms = ("다음 단계",)
     for source_id, ctx in ctx_by_id.items():
         for e in ctx.get("events", []):
-            text = " ".join([
-                str(e.get("action") or ""),
-                str(e.get("evidence") or ""),
-            ])
-            if not any(term in text for term in handoff_terms):
+            action = str(e.get("action") or "").strip()
+            evidence = str(e.get("evidence") or "").strip()
+
+            is_strong_assignment = any(term in action for term in strong_assignment_terms)
+            is_generic_next = any(term in action for term in generic_next_terms)
+            if not is_strong_assignment and not is_generic_next:
                 continue
+
             recipient = e.get("recipient") or {}
             rid = recipient.get("slack_id")
             if not rid:
                 continue
+
             event_order = _msg_order(e.get("source_id"))
             candidates = [
                 target_id for target_id, actors in task_actor_ids.items()
@@ -230,9 +235,31 @@ def derive_strong_work_links(tasks, event_context):
                 and rid in actors
                 and task_first_order.get(target_id, 10**9) > event_order
             ]
-            if candidates:
-                target_id = min(candidates, key=lambda x: task_first_order[x])
-                add_link(source_id, target_id, "explicit_handoff_to_later_actor", e.get("evidence") or text)
+            if not candidates:
+                continue
+
+            target_id = min(candidates, key=lambda x: task_first_order[x])
+
+            if is_generic_next and not is_strong_assignment:
+                source_text = " ".join([
+                    str(task_by_id[source_id].get("title") or ""),
+                    str(task_by_id[source_id].get("subject") or ""),
+                ])
+                target_text = " ".join([
+                    str(task_by_id[target_id].get("title") or ""),
+                    str(task_by_id[target_id].get("subject") or ""),
+                ])
+                source_tokens = {tok for tok in re.findall(r"[가-힣A-Za-z0-9]+", source_text) if len(tok) >= 2}
+                target_tokens = {tok for tok in re.findall(r"[가-힣A-Za-z0-9]+", target_text) if len(tok) >= 2}
+                if not (source_tokens & target_tokens):
+                    continue
+
+            add_link(
+                source_id,
+                target_id,
+                "explicit_assignment_to_later_actor",
+                evidence or action
+            )
 
     return links
 
