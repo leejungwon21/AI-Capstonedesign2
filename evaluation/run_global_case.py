@@ -4,6 +4,7 @@ Unlike run_thread_case.py, this runner deliberately mixes multiple source cases 
 Task integration. Component case IDs are evaluator-only and are never sent to the LLM.
 """
 import argparse
+from collections import Counter
 import json
 import statistics
 import sys
@@ -255,13 +256,52 @@ def main():
     metrics_path.write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
 
     work_f1_values = [x["metrics"]["task_to_work_pairwise"]["f1"] for x in runs]
+    fp_counter = Counter()
+    fn_counter = Counter()
+    for run in runs:
+        wm = run["metrics"]["task_to_work_pairwise"]
+        for pair in wm.get("false_positive_pairs", []):
+            fp_counter[tuple(pair)] += 1
+        for pair in wm.get("false_negative_pairs", []):
+            fn_counter[tuple(pair)] += 1
+
+    def recurring_pairs(counter):
+        return [
+            {"pair": list(pair), "count": count, "rate": count / args.repeat}
+            for pair, count in sorted(counter.items(), key=lambda x: (-x[1], x[0]))
+            if count >= 2
+        ]
+
     repeat_summary = {
         "runs": args.repeat,
         "work_f1_mean": statistics.mean(work_f1_values),
         "work_f1_std": statistics.pstdev(work_f1_values) if len(work_f1_values) > 1 else 0.0,
         "work_f1_values": work_f1_values,
         "work_count_values": [len(x["prediction"]["works"]) for x in runs],
+        "recurring_false_positive_pairs": recurring_pairs(fp_counter),
+        "recurring_false_negative_pairs": recurring_pairs(fn_counter),
     }
+
+    repeat_path = out_dir / f"{args.case}.repeat.json"
+    repeat_path.write_text(
+        json.dumps(
+            {
+                "case_id": args.case,
+                "repeat_summary": repeat_summary,
+                "runs": [
+                    {
+                        "run": idx,
+                        "works": run["prediction"]["works"],
+                        "task_to_work_pairwise": run["metrics"]["task_to_work_pairwise"],
+                    }
+                    for idx, run in enumerate(runs, start=1)
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
     issues = issue_list(gold, events, tasks, works, metrics)
 
     print(f"Saved: {pred_path}")
@@ -269,6 +309,7 @@ def main():
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
     print("\nRepeat summary:")
     print(json.dumps(repeat_summary, ensure_ascii=False, indent=2))
+    print(f"Saved repeat details: {repeat_path}")
     print("\nIssues:")
     if issues:
         for issue in issues:
