@@ -67,11 +67,15 @@ def issue_list(gold, events, tasks, works, metrics):
     if pw != gw:
         issues.append({"type": "work_count_mismatch", "detail": f"Work 개수 불일치: Gold {gw}, Pred {pw}"})
 
-    task_score = metrics["event_to_task_pairwise"]
-    if task_score["recall"] == 1.0 and task_score["precision"] < 1.0:
+    task_score = metrics["source_to_task_pairwise"]
+    if task_score["f1"] < 1.0:
         issues.append({
-            "type": "event_to_task_false_positives",
-            "detail": f"Event→Task Recall=1.0, Precision={task_score['precision']:.4f}: 서로 다른 Task를 과병합한 pair 존재"
+            "type": "source_to_task_mismatch",
+            "detail": (
+                f"Source→Task pairwise F1={task_score['f1']:.4f} "
+                f"(P={task_score['precision']:.4f}, R={task_score['recall']:.4f}): "
+                "메시지 기준 Task 경계 불일치"
+            )
         })
 
     work_score = metrics["task_to_work_pairwise"]
@@ -262,7 +266,9 @@ def main():
             "repeat": args.repeat,
         },
         "scores": {
-            "event_to_task_pairwise": metrics["event_to_task_pairwise"],
+            "event_to_task_pairwise_legacy": metrics["event_to_task_pairwise"],
+            "source_to_task_pairwise": metrics["source_to_task_pairwise"],
+            "source_task_coverage": metrics["source_task_coverage"],
             "task_to_work_pairwise_last_run": metrics["task_to_work_pairwise"],
             "task_to_work_repeat_summary": repeat_summary,
         },
