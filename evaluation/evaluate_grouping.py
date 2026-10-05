@@ -157,7 +157,7 @@ def evaluate(gold, pred):
         "event_to_task_pairwise": score(gold_task_pairs, pred_task_pairs),
         "source_to_task_pairwise": score_with_pairs(gold_source_task_pairs, pred_source_task_pairs),
         "source_task_coverage": source_task_coverage(gold, pred),
-        "task_to_work_pairwise": score(gold_work_pairs, pred_work_pairs),
+        "task_to_work_pairwise": score_with_pairs(gold_work_pairs, pred_work_pairs),
         "task_id_alignment": alignment,
         "counts": {
             "gold_tasks": len(gold.get("tasks", [])),
