@@ -1,0 +1,63 @@
+{
+  "case_id": "GLOBAL-00001",
+  "status": "baseline_failed",
+  "model": "gpt-6-luna",
+  "experiment": {
+    "type": "global_multi_thread_grouping",
+    "component_cases": [
+      "THREAD-00005",
+      "THREAD-00006",
+      "THREAD-00021"
+    ],
+    "component_case_ids_exposed_to_llm": false
+  },
+  "counts": {
+    "gold_events": 62,
+    "pred_events": 53,
+    "gold_tasks": 12,
+    "pred_tasks": 13,
+    "gold_works": 3,
+    "pred_works": 2
+  },
+  "metrics": {
+    "event_to_task_pairwise": {
+      "tp": 84,
+      "fp": 8,
+      "fn": 53,
+      "precision": 0.9130434782608695,
+      "recall": 0.6131386861313869,
+      "f1": 0.7336244541484717
+    },
+    "task_to_work_pairwise": {
+      "tp": 15,
+      "fp": 27,
+      "fn": 3,
+      "precision": 0.35714285714285715,
+      "recall": 0.8333333333333334,
+      "f1": 0.5
+    },
+    "work_repeat_summary": {
+      "runs": 1,
+      "work_f1_mean": 0.5,
+      "work_f1_std": 0,
+      "work_f1_values": [
+        0.5
+      ],
+      "work_count_values": [
+        2
+      ]
+    }
+  },
+  "observed_issues": [
+    "Event 누락: Gold 62, Pred 53 (-9)",
+    "Task 개수 불일치: Gold 12, Pred 13",
+    "Work 개수 불일치: Gold 3, Pred 2",
+    "Task→Work pairwise F1=0.5000"
+  ],
+  "diagnosis": [
+    "첫 global multi-thread 기준선에서 Task는 1개 과분리, Work는 1개 과병합됐다.",
+    "derived strong links 15개와 대형 must-link cluster 2개가 생성되어 서로 다른 Work를 연결했을 가능성이 높다.",
+    "현재 GLOBAL Gold의 Event 62개는 THREAD-00005/00006/00021 Gold를 단순 합산한 값이다. THREAD-00021은 최신 Event 기준으로 재검토됐지만 THREAD-00005/00006 Gold는 최신 Event prompt 기준으로 재검토되지 않았으므로 Event -9를 곧바로 모델 누락으로 단정하면 안 된다.",
+    "다음 단계는 prediction.json을 보고 13번째 Task의 과분리 위치와 cross-work strong link 오연결을 확인하는 것이다."
+  ]
+}
