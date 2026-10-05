@@ -1,0 +1,47 @@
+{
+  "case_id": "GLOBAL-00002",
+  "run_label": "run2_fixed_events",
+  "mode": "reuse_events",
+  "counts": {
+    "gold_events": 30,
+    "pred_events": 41,
+    "gold_tasks": 10,
+    "pred_tasks": 14,
+    "gold_works": 2,
+    "pred_works": 2
+  },
+  "event_to_task_pairwise": {
+    "tp": 24,
+    "fp": 33,
+    "fn": 6,
+    "precision": 0.42105263157894735,
+    "recall": 0.8,
+    "f1": 0.5517241379310345
+  },
+  "task_to_work_pairwise": {
+    "tp": 20,
+    "fp": 23,
+    "fn": 0,
+    "precision": 0.46511627906976744,
+    "recall": 1,
+    "f1": 0.6349206349206349
+  },
+  "repeat_summary": {
+    "runs": 1,
+    "work_f1_mean": 0.6349206349206349,
+    "work_f1_std": 0,
+    "work_f1_values": [
+      0.6349206349206349
+    ],
+    "work_count_values": [
+      2
+    ]
+  },
+  "diagnosis": [
+    "Events were fixed by --reuse-events, so this run isolates downstream Task/Work behavior from Event extraction variance.",
+    "Task count remained 14 vs Gold 10, confirming the current Event->Task prompt stably produces finer Task boundaries than the legacy handover-demo answer key.",
+    "Predicted Work count is correct at 2 and Work recall is 1.0; low precision is largely downstream of Task over-splitting/alignment rather than a clear failure to separate the two projects.",
+    "Before further prompt tuning, the legacy Gold Task boundaries should be reviewed against the current Task definition because some predicted splits (e.g. material preparation vs review, SDK code completion vs operational verification) have distinct owners, deadlines, and completion criteria and may be semantically valid under the current system."
+  ],
+  "next_step": "Review and, where justified, migrate the legacy handover-demo Gold Task boundaries to the current Task semantics before changing the Task integration prompt again."
+}
