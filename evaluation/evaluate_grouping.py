@@ -59,6 +59,42 @@ def sources_for_task(task, source_map):
     }
 
 
+def source_task_pairs(data):
+    """Pairwise Task grouping after collapsing Event granularity to source messages."""
+    source_map = source_by_event(data)
+    return cluster_pairs(
+        data.get("tasks", []),
+        lambda task: sources_for_task(task, source_map),
+    )
+
+
+def source_task_coverage(gold, pred):
+    """Coverage of source messages represented in any Task."""
+    gold_map = source_by_event(gold)
+    pred_map = source_by_event(pred)
+    gold_sources = set()
+    pred_sources = set()
+
+    for task in gold.get("tasks", []):
+        gold_sources |= sources_for_task(task, gold_map)
+    for task in pred.get("tasks", []):
+        pred_sources |= sources_for_task(task, pred_map)
+
+    matched = gold_sources & pred_sources
+    precision = 0.0 if not pred_sources else len(matched) / len(pred_sources)
+    recall = 0.0 if not gold_sources else len(matched) / len(gold_sources)
+    return {
+        "gold_sources": len(gold_sources),
+        "pred_sources": len(pred_sources),
+        "matched_sources": len(matched),
+        "missing_sources": sorted(gold_sources - pred_sources),
+        "extra_sources": sorted(pred_sources - gold_sources),
+        "precision": precision,
+        "recall": recall,
+        "f1": f1(precision, recall),
+    }
+
+
 def align_pred_tasks(gold, pred):
     """Align generated Task IDs to Gold Task IDs by Slack source-message overlap."""
     gold_map = source_by_event(gold)
@@ -100,6 +136,8 @@ def mapped_work_members(work, mapping):
 def evaluate(gold, pred):
     gold_task_pairs = cluster_pairs(gold.get("tasks", []), task_event_ids)
     pred_task_pairs = cluster_pairs(pred.get("tasks", []), task_event_ids)
+    gold_source_task_pairs = source_task_pairs(gold)
+    pred_source_task_pairs = source_task_pairs(pred)
 
     alignment = align_pred_tasks(gold, pred)
     gold_work_pairs = cluster_pairs(gold.get("works", []), work_task_ids)
@@ -110,6 +148,8 @@ def evaluate(gold, pred):
 
     return {
         "event_to_task_pairwise": score(gold_task_pairs, pred_task_pairs),
+        "source_to_task_pairwise": score(gold_source_task_pairs, pred_source_task_pairs),
+        "source_task_coverage": source_task_coverage(gold, pred),
         "task_to_work_pairwise": score(gold_work_pairs, pred_work_pairs),
         "task_id_alignment": alignment,
         "counts": {
