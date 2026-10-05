@@ -1,0 +1,47 @@
+{
+  "case_id": "GLOBAL-00001",
+  "run_label": "run3",
+  "status": "work_grouping_near_target",
+  "counts": {
+    "gold_events": 62,
+    "pred_events": 54,
+    "gold_tasks": 12,
+    "pred_tasks": 12,
+    "gold_works": 3,
+    "pred_works": 4
+  },
+  "event_to_task_pairwise": {
+    "tp": 82,
+    "fp": 18,
+    "fn": 55,
+    "precision": 0.82,
+    "recall": 0.5985401459854015,
+    "f1": 0.6919831223628692
+  },
+  "task_to_work_pairwise": {
+    "tp": 15,
+    "fp": 0,
+    "fn": 3,
+    "precision": 1,
+    "recall": 0.8333333333333334,
+    "f1": 0.9090909090909091
+  },
+  "repeat_summary": {
+    "runs": 1,
+    "work_f1_mean": 0.9090909090909091,
+    "work_f1_std": 0,
+    "work_f1_values": [
+      0.9090909090909091
+    ],
+    "work_count_values": [
+      4
+    ]
+  },
+  "diagnosis": [
+    "Task count matched Gold exactly at 12/12.",
+    "Task-to-Work precision reached 1.0 with no false-positive pairs.",
+    "Remaining error is Work over-splitting: Gold 3 vs Pred 4, with 3 false-negative task pairs.",
+    "Work F1 reached 0.9091 and exceeded the 0.90 target for this run.",
+    "Event-to-Task score should not be treated as a clean current extraction score because the merged Gold includes older THREAD-00005 and THREAD-00006 event granularity."
+  ]
+}
