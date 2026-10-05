@@ -24,6 +24,7 @@ from evaluation.run_thread_case import (
     build_must_link_clusters,
     build_work_event_context,
     derive_strong_work_links,
+    hydrate_event_source_context,
     prompt,
     read_json,
     safe_text,
@@ -41,13 +42,18 @@ def merge_people(sources):
 
 
 def merge_gold(case_ids):
-    merged = {"case_id": None, "events": [], "tasks": [], "works": []}
+    merged = {"case_id": None, "events": [], "tasks": [], "works": [], "gold_scope": None}
     for case_id in case_ids:
         gold_path = ROOT / "evaluation" / "cases" / f"{case_id}.gold.json"
         gold = read_json(gold_path)
         merged["events"].extend(gold.get("events", []))
         merged["tasks"].extend(gold.get("tasks", []))
         merged["works"].extend(gold.get("works", []))
+        scope = gold.get("gold_scope")
+        if merged["gold_scope"] is None:
+            merged["gold_scope"] = scope
+        elif scope != merged["gold_scope"]:
+            merged["gold_scope"] = "mixed"
     return merged
 
 
@@ -57,10 +63,11 @@ def issue_list(gold, events, tasks, works, metrics):
     gt, pt = len(gold.get("tasks", [])), len(tasks)
     gw, pw = len(gold.get("works", [])), len(works)
 
-    if pe > ge:
-        issues.append({"type": "event_over_extraction", "detail": f"Event 과추출: Gold {ge}, Pred {pe} (+{pe-ge})"})
-    elif pe < ge:
-        issues.append({"type": "event_under_extraction", "detail": f"Event 누락: Gold {ge}, Pred {pe} (-{ge-pe})"})
+    if gold.get("gold_scope") != "grouping_boundary_gold":
+        if pe > ge:
+            issues.append({"type": "event_over_extraction", "detail": f"Event 과추출: Gold {ge}, Pred {pe} (+{pe-ge})"})
+        elif pe < ge:
+            issues.append({"type": "event_under_extraction", "detail": f"Event 누락: Gold {ge}, Pred {pe} (-{ge-pe})"})
 
     if pt != gt:
         issues.append({"type": "task_count_mismatch", "detail": f"Task 개수 불일치: Gold {gt}, Pred {pt}"})
@@ -133,6 +140,7 @@ def main():
         upstream = read_json(upstream_path)
         events = upstream["events"]
         tasks = upstream["tasks"]
+        hydrate_event_source_context(events, all_messages)
         print(f"Reused upstream: {upstream_path}")
     else:
         if args.reuse_events:
@@ -140,6 +148,7 @@ def main():
                 raise FileNotFoundError(f"Saved upstream not found: {upstream_path}")
             upstream = read_json(upstream_path)
             events = upstream["events"]
+            hydrate_event_source_context(events, all_messages)
             print(f"Reused events only: {upstream_path}")
         else:
             events = []
@@ -164,6 +173,7 @@ def main():
                     e["source_id"] = m["id"]
                     e["source_channel"] = m.get("channel")
                     e["source_timestamp"] = m.get("timestamp")
+                    e["source_thread_key"] = m.get("thread_key")
                 events.extend(extracted)
                 print(f'{m["id"]}: {len(extracted)} event(s)')
 
@@ -220,7 +230,18 @@ def main():
             "works": works,
         }
         metrics = evaluate_grouping(gold, pred)
-        metrics["event_count"] = {"gold": len(gold["events"]), "pred": len(events)}
+        if gold.get("gold_scope") == "grouping_boundary_gold":
+            metrics["event_to_task_pairwise"] = {
+                "scored": False,
+                "reason": "Gold Events are source anchors for grouping boundaries, not full Event-fact annotations."
+            }
+            metrics["event_count"] = {
+                "gold_anchors": len(gold["events"]),
+                "pred": len(events),
+                "scored": False
+            }
+        else:
+            metrics["event_count"] = {"gold": len(gold["events"]), "pred": len(events), "scored": True}
         runs.append({"prediction": pred, "metrics": metrics})
         print(f"Run {idx}/{args.repeat}: tasks={len(tasks)}, works={len(works)}, work_f1={metrics['task_to_work_pairwise']['f1']:.4f}")
 
