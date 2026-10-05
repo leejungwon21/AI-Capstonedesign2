@@ -100,6 +100,18 @@ def assign_ids(items, key, prefix):
         if not x.get(key):
             x[key] = f"{prefix}-{i:05d}"
 
+def hydrate_event_source_context(events, messages):
+    """Restore non-semantic Slack source context after reusing saved Event output."""
+    by_id = {m.get("id"): m for m in messages}
+    for e in events:
+        m = by_id.get(e.get("source_id"))
+        if not m:
+            continue
+        e["source_channel"] = m.get("channel")
+        e["source_timestamp"] = m.get("timestamp")
+        e["source_thread_key"] = m.get("thread_key")
+
+
 def build_work_event_context(tasks, events):
     """Preserve source-grounded Event context for Task -> Work integration."""
     event_map = {e["event_id"]: e for e in events}
@@ -118,6 +130,7 @@ def build_work_event_context(tasks, events):
                 "source_id": e.get("source_id"),
                 "source_channel": e.get("source_channel"),
                 "source_timestamp": e.get("source_timestamp"),
+                "source_thread_key": e.get("source_thread_key"),
                 "subject": e.get("subject"),
                 "action": e.get("action"),
                 "event_type": e.get("event_type"),
@@ -163,10 +176,12 @@ def derive_strong_work_links(tasks, event_context):
 
     task_actor_ids = {}
     task_channels = {}
+    task_thread_keys = {}
     task_first_order = {}
     for task_id, ctx in ctx_by_id.items():
         actors = set()
         channels = set()
+        thread_keys = set()
         orders = []
         for e in ctx.get("events", []):
             actor = e.get("actor") or {}
@@ -174,11 +189,14 @@ def derive_strong_work_links(tasks, event_context):
                 actors.add(actor["slack_id"])
             if e.get("source_channel"):
                 channels.add(e["source_channel"])
+            if e.get("source_thread_key"):
+                thread_keys.add(e["source_thread_key"])
             order = _msg_order(e.get("source_id"))
             if order >= 0:
                 orders.append(order)
         task_actor_ids[task_id] = actors
         task_channels[task_id] = channels
+        task_thread_keys[task_id] = thread_keys
         task_first_order[task_id] = min(orders) if orders else 10**9
 
     links = []
@@ -216,24 +234,17 @@ def derive_strong_work_links(tasks, event_context):
                     # prerequisite/context, they are strongly linked.
                     add_link(target_id, source_id, f"explicit_{field}_task_reference", text)
 
-    # 2) Explicit execution handoff only.
-    # Same person later appearing in another Task is not enough.
-    # Require an explicit assignment plus contextual continuity.
+    # 2) Explicit execution handoff only when both Tasks share the same
+    # opaque Slack thread context. Across a global corpus, recurring people,
+    # channels, or generic topic words are not strong enough for a deterministic
+    # must-link because they can bridge unrelated projects.
     strong_assignment_terms = ("다음 업무", "후속 업무", "후속 작업", "이어가", "이어서 진행", "정리본 기준으로 이어")
-    generic_tokens = {"딜러", "자료", "확인", "업무", "후속", "결과", "진행", "요청", "검토", "정리", "공유"}
-
-    def meaningful_tokens(task_id):
-        task = task_by_id[task_id]
-        text = " ".join([
-            str(task.get("title") or ""),
-            str(task.get("subject") or ""),
-        ])
-        return {
-            tok for tok in re.findall(r"[가-힣A-Za-z0-9]+", text)
-            if len(tok) >= 2 and tok not in generic_tokens
-        }
 
     for source_id, ctx in ctx_by_id.items():
+        source_threads = task_thread_keys.get(source_id, set())
+        if not source_threads:
+            continue
+
         for e in ctx.get("events", []):
             action = str(e.get("action") or "").strip()
             evidence = str(e.get("evidence") or "").strip()
@@ -251,27 +262,16 @@ def derive_strong_work_links(tasks, event_context):
                 if target_id != source_id
                 and rid in actors
                 and task_first_order.get(target_id, 10**9) > event_order
+                and bool(source_threads & task_thread_keys.get(target_id, set()))
             ]
             if not candidates:
                 continue
 
-            source_channels = task_channels.get(source_id, set())
-            source_tokens = meaningful_tokens(source_id)
-            qualified = []
-            for target_id in candidates:
-                same_channel = bool(source_channels & task_channels.get(target_id, set()))
-                topic_overlap = bool(source_tokens & meaningful_tokens(target_id))
-                if same_channel or topic_overlap:
-                    qualified.append(target_id)
-
-            if not qualified:
-                continue
-
-            target_id = min(qualified, key=lambda x: task_first_order[x])
+            target_id = min(candidates, key=lambda x: task_first_order[x])
             add_link(
                 source_id,
                 target_id,
-                "explicit_assignment_with_context",
+                "explicit_assignment_same_thread",
                 evidence or action
             )
 
@@ -339,6 +339,7 @@ def main():
         upstream = read_json(upstream_path)
         events = upstream["events"]
         tasks = upstream["tasks"]
+        hydrate_event_source_context(events, src["messages"])
         print(f"Reused upstream: {upstream_path}")
         print(f"Upstream counts: events={len(events)}, tasks={len(tasks)}")
     else:
@@ -365,6 +366,7 @@ def main():
                 e["source_id"] = m["id"]
                 e["source_channel"] = m.get("channel")
                 e["source_timestamp"] = m.get("timestamp")
+                e["source_thread_key"] = m.get("thread_key")
             events.extend(extracted)
             print(f'{m["id"]}: {len(extracted)} event(s)')
 
