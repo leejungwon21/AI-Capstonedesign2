@@ -111,7 +111,7 @@ planned | in_progress | waiting | blocked | completed | unknown
       "subject": "string | null",
       "status": "planned | in_progress | waiting | blocked | completed | unknown",
       "status_history": [],
-      "deadline": {"text": "string | null", "at": "YYYY-MM-DD | null"},
+      "deadline": {"text": "string | null", "at": "ISO 8601 날짜·시간(+09:00) 또는 YYYY-MM-DD | null"},
       "next_action": "string | null",
       "participants": [
         {
@@ -132,3 +132,9 @@ planned | in_progress | waiting | blocked | completed | unknown
 ```
 
 애매하면 억지로 기존 Task에 합치지 않는다.
+
+## 기존 업무 보존과 마감
+
+기존 Task를 갱신하면 변경되지 않은 Event·참여자·업무 관계도 함께 유지한다.
+마감은 연결 Event의 deadline을 그대로 사용하며 날짜·시간을 새로 추측하거나 날짜만으로 축약하지 않는다.
+출력은 새 Event가 속한 Task와 갱신되는 Task만 포함한다. 관련 없는 기존 Task를 다시 출력하지 않는다.

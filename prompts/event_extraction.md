@@ -145,12 +145,20 @@ note만 존재한다는 이유로 별도 Event를 만들지 않는다.
 
 ## 날짜
 
-deadline:
-- text: 원문 표현 그대로
-- at: 메시지 작성 시각을 기준으로 확정 가능한 경우 YYYY-MM-DD
-- 단일 날짜로 확정할 수 없으면 null
+- deadline.text: 현재 메시지에 실제 존재하는 마감 표현을 그대로 복사한다.
+- 기준은 message.timestamp_kst 또는 message.timestamp의 한국 시간(Asia/Seoul)이다. 현재 실행 시각을 사용하지 않는다.
+- 날짜와 시간이 명확하면 deadline.at은 ISO 8601(+09:00)이다.
+- 2026-10-10 14:00 KST 메시지의 "내일 오전 10시까지" → at="2026-10-11T10:00:00+09:00".
+- 2026-10-10 14:00 KST 메시지의 "오늘 오후 1시까지" → at="2026-10-10T13:00:00+09:00". 이미 지난 마감이어도 다음날로 바꾸지 않는다.
+- 날짜만 명확하면 YYYY-MM-DD로 반환한다. 시간을 임의로 00:00, 18:00, 23:59로 채우지 않는다.
+- "내일 10시"처럼 오전/오후가 불명확하면 날짜만 반환한다. 13시 또는 10:00 같은 24시간 표기는 명시된 시간으로 처리한다.
+- 날짜·시간을 확정할 근거가 없으면 at=null.
 
-예: 메시지 작성일이 2026-10-02이고 "내일까지"이면 at="2026-10-03".
+## 요청자
+
+requester는 실제 요청한 사람을 {slack_id, name}으로 기록한다. 직접 요청 메시지라면 발화자가 요청자다.
+다른 사람의 요청을 전달하는 메시지라면 원문에 명시된 요청자만 기록한다.
+알 수 없으면 null. 모든 발화자를 자동으로 요청자로 취급하지 않는다.
 
 ## event_type
 
@@ -167,6 +175,7 @@ request | requirement | plan | progress | completion | status | question | decis
       "source_id": "MSG-...",
       "subject": "string | null",
       "actor": {"slack_id": "string", "name": "string"} ,
+      "requester": {"slack_id": "string", "name": "string"} ,
       "related_people": [
         {
           "slack_id": "string | null",
@@ -180,7 +189,7 @@ request | requirement | plan | progress | completion | status | question | decis
       "event_type": "request | requirement | plan | progress | completion | status | question | decision",
       "status": "string | null",
       "time_scope": "past | current | future | unknown",
-      "deadline": {"text": "string | null", "at": "YYYY-MM-DD | null"},
+      "deadline": {"text": "string | null", "at": "ISO 8601 날짜·시간(+09:00) 또는 YYYY-MM-DD | null"},
       "prerequisite": "string | null",
       "constraint": "string | null",
       "note": "string | null",

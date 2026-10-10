@@ -12,11 +12,12 @@ Graph/ML은 이 파이프라인 이후 단계다.
 
 ## 2. 수집 방식
 
-초기 구현은 on-demand 방식이다.
+최종 목표는 실시간 동기화다.
 
-사용자 요청 -> Slack 수집 -> Event 추출/업데이트 -> 기존 Task/Work 매칭 -> 변경분 저장
+Slack 변경 수신 -> Event 추출/업데이트 -> 기존 Task/Work 매칭 -> 변경분 저장
 
-자동 polling은 사용하지 않는다.
+`src/pipeline.py`가 메시지 묶음 처리 진입점이다. 현재 collector는 초기 수집/복구에 사용한다.
+Slack Events API 웹훅/상시 worker는 별도로 연결해야 한다.
 
 ## 3. ID 규칙
 
@@ -64,13 +65,14 @@ ID는 저장소/후처리 계층에서 안정적으로 관리한다. LLM이 Gold
 ```json
 {
   "deadline": {
-    "text": "내일까지",
-    "at": "2026-10-03"
+    "text": "내일 오전 10시까지",
+    "at": "2026-10-03T10:00:00+09:00"
   }
 }
 ```
 
-- at은 YYYY-MM-DD
+- 날짜와 시간이 확정되면 at은 ISO 8601(+09:00), 날짜만 확정되면 YYYY-MM-DD
+- 시간이 없으면 임의의 시간을 붙이지 않으며 DB timestamp는 null로 저장한다
 - 상대 날짜 해석 기준은 해당 Slack 메시지의 작성 시각(Asia/Seoul)
 - 단일 날짜로 확정할 수 없으면 at=null
 - audit timestamp(slack_ts, changed_at)는 원래 timestamp 정밀도를 유지한다.
@@ -120,3 +122,7 @@ Gold는 평가 단계에서만 로드한다.
 - Task 과병합/과분리
 - Work 과병합/과분리
 - status/date/person/prerequisite/constraint 오류
+
+## 11. DB 연결
+
+현재 Supabase 5개 테이블 매핑, 사람 ID 충돌 처리, 원문·상태 이력 보존, 저장·그래프 생성 절차는 [db-integration.md](db-integration.md)를 따른다.
