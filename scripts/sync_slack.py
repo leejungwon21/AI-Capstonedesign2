@@ -52,6 +52,7 @@ def main():
     ap.add_argument("--result", help="Already extracted service result; no LLM call")
     ap.add_argument("--snapshot", help="Saved DB snapshot for offline preparation")
     ap.add_argument("--prior-result", help="Previous run plan (preserves status history)")
+    ap.add_argument("--event-cache-dir", default="handover_runs/event_cache", help="Cache verified Event extraction for safe retries")
     ap.add_argument("--out", default="handover_runs/run.json")
     ap.add_argument("--apply-plan", help="Apply this saved plan; never rerun LLM")
     args = ap.parse_args()
@@ -109,7 +110,8 @@ def main():
         before, project_url = store.snapshot(), store.url
     prior = read(args.prior_result) if args.prior_result else {}
     result = read(args.result) if args.result else run_pipeline(
-        read(args.input), snapshot=before, prior_result=prior.get("result", prior))
+        read(args.input), snapshot=before, prior_result=prior.get("result", prior),
+        event_cache_dir=args.event_cache_dir)
     bundle, warnings = to_db(result, before)
     conflicts = identity_conflicts(bundle, before)
     plan = {"project_url": project_url, "before_digest": digest(before), "result": result,
