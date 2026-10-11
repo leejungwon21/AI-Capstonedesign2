@@ -165,10 +165,30 @@ def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured
     if not events:
         return {"people": people, "messages": messages, "events": [], "tasks": [], "works": [],
                 "processed_at": processed_at, "status_history_by_task": history}
-    task_result, _ = call(system_prompt=prompt("event_to_task.md"),
-        user_payload={"new_events": events, "existing_tasks": old_tasks, "people": people},
-        json_schema=TASK_SCHEMA, max_output_tokens=16000)
-    tasks = task_result["tasks"]
+    # Retry only Task integration when Event membership is missing or duplicated.
+    # Check BEFORE assign_ids so failed attempts never consume generated IDs.
+    event_map = {e["event_id"]: e for e in events}
+    known_events = set(event_map) | {e["event_id"] for e in snapshot.get("events", [])}
+    task_payload = {"new_events": events, "existing_tasks": old_tasks, "people": people}
+    for attempt in range(3):
+        task_result, _ = call(system_prompt=prompt("event_to_task.md"),
+            user_payload=task_payload, json_schema=TASK_SCHEMA, max_output_tokens=16000)
+        tasks = task_result["tasks"]
+        memberships = [item["event_id"] for task in tasks for item in task["events"]]
+        from collections import Counter
+        counts = Counter(x for x in memberships if x in event_map)
+        missing = sorted(set(event_map) - set(counts))
+        duplicated = sorted(x for x, n in counts.items() if n != 1)
+        unknown = sorted(set(memberships) - known_events)
+        if not (missing or duplicated or unknown):
+            break
+        if attempt == 2:
+            raise ValueError(f"Task integration invalid after 3 attempts: missing={missing}, duplicated={duplicated}, unknown={unknown}")
+        print(f"Retry Task integration (attempt {attempt + 2}/3): missing={len(missing)}, duplicated={len(duplicated)}, unknown={len(unknown)}", flush=True)
+        task_payload = {**task_payload, "previous_invalid_tasks": tasks,
+            "validation_feedback": {"instruction": "Regenerate the entire Task list. Each new Event must appear in exactly one Task; never invent Event IDs.",
+                                    "missing_event_ids": missing, "duplicated_event_ids": duplicated,
+                                    "unknown_event_ids": unknown}}
     assign_ids(tasks, "task_id", old_tasks)
     old_map = {t["task_id"]: t for t in old_tasks}
     event_map = {e["event_id"]: e for e in events}
