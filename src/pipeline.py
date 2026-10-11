@@ -123,14 +123,28 @@ def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured
         payload = {"message": {"source_id": m["source_id"], "slack_id": m["slack_id"],
                     "timestamp": m["timestamp"], "timestamp_kst": message_time(m["timestamp"]).isoformat(),
                     "channel": m["channel"], "text": m["raw_text"]}, "people": people}
-        result, _ = call(system_prompt=prompt("event_extraction.md"), user_payload=payload, json_schema=EVENT_SCHEMA)
-        extracted = result["events"]
+        # Retry only the current message if the model changes a verbatim quote.
+        # Keep strict source-grounding; do not rewrite or invent evidence.
+        for attempt in range(3):
+            result, _ = call(system_prompt=prompt("event_extraction.md"),
+                             user_payload=payload, json_schema=EVENT_SCHEMA)
+            extracted = result["events"]
+            invalid = set()
+            for e in extracted:
+                evidence = e.get("evidence")
+                deadline_text = (e.get("deadline") or {}).get("text")
+                if not evidence or evidence not in m["raw_text"]:
+                    invalid.add("evidence")
+                if deadline_text and deadline_text not in m["raw_text"]:
+                    invalid.add("deadline.text")
+            if not invalid:
+                break
+            fields = ", ".join(sorted(invalid))
+            if attempt == 2:
+                raise ValueError(f"Slack message {m['source_id']}: invalid {fields} after 3 attempts.")
+            print(f"Retry Event extraction: {m['source_id']} ({fields}, attempt {attempt + 2}/3)", flush=True)
         previous = [e for e in snapshot.get("events", []) if e["source_id"] == m["source_id"]]
         for e in extracted:
-            if not e.get("evidence") or e["evidence"] not in m["raw_text"]:
-                raise ValueError("Event evidence is not a verbatim source-message excerpt.")
-            if e.get("deadline", {}).get("text") and e["deadline"]["text"] not in m["raw_text"]:
-                raise ValueError("Deadline text is not present in the source message.")
             e["source_id"] = m["source_id"]
             e["deadline"] = normalize_deadline(e.get("deadline"), m["timestamp"])
             e.update({"speaker_id": m["slack_id"], "speaker": people_map[m["slack_id"]]["name"],
