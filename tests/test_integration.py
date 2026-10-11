@@ -119,6 +119,21 @@ class IntegrationTests(unittest.TestCase):
         bundle, _ = to_db(result)
         self.assertNotIn("REQUESTER", {e["relation"] for e in bundle["edges"]})
 
+    def test_extra_task_roles_map_without_inventing_owner(self):
+        result = copy.deepcopy(self.result)
+        task = result["tasks"][0]
+        event_id = result["events"][0]["event_id"]
+        task["participants"].extend([
+            {"slack_id": "U01", "name": "김지수", "roles": ["follow-up owner"], "event_ids": [event_id]},
+            {"slack_id": "U01", "name": "김지수", "roles": ["recipient", "requester"], "event_ids": [event_id]},
+        ])
+        bundle, warnings = to_db(result)
+        edges = {(e["source_id"], e["relation"], e["target_id"]) for e in bundle["edges"]}
+        self.assertIn(("U01", "RELATED", task["task_id"]), edges)
+        self.assertNotIn(("U01", "OWNER", task["task_id"]), edges)
+        self.assertIn(("U01", "REQUESTER", event_id), edges)
+        self.assertFalse(any(w["type"] == "role_not_in_ml_schema" for w in warnings))
+
     def test_unresolved_prerequisite_preserved(self):
         result = copy.deepcopy(self.result)
         result["events"][0]["prerequisite"] = "최종 승인 후"
