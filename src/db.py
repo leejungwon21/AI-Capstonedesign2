@@ -160,12 +160,27 @@ def to_db(result, before=None):
         for e in t.get("events", []):
             edge(t["task_id"], "Task", "HAS_EVENT", e["event_id"], "Event", [e["event_id"]])
         for p in t.get("participants", []):
+            # Keep the DB relation vocabulary fixed. Do not equate a future
+            # handoff recipient with the currently responsible OWNER.
+            participant_id = person(p)
             for role in p.get("roles", []):
-                relation = role.upper()
-                if relation in {"OWNER", "APPROVER", "REVIEWER", "COLLABORATOR", "RELATED"}:
-                    edge(person(p), "Person", relation, t["task_id"], "Task", p.get("event_ids", []))
+                normalized_role = role.strip().lower().replace("-", "_").replace(" ", "_")
+                relation = {
+                    "owner": "OWNER",
+                    "collaborator": "COLLABORATOR",
+                    "reviewer": "REVIEWER",
+                    "approver": "APPROVER",
+                    "related": "RELATED",
+                    "recipient": "RELATED",
+                    "follow_up_owner": "RELATED",
+                    "requester": "RELATED",
+                }.get(normalized_role)
+                if relation:
+                    edge(participant_id, "Person", relation, t["task_id"], "Task", p.get("event_ids", []))
                 else:
                     warnings.append({"type": "role_not_in_ml_schema", "task_id": t["task_id"], "role": role})
+                # REQUESTER is Person -> Event, created above only when the
+                # Event itself explicitly identifies the true requester.
         if t.get("task_links"):
             warnings.append({"type": "task_links_not_in_ml_schema", "task_id": t["task_id"]})
     for w in result.get("works", []):
