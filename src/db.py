@@ -19,7 +19,7 @@ ALLOWED = {"HAS_TASK": {("Work", "Task")}, "HAS_EVENT": {("Task", "Event")},
            "REVIEWER": {("Person", "Task")}, "COLLABORATOR": {("Person", "Task")},
            "RELATED": {("Person", "Task"), ("Person", "Event")},
            "ACTOR": {("Person", "Event")}, "REQUESTER": {("Person", "Event")},
-           "DEPENDS_ON": {("Event", "Event")}}
+           "DEPENDS_ON": {("Event", "Event"), ("Task", "Task")}}
 
 
 class SupabaseStore:
