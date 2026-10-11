@@ -101,6 +101,15 @@ class IntegrationTests(unittest.TestCase):
         self.assertEqual(graph["metadata"]["relation_to_idx"]["ACTOR"], 7)
         self.assertEqual(len(graph["rgcn_tensors"]["edge_type"]), len(self.bundle["edges"]))
 
+    def test_existing_task_dependency_is_exportable(self):
+        data = copy.deepcopy(self.bundle)
+        task_id = data["tasks"][0]["task_id"]
+        data["edges"].append({"source_id": task_id, "source_type": "Task",
+                              "relation": "DEPENDS_ON", "target_id": task_id,
+                              "target_type": "Task", "evidence_event_ids": []})
+        graph = export_graph(data)
+        self.assertIn("DEPENDS_ON", [edge["relation"] for edge in graph["edges"]])
+
     def test_rerun_keeps_all_ids(self):
         rerun = run_pipeline(source(), snapshot=self.bundle, prior_result=self.result, call=model_call)
         for key, field in (("events", "event_id"), ("tasks", "task_id"), ("works", "work_id")):
