@@ -1,5 +1,7 @@
 """Slack -> Event -> Task -> Work service entry point, independent of Gold data."""
 import copy
+import hashlib
+import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -107,7 +109,7 @@ def assign_ids(items, key, existing):
         seen.add(item[key])
 
 
-def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured):
+def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured, event_cache_dir=None):
     snapshot = snapshot or {}
     prior_result = prior_result or {}
     messages = normalize_messages(data)
@@ -123,12 +125,27 @@ def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured
         payload = {"message": {"source_id": m["source_id"], "slack_id": m["slack_id"],
                     "timestamp": m["timestamp"], "timestamp_kst": message_time(m["timestamp"]).isoformat(),
                     "channel": m["channel"], "text": m["raw_text"]}, "people": people}
-        # Retry only the current message if the model changes a verbatim quote.
-        # Keep strict source-grounding; do not rewrite or invent evidence.
+        # Cache only fully verified model Event output. A resumed run never
+        # silently accepts an invalid quote or stale message content.
+        cache_file = None
+        cached_events = None
+        if event_cache_dir is not None:
+            cache_folder = Path(event_cache_dir)
+            cache_folder.mkdir(parents=True, exist_ok=True)
+            fingerprint = hashlib.sha256(json.dumps(
+                {"message": payload["message"], "people": people,
+                 "prompt": prompt("event_extraction.md")},
+                sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+            cache_file = cache_folder / (fingerprint + ".json")
+            if cache_file.exists():
+                cached_events = json.loads(cache_file.read_text(encoding="utf-8"))["events"]
         for attempt in range(3):
-            result, _ = call(system_prompt=prompt("event_extraction.md"),
-                             user_payload=payload, json_schema=EVENT_SCHEMA)
-            extracted = result["events"]
+            if cached_events is not None:
+                extracted = copy.deepcopy(cached_events)
+            else:
+                result, _ = call(system_prompt=prompt("event_extraction.md"),
+                                 user_payload=payload, json_schema=EVENT_SCHEMA)
+                extracted = result["events"]
             invalid = set()
             for e in extracted:
                 evidence = e.get("evidence")
@@ -138,11 +155,21 @@ def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured
                 if deadline_text and deadline_text not in m["raw_text"]:
                     invalid.add("deadline.text")
             if not invalid:
+                if cache_file is not None and cached_events is None:
+                    tmp = cache_file.with_suffix(".tmp")
+                    tmp.write_text(json.dumps({"events": extracted}, ensure_ascii=False),
+                                   encoding="utf-8")
+                    tmp.replace(cache_file)
                 break
+            if cached_events is not None:
+                raise ValueError(f"Invalid cached Event output for {m['source_id']}: {sorted(invalid)}")
             fields = ", ".join(sorted(invalid))
             if attempt == 2:
                 raise ValueError(f"Slack message {m['source_id']}: invalid {fields} after 3 attempts.")
-            print(f"Retry Event extraction: {m['source_id']} ({fields}, attempt {attempt + 2}/3)", flush=True)
+            print(f"Retry Event extraction: {m['source_id']} ({fields}, attempt {attempt + 2}/3)",
+                  flush=True)
+        print(f"Event extraction {'cached' if cached_events is not None else 'completed'}: "
+              f"{m['source_id']} ({len(extracted)} events)", flush=True)
         previous = [e for e in snapshot.get("events", []) if e["source_id"] == m["source_id"]]
         for e in extracted:
             e["source_id"] = m["source_id"]
