@@ -139,21 +139,22 @@ def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured
             cache_file = cache_folder / (fingerprint + ".json")
             if cache_file.exists():
                 cached_events = json.loads(cache_file.read_text(encoding="utf-8"))["events"]
+        retry_payload = payload
         for attempt in range(3):
             if cached_events is not None:
                 extracted = copy.deepcopy(cached_events)
             else:
                 result, _ = call(system_prompt=prompt("event_extraction.md"),
-                                 user_payload=payload, json_schema=EVENT_SCHEMA)
+                                 user_payload=retry_payload, json_schema=EVENT_SCHEMA)
                 extracted = result["events"]
-            invalid = set()
-            for e in extracted:
+            invalid = []
+            for index, e in enumerate(extracted):
                 evidence = e.get("evidence")
                 deadline_text = (e.get("deadline") or {}).get("text")
                 if not evidence or evidence not in m["raw_text"]:
-                    invalid.add("evidence")
+                    invalid.append({"event_index": index, "field": "evidence", "invalid_value": evidence})
                 if deadline_text and deadline_text not in m["raw_text"]:
-                    invalid.add("deadline.text")
+                    invalid.append({"event_index": index, "field": "deadline.text", "invalid_value": deadline_text})
             if not invalid:
                 if cache_file is not None and cached_events is None:
                     tmp = cache_file.with_suffix(".tmp")
@@ -162,10 +163,16 @@ def run_pipeline(data, *, snapshot=None, prior_result=None, call=call_structured
                     tmp.replace(cache_file)
                 break
             if cached_events is not None:
-                raise ValueError(f"Invalid cached Event output for {m['source_id']}: {sorted(invalid)}")
-            fields = ", ".join(sorted(invalid))
+                raise ValueError(f"Invalid cached Event output for {m['source_id']}: {invalid}")
+            fields = ", ".join(sorted({issue["field"] for issue in invalid}))
             if attempt == 2:
                 raise ValueError(f"Slack message {m['source_id']}: invalid {fields} after 3 attempts.")
+            # Keep the original source message unchanged. Give the model exact
+            # field-level feedback instead of rerunning the identical prompt.
+            retry_payload = {**payload, "validation_feedback": {
+                "instruction": "Regenerate events for this same Slack message. Every evidence must be an EXACT contiguous substring copied from message.text, with identical Slack markup, spaces, line breaks and punctuation. Never paraphrase. deadline.text must also be copied verbatim. If there is no work fact, return an empty events list.",
+                "invalid_fields": invalid
+            }}
             print(f"Retry Event extraction: {m['source_id']} ({fields}, attempt {attempt + 2}/3)",
                   flush=True)
         print(f"Event extraction {'cached' if cached_events is not None else 'completed'}: "
